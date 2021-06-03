@@ -3,14 +3,12 @@
  * @Author: l
  * @Date: 2021-05-31 13:38:16
  * @LastEditors: l
- * @LastEditTime: 2021-06-01 15:01:44
- * @FilePath: \client\src\App.vue
+ * @LastEditTime: 2021-06-04 00:22:51
+ * @FilePath: \DistributedControlSystem\frontend\src\App.vue
 -->
 <template>
   <div id="app">
     <v-nav></v-nav>
-    <!-- <img src="./assets/logo.png" /> -->
-    
     <router-view></router-view>
   </div>
 </template>
@@ -36,10 +34,15 @@ export default {
 <style>
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; */
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  /* background: url('assets/bg_1.jpg');
+  background-size: 100% 100%; */
+  background-color: pink;
+  height: 100%;
+  width: 100%;
+  position: fixed;
 }
 </style>
