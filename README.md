@@ -3,7 +3,7 @@
  * @Author: l
  * @Date: 2021-06-03 20:40:55
  * @LastEditors: l
- * @LastEditTime: 2021-06-04 15:48:25
+ * @LastEditTime: 2021-06-04 15:51:17
  * @FilePath: \DistributedControlSystem\README.md
 -->
 # DistributedControlSystem
@@ -15,5 +15,5 @@
 ## manager
 ![image](https://user-images.githubusercontent.com/54203997/120764587-df53e080-c54a-11eb-8d9e-8e9582fc5139.png)
 
-who am i
+
 # back-end
