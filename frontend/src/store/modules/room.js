@@ -3,9 +3,11 @@
  * @Author: l
  * @Date: 2021-06-03 13:45:26
  * @LastEditors: l
- * @LastEditTime: 2021-06-03 14:10:46
+ * @LastEditTime: 2021-06-04 21:09:32
  * @FilePath: \DistributedControlSystem\frontend\src\store\modules\room.js
  */
+const api = 'http://127.0.0.1:5000/room';
+import axios from 'axios';
 export default{
     state:{
         roomId:10,
@@ -41,7 +43,39 @@ export default{
             state.roomId=roomId;
         }
     },
-    actions:{},
+    actions:{
+        updateRoomState({commit},payload){
+            console.log('updateRoomState...');
+            return axios.post(api + '/updateRoomState', {
+                roomId:payload.roomId,
+            }).then((response) => {
+                if (response.data.error == false) {
+                    commit('setRoomState',response.data.roomState);
+                } else {
+                    // commit('setRDRIsOk', false);
+                }
+            }).catch((error) => {
+                console.error(error)
+            });
+        },
+        changeRoomState({commit},payload){
+            console.log('changeRoomState...');
+            return axios.post(api + '/changeRoomState', {
+                roomId:payload.roomId,
+                targetTemp:payload.targetTemp,
+                targetSpeed:payload.targetSpeed,
+                acState:payload.acState,
+            }).then((response) => {
+                if (response.data.error == false) {
+                    // commit('setRoomState',response.data.roomState);
+                } else {
+                    // commit('setRDRIsOk', false);
+                }
+            }).catch((error) => {
+                console.error(error)
+            });
+        }
+    },
     modules:{},
-    namespace:true,
+    namespaced:true,
 }
