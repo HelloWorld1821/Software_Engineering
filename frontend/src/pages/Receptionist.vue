@@ -3,7 +3,7 @@
  * @Author: l
  * @Date: 2021-06-01 15:38:49
  * @LastEditors: l
- * @LastEditTime: 2021-06-04 15:23:34
+ * @LastEditTime: 2021-06-04 15:25:07
  * @FilePath: \DistributedControlSystem\frontend\src\pages\Receptionist.vue
 -->
 <template>
