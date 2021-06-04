@@ -14,6 +14,8 @@
 ![image](https://user-images.githubusercontent.com/54203997/120764558-d82cd280-c54a-11eb-8101-2479f4ce3793.png)
 ## manager
 ![image](https://user-images.githubusercontent.com/54203997/120764587-df53e080-c54a-11eb-8d9e-8e9582fc5139.png)
+## administrator
+![image](https://user-images.githubusercontent.com/54203997/120777051-7757c700-c557-11eb-8492-bcdc874364cf.png)
 
 --
 # back-end
