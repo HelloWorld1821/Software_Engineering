@@ -165,39 +165,58 @@ def check_room_state():
                                    ]})
 
 
-@app.route('/room/updateRoomState', methods=['POST'])
-def update_room_state():
+@app.route('/room/getRoomState', methods=['POST'])
+def get_room_state():
     """
-    roomId:int
-    :return: { roomState:{  speed:str,
-                            currTemp:int,
-                            targetTemp:int,
-                            fee:double,
-                            acState:str},
-                            error:bool}
+    客户定期请求空调信息
+    :params:{
+        roomId:int          # 房间号
+        cookie ?            # 这玩意儿我不是很懂，我这边暂时不打算用
+    }
+    :return: {
+        roomState:{
+            speed:str,      # 风速：{"High", "Medium", "Low"}
+            currTemp:int,   # 当前温度
+            targetTemp:int, # 目标温度
+            fee:double,     # 费用
+            acState:str     # 空调状态：{"On","Off","WaitForSchedul","Sleep"}
+        },
+        error:bool          # 处理请求过程是否发生错误，一般回送False
+    }
     """
     params = request.get_json(force=True)
     print(request.path, " : ", params)
-    return jsonify({'error': False,
-                    'roomState': {'speed': 'high',
-                                  'currTemp': 15,
-                                  'targetTemp': 25,
-                                  'fee': 103.2,
-                                  'acState': 'on'}})
+    return jsonify({
+        'error': False,
+        'roomState': {
+            'speed': 'high',
+            'currTemp': 15,
+            'targetTemp': 25,
+            'fee': 103.2,
+            'acState': 'on'
+        }
+    })
 
 
 @app.route('/room/changeRoomState', methods=['POST'])
 def change_room_state():
     """
-    roomId:int,
-    targetTemp:int,
-    targetSpeed:str,
-    acState:str
-    :return: { error:bool }
+    客户发送开关机、送风、调温请求
+    params:{
+        roomId:int,         # 房间号
+        targetTemp:int,     # 目标温度
+        targetSpeed:str,    # 目标风速：{"High", "Medium", "Low"}
+        acState:str         # 开机/关机：{"On", "Off"}
+    }
+    :return: {
+        error:bool          # 处理请求过程是否发生错误，一般回送False
+    }
     """
     params = request.get_json(force=True)
     print(request.path, " : ", params)
-    return jsonify({'error': False})
+    return jsonify({
+        'error': False
+    })
 
 
 @app.route('/')
