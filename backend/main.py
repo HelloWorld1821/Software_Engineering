@@ -127,7 +127,7 @@ def set_default_params():
     return jsonify({'error': False})
 
 
-@app.route('/administrator/checkRoomState', methods=['POST'])
+@app.route('/administrator/checkRoomsState', methods=['POST'])
 def check_room_state():
     """管理员检查房间状态
 
@@ -144,7 +144,7 @@ def check_room_state():
     params = request.get_json(force=True)
     print(request.path, " : ", params)
     return jsonify({'error': False,
-                    'roomStates': [{'roomState': {'roomId': 1,
+                    'roomsState': [{'roomState': {'roomId': 1,
                                                   'isCheckIn': False,
                                                   'mode': 'hot',
                                                   'speed': 'low',
