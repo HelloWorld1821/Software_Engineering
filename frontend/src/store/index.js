@@ -3,7 +3,7 @@
  * @Author: l
  * @Date: 2021-06-01 17:15:19
  * @LastEditors: l
- * @LastEditTime: 2021-06-04 15:01:07
+ * @LastEditTime: 2021-06-04 16:22:28
  * @FilePath: \DistributedControlSystem\frontend\src\store\index.js
  */
 import Vue from 'vue';
@@ -11,6 +11,7 @@ import Vuex from 'vuex';
 import auth from './modules/auth'
 import manager from './modules/manager'
 import receptionist from './modules/receptionist'
+import administrator from './modules/administrator'
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -19,5 +20,6 @@ export default new Vuex.Store({
         auth,
         manager,
         receptionist,
+        administrator,
     }
 })
