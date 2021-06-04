@@ -3,7 +3,7 @@
  * @Author: l
  * @Date: 2021-06-01 14:39:02
  * @LastEditors: l
- * @LastEditTime: 2021-06-04 00:17:18
+ * @LastEditTime: 2021-06-04 12:55:14
  * @FilePath: \DistributedControlSystem\frontend\src\components\VNav.vue
 -->
 <template>
@@ -46,7 +46,8 @@ export default defineComponent({
   text-size-adjust: 100%;
   line-height: 28.8px;
   /* background-color: pink; */
-  border-bottom-width: 10px;
+  /* border-width: 100px;
+  border-color: aqua; */
   /* border-block-color: black; */
 }
 .nav-brand {
@@ -68,16 +69,13 @@ export default defineComponent({
     white-space: nowrap;
     text-transform: uppercase;
     letter-spacing: .1em;
-    color: black;
+    color: white
 }
 .nav-collapse{
-    -webkit-text-size-adjust: 100%;
-    -webkit-tap-highlight-color: transparent;
     font-size: 1rem;
     font-weight: 300;
     line-height: 1.8;
     color: #868e96;
-    font-family: "Work Sans", Arial, sans-serif;
     -webkit-box-direction: normal;
     box-sizing: inherit;
     flex-basis: 100%;
@@ -94,24 +92,18 @@ export default defineComponent({
 }
 .menu > ul > li {
   text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-  -webkit-tap-highlight-color: transparent;
   font-size: 1rem;
   font-weight: 300;
   line-height: 1.8;
   color: #868e96;
   font-family: "Work Sans", Arial, sans-serif;
   list-style: none;
-  -webkit-box-direction: normal;
   box-sizing: inherit;
 }
 .menu > li > a {
-  -webkit-text-size-adjust: 100%;
-  -webkit-tap-highlight-color: transparent;
   line-height: 1.8;
   font-family: "Work Sans", Arial, sans-serif;
   list-style: none;
-  -webkit-box-direction: normal;
   box-sizing: inherit;
   text-decoration: none;
   background-color: transparent;
@@ -123,6 +115,6 @@ export default defineComponent({
   text-transform: uppercase;
   letter-spacing: 0.1em;
   font-weight: 400;
-  color: black;
+  color: white;
 }
 </style>
