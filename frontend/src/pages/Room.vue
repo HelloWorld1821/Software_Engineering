@@ -3,7 +3,7 @@
  * @Author: l
  * @Date: 2021-06-01 15:34:21
  * @LastEditors: l
- * @LastEditTime: 2021-06-04 21:54:28
+ * @LastEditTime: 2021-06-05 10:52:20
  * @FilePath: \DistributedControlSystem\frontend\src\pages\Room.vue
 -->
 <template>
@@ -25,7 +25,7 @@
       <p>Is Running : {{ roomState.acState }}</p>
       <p>The Speed: {{ roomState.speed }}</p>
       <p>Current Temperature: {{ roomState.currTemp }}</p>
-      <p>targetTemp: {{ roomState.targetTemp }}</p>
+      <p>Target Temperature: {{ roomState.targetTemp }}</p>
       <p>Your Cost : {{ roomState.fee }}</p>
     </div>
   </div>

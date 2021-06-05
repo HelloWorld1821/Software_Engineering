@@ -7,7 +7,7 @@
  * @FilePath: \DistributedControlSystem\frontend\src\store\modules\receptionist.js
  */
 const api = 'http://127.0.0.1:5000/receptionist';
-import axios from 'axios'
+import axios from 'axios';
 export default{
     state:{
         billRoomId:10,

@@ -131,7 +131,7 @@ def set_default_params():
 def check_room_state():
     """管理员检查房间状态
 
-    :return: { roomStates:[ roomState:
+    :return: { roomsStates:[ roomState:
                            {roomId:int,
                             isCheckIn:bool,
                             mode:str,
