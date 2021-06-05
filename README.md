@@ -10,3 +10,9 @@
 
 # back-end
 这里是后端的分支
+
+## 后端python依赖配置
+在backend目录下，输入以下命令(如有担心与本地配置冲突，可以选择先创建虚拟环境)
+```
+pip install -r requirements.txt
+```
