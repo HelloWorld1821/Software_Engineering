@@ -3,7 +3,7 @@
  * @Author: l
  * @Date: 2021-06-01 15:34:21
  * @LastEditors: l
- * @LastEditTime: 2021-06-05 13:34:22
+ * @LastEditTime: 2021-06-05 14:10:05
  * @FilePath: \DistributedControlSystem\frontend\src\pages\Room.vue
 -->
 <template>
@@ -11,6 +11,7 @@
     <h1>This is Room</h1>
     <div class="ac-control">
       <div class='temp-choose-div'>
+        <h2 class="mb-0">AC Controller</h2>
         Target Temperature:
         <input type="button" @click="subCurrTemp" value="sub" />
         {{ targetTemp }}
@@ -114,13 +115,25 @@ export default {
 .user-panel {
   background-color: white;
   margin-top: 10px;
-  padding: 10px;
-  margin-left: 30%;
-  margin-right: 30%;
+  margin-right: 20%;
+  padding: 20px;
+  /* display: inline-block; */
+  float: right;
+  width: 300px;
+  height: 400px;
 }
 .ac-control {
   background-color: #fff;
-  margin-left: 30%;
-  margin-right: 30%;
+  margin-top: 10px;
+  margin-left: 20%;
+  padding-top: 30px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 20px;
+  /* display: inline-block; */
+  height: 400px;
+  width: 300px;
+  float: left;
+  /* float: left; */
 }
 </style>
