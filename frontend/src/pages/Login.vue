@@ -3,7 +3,7 @@
  * @Author: l
  * @Date: 2021-06-01 10:29:38
  * @LastEditors: l
- * @LastEditTime: 2021-06-03 14:50:14
+ * @LastEditTime: 2021-06-05 14:38:30
  * @FilePath: \DistributedControlSystem\frontend\src\pages\Login.vue
 -->
 <template>
@@ -27,7 +27,7 @@ export default defineComponent({
     name:'Login',
     data:function(){
         return{
-            userName:"username",
+            userName:"1",
             password:"password",
         }
     },

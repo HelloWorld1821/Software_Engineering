@@ -10,11 +10,21 @@ def login_admin():
     """
     userName
     password
-    :return:
+    :return: {error:bool.
+                role:str}  # room/administrator/manager/receptionist
     """
     params = request.get_json(force=True)
     print(request.path, " : ", params)
-    return jsonify({'error': False})
+    role='';
+    if params['userName']=='1':
+        role='room'
+    elif params['userName']=='2':
+        role='administrator'
+    elif params['userName']=='3':
+        role='manager'
+    elif params['userName']=='4':
+        role='receptionist'
+    return jsonify({'error': False ,'role':role})
 
 
 @app.route('/auth/login', methods=['POST'])
