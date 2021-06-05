@@ -32,7 +32,7 @@ def login():
 def create_RDR():
     """前台开详单
     roomId:int
-    :return: { record:{
+    :return: { RDR:{
                     startTime:str,
                     endTime:str,
                     speed:str,
@@ -42,7 +42,7 @@ def create_RDR():
     params = request.get_json(force=True)
     print(request.path, " : ", params)
     return jsonify({'error': False,
-                    'record': {'startTime': '2021-6-2,15:20',
+                    'RDR': {'startTime': '2021-6-2,15:20',
                                'endTime': '2021-6-3,16:40',
                                'speed': 'high',
                                'fee': 2333.3}})
@@ -52,13 +52,13 @@ def create_RDR():
 def create_bill():
     """前台开账单
     roomId:int
-    :return: { fee:double ,
+    :return: { bill:{fee:double },
                 error:bool }
     """
     params = request.get_json(force=True)
     print(request.path, " : ", params)
     return jsonify({'error': False,
-                    'fee': 123.3})
+                    'bill':{'fee': 123.3}})
 
 
 @app.route('/receptionist/checkIn', methods=['POST'])

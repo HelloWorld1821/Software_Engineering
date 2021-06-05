@@ -3,7 +3,7 @@
  * @Author: l
  * @Date: 2021-06-03 13:45:26
  * @LastEditors: l
- * @LastEditTime: 2021-06-04 21:09:32
+ * @LastEditTime: 2021-06-05 13:24:06
  * @FilePath: \DistributedControlSystem\frontend\src\store\modules\room.js
  */
 const api = 'http://127.0.0.1:5000/room';
@@ -64,7 +64,7 @@ export default{
                 roomId:payload.roomId,
                 targetTemp:payload.targetTemp,
                 targetSpeed:payload.targetSpeed,
-                acState:payload.acState,
+                acState:payload.targetACState,
             }).then((response) => {
                 if (response.data.error == false) {
                     // commit('setRoomState',response.data.roomState);
