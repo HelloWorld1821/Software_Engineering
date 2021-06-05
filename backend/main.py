@@ -1,8 +1,36 @@
-from flask import Flask, request, jsonify
+from enum import unique
+from flask import Flask, config, request, jsonify
 from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
+import config
 
 app = Flask(__name__)
+app.config.from_object(config)
 CORS(app, resources=r'/*')
+db = SQLAlchemy(app)
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True)
+    password = db.Column(db.String(80), nullable=True)
+    type = db.Column(db.Enum('receptionist','manager','administrator','room'))
+
+    def __repr__(self) -> str:
+        return '{0},{1},{2},{3}'.format(self.id,self.username,self.password,self.type)
+
+def db_init():
+    db.drop_all()
+    db.create_all()
+    db.session.add(User(username='receptionist_1',password='receptionist',type='receptionist'))
+    db.session.add(User(username='manager_1',password='manager',type='manager'))
+    db.session.add(User(username='administrator_1',password='administrator',type='administrator'))
+    db.session.add(User(username='room_1',password='room',type='room'))
+    db.session.commit()
+
+
+
+
+
 
 
 @app.route('/auth/loginAdmin', methods=['POST'])
@@ -13,6 +41,7 @@ def login_admin():
     :return:
     """
     params = request.get_json(force=True)
+    
     print(request.path, " : ", params)
     return jsonify({'error': False})
 
@@ -20,12 +49,27 @@ def login_admin():
 @app.route('/auth/login', methods=['POST'])
 def login():
     """
-
-    :return:
+    登录
+    :params:{
+        username:str
+        password:str
+    }
+    :return:{
+        error: bool # 处理请求过程中是否发生错误，登录失败返回True，登录成功返回False
+        type: str   # 类型:{'receptionist','manager','administrator','room'}
+    }
     """
     params = request.get_json(force=True)
     print(request.path, " : ", params)
-    return jsonify({'error': False})
+    username = params['username']
+    password = params['password']
+    ans = User.query.filter(User.username == username and User.password == password).first()
+
+    if ans is None:
+        return jsonify({'error': True})
+    else:
+        return jsonify({'error': False, 'type': ans.type})
+    
 
 
 @app.route('/receptionist/getRDR', methods=['POST'])
@@ -227,4 +271,5 @@ def hello_world():
 
 
 if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+    # db_init()  # 这行代码跑一次即可
+    app.run(port=5000, debug=True, host='0.0.0.0')
