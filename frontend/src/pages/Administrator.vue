@@ -3,7 +3,7 @@
  * @Author: l
  * @Date: 2021-06-01 15:36:52
  * @LastEditors: l
- * @LastEditTime: 2021-06-14 15:26:26
+ * @LastEditTime: 2021-06-14 15:29:16
  * @FilePath: \DistributedControlSystem\frontend\src\pages\Administrator.vue
 -->
 <template>
@@ -71,6 +71,9 @@ export default {
       },1000);
     }
   },
+  destroyed:function(){
+		 clearInterval(this.timer);
+	}
 };
 </script>
 

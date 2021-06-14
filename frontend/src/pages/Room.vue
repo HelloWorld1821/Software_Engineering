@@ -3,7 +3,7 @@
  * @Author: l
  * @Date: 2021-06-01 15:34:21
  * @LastEditors: l
- * @LastEditTime: 2021-06-05 14:10:05
+ * @LastEditTime: 2021-06-14 15:31:55
  * @FilePath: \DistributedControlSystem\frontend\src\pages\Room.vue
 -->
 <template>
@@ -107,7 +107,23 @@ export default {
       console.log('targetACState: '+oldValue+'-->'+newVaule);
       this.changeRoomStateHere();
     }
-  }
+  },
+  mounted:function(){
+    let that= this;
+    that.updateRoomState(that.roomId);
+    if(this.timer){
+      clearInterval(this.timer);
+    }else{
+      this.timer = setInterval(()=>{
+          let that =this;
+          // that.checkRoomsState();
+          that.updateRoomState(that.roomId);
+      },1000);
+    }
+  },
+  destroyed:function(){
+		 clearInterval(this.timer);
+	}
 };
 </script>
 
