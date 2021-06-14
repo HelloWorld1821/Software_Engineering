@@ -1,36 +1,7 @@
-from enum import unique
-from flask import Flask, config, request, jsonify
-from flask_cors import CORS
-from flask_sqlalchemy import SQLAlchemy
-import config
-
-app = Flask(__name__)
-app.config.from_object(config)
-CORS(app, resources=r'/*')
-db = SQLAlchemy(app)
-
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True)
-    password = db.Column(db.String(80), nullable=True)
-    type = db.Column(db.Enum('receptionist','manager','administrator','room'))
-
-    def __repr__(self) -> str:
-        return '{0},{1},{2},{3}'.format(self.id,self.username,self.password,self.type)
-
-def db_init():
-    db.drop_all()
-    db.create_all()
-    db.session.add(User(username='receptionist_1',password='receptionist',type='receptionist'))
-    db.session.add(User(username='manager_1',password='manager',type='manager'))
-    db.session.add(User(username='administrator_1',password='administrator',type='administrator'))
-    db.session.add(User(username='room_1',password='room',type='room'))
-    db.session.commit()
-
-
-
-
-
+from app import *
+from flask import request, jsonify
+from database import *
+import utils
 
 
 @app.route('/auth/loginAdmin', methods=['POST'])
@@ -46,6 +17,7 @@ def login_admin():
     return jsonify({'error': False})
 
 
+# FINISH
 @app.route('/auth/login', methods=['POST'])
 def login():
     """
@@ -63,14 +35,18 @@ def login():
     print(request.path, " : ", params)
     username = params['username']
     password = params['password']
-    ans = User.query.filter(User.username == username and User.password == password).first()
+    print(username, ',', password)
+    query_list = [
+        User.username == username,
+        User.password == password
+    ]
+    ans = User.query.filter(*query_list).first()
 
     if ans is None:
         return jsonify({'error': True})
     else:
         return jsonify({'error': False, 'type': ans.type})
     
-
 
 @app.route('/receptionist/getRDR', methods=['POST'])
 def create_RDR():
@@ -105,6 +81,7 @@ def create_bill():
                     'fee': 123.3})
 
 
+# FINISH
 @app.route('/receptionist/checkIn', methods=['POST'])
 def check_in():
     """前台开房
@@ -113,20 +90,67 @@ def check_in():
                 error:bool }
     """
     params = request.get_json(force=True)
+    # print(request.path, " : ", params)
+    roomId = params['roomId']
+    # print(username, ',', password)
+    query_list = [
+        User.room_id == roomId,
+        User.status == 'out'
+    ]
+    ans = User.query.filter(*query_list).first()
+
+    if ans is None:
+        return jsonify({'error': True})
+    else:
+        idCard = utils.random_str()
+        # ans.status = 'in'
+        # ans.times_used += 1
+        # ans.password = idCard
+        User.query.filter(*query_list).update({
+            'status':'in',
+            'times_used':ans.times_used+1,
+            'password':idCard
+        })
+        db.session.commit()
+        return jsonify({'error': False, 'idCard': idCard})
+
+
+    params = request.get_json(force=True)
     print(request.path, " : ", params)
     return jsonify({'error': False,
                     'idCard': 'asdfjk42dfsd'})
 
 
+# FINISH
 @app.route('/receptionist/checkOut', methods=['POST'])
 def check_out():
     """前台退房
     roomId:int
     :return: { error:bool }
     """
+
     params = request.get_json(force=True)
-    print(request.path, " : ", params)
-    return jsonify({'error': False})
+    # print(request.path, " : ", params)
+    roomId = params['roomId']
+    # print(username, ',', password)
+    query_list = [
+        User.room_id == roomId,
+        User.status == 'in'
+    ]
+    ans = User.query.filter(*query_list).first()
+
+    if ans is None:
+        return jsonify({'error': True})
+    else:
+        User.query.filter(*query_list).update({
+            'status':'out',
+        })
+        db.session.commit()
+        return jsonify({'error': False})
+
+    # params = request.get_json(force=True)
+    # print(request.path, " : ", params)
+    # return jsonify({'error': False})
 
 
 @app.route('/manager/checkReport', methods=['POST'])
@@ -267,7 +291,7 @@ def change_room_state():
 def hello_world():
     print(request.path)
     print(request.full_path)
-    return request.args.__str__()
+    return "hello"
 
 
 if __name__ == '__main__':
