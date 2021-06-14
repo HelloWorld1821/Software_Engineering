@@ -3,7 +3,7 @@
  * @Author: l
  * @Date: 2021-06-01 10:29:38
  * @LastEditors: l
- * @LastEditTime: 2021-06-05 14:38:30
+ * @LastEditTime: 2021-06-14 14:44:51
  * @FilePath: \DistributedControlSystem\frontend\src\pages\Login.vue
 -->
 <template>
@@ -31,11 +31,36 @@ export default defineComponent({
             password:"password",
         }
     },
+    computed:{
+        ...mapState('auth',[
+            'role'
+        ]),
+        
+    },
+    watch:{
+        role:function(){
+            console.log('current role:',this.role);
+            switch(this.role){
+                        case 'room':
+                            this.$router.replace('/room');
+                            break;
+                        case 'administrator':
+                            this.$router.replace('/administrator');
+                            break;
+                        case 'manager':
+                            this.$router.replace('/manager');
+                            break;
+                        case 'receptionist':
+                            this.$router.replace('/receptionist');
+                            break;
+                        default:
+                            console.log('illegal role');
+                            this.$router.replace('/home');
+                            break;
+                    }
+        }
+    },
     methods:{
-        // loginAdmin:function(userName,password){
-        //     this.$store.dispatch("loginAdmin",{userName,password});
-        //    // this.$store.dispatch("auth/loginAdmin",{userName,password});
-        // }
         ...mapActions('auth',[
             'loginAdmin',
             'login'

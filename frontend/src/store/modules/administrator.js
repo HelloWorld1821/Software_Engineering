@@ -3,7 +3,7 @@
  * @Author: l
  * @Date: 2021-06-03 14:17:10
  * @LastEditors: l
- * @LastEditTime: 2021-06-04 17:07:27
+ * @LastEditTime: 2021-06-14 14:21:05
  * @FilePath: \DistributedControlSystem\frontend\src\store\modules\administrator.js
  */
 const api = 'http://127.0.0.1:5000/administrator';
@@ -16,7 +16,7 @@ export default{
     getter:{},
     mutations:{
         setRoomsState(state,roomsState){
-            console.log('111');
+            // console.log('111');
             state.roomsState=roomsState;
         },
         setStateIsOk(state,isOk){

@@ -3,13 +3,13 @@
  * @Author: l
  * @Date: 2021-05-31 13:38:16
  * @LastEditors: l
- * @LastEditTime: 2021-06-04 12:30:46
+ * @LastEditTime: 2021-06-14 14:17:53
  * @FilePath: \DistributedControlSystem\frontend\src\App.vue
 -->
 <template>
   <div id="app">
     <v-nav></v-nav>
-    <router-view></router-view>
+    <router-view v-if="isRouterAlive"></router-view>
   </div>
 </template>
 
@@ -19,10 +19,22 @@
 import VNav from './components/VNav'
 export default {
   name: "App",
+  provide(){
+    return{
+      reload:this.reload
+    }
+  },
   data(){
     return{
-      msg:"aa",
-      log_list:[]
+      isRouterAlive:true,
+    }
+  },
+  methods:{
+    reload(){
+      this.isRouterAlive = false
+      this.$nextTick(function(){
+        this.isRouterAlive=true
+      })
     }
   },
   components:{
