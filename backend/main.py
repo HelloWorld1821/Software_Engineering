@@ -103,9 +103,6 @@ def check_in():
         return jsonify({'error': True})
     else:
         idCard = utils.random_str()
-        # ans.status = 'in'
-        # ans.times_used += 1
-        # ans.password = idCard
         User.query.filter(*query_list).update({
             'status':'in',
             'times_used':ans.times_used+1,
@@ -113,12 +110,6 @@ def check_in():
         })
         db.session.commit()
         return jsonify({'error': False, 'idCard': idCard})
-
-
-    params = request.get_json(force=True)
-    print(request.path, " : ", params)
-    return jsonify({'error': False,
-                    'idCard': 'asdfjk42dfsd'})
 
 
 # FINISH
@@ -147,10 +138,6 @@ def check_out():
         })
         db.session.commit()
         return jsonify({'error': False})
-
-    # params = request.get_json(force=True)
-    # print(request.path, " : ", params)
-    # return jsonify({'error': False})
 
 
 @app.route('/manager/checkReport', methods=['POST'])
