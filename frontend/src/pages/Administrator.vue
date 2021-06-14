@@ -3,7 +3,7 @@
  * @Author: l
  * @Date: 2021-06-01 15:36:52
  * @LastEditors: l
- * @LastEditTime: 2021-06-04 17:05:04
+ * @LastEditTime: 2021-06-14 15:26:26
  * @FilePath: \DistributedControlSystem\frontend\src\pages\Administrator.vue
 -->
 <template>
@@ -49,12 +49,27 @@ export default {
 
     };
   },
-
   computed: {
     ...mapState("administrator", ["roomsState", "stateIsOk"]),
   },
   methods: {
     ...mapActions("administrator", ["checkRoomsState","setDefaultParams"]),
+  },
+  mounted:function(){
+    // console.log("do it ...")
+    // console.log("checkRoomsState...");
+    let that= this;
+    that.checkRoomsState();
+    if(this.timer){
+      clearInterval(this.timer);
+    }else{
+      this.timer = setInterval(()=>{
+          // console.log("do it ...")
+          // console.log("checkRoomsState...");
+          let that =this;
+          that.checkRoomsState();
+      },1000);
+    }
   },
 };
 </script>
