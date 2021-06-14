@@ -3,7 +3,7 @@
  * @Author: l
  * @Date: 2021-06-02 15:34:01
  * @LastEditors: l
- * @LastEditTime: 2021-06-05 14:47:08
+ * @LastEditTime: 2021-06-14 14:27:32
  * @FilePath: \DistributedControlSystem\frontend\src\store\modules\auth.js
  */
 // const api = 'http://10.28.174.15:5000/auth';
@@ -17,7 +17,7 @@ export default{
         password:'',
         loading:false,
         error:'',
-        role:'',
+        role:'home',
     },
     getter:{},
     mutations:{     
@@ -62,26 +62,6 @@ export default{
                     commit('setLoading',false);
                     commit('setError','');
                     commit('setRole',resposne.data.role);
-                    switch(resposne.data.role){
-                        case 'room':
-                            console.log('role: '+resposne.data.role);
-                            //this.$router.push('/room');
-                            // this.$router;
-                            this.$router.replace('/room');
-                            break;
-                        case 'administrator':
-                            this;
-                            break;
-                        case 'manager':
-                            this;
-                            break;
-                        case 'receptionist':
-                            this;
-                            break;
-                        default:
-                            console.log('illegal role');
-                            break;
-                    }
                 }
             }).catch((error)=>{
                 console.error(error)
