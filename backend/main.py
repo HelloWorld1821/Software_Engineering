@@ -4,6 +4,7 @@ from database import *
 import utils
 
 
+# 这个暂时不用写
 @app.route('/auth/loginAdmin', methods=['POST'])
 def login_admin():
     """
@@ -268,6 +269,10 @@ def change_room_state():
     }
     """
     params = request.get_json(force=True)
+    roomId = params['roomId']
+    targetTemp = params['targetTemp']
+    targetSpeed = params['targetSpeed']
+    acState = params['acState']
     print(request.path, " : ", params)
     return jsonify({
         'error': False
@@ -282,5 +287,5 @@ def hello_world():
 
 
 if __name__ == '__main__':
-    # db_init()  # 这行代码跑一次即可
+    # db_init()  # 这行代码，如果数据库没有发生变化，则跑一次即可
     app.run(port=5000, debug=True, host='0.0.0.0')
