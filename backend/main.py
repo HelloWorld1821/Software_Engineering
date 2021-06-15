@@ -59,6 +59,7 @@ def create_RDR():
                     speed:str,
                     fee:double } ,
                 error:bool}
+                
     """
 
     params = request.get_json(force=True)
