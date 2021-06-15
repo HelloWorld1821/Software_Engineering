@@ -60,13 +60,20 @@ def create_RDR():
                     fee:double } ,
                 error:bool}
     """
+
     params = request.get_json(force=True)
     print(request.path, " : ", params)
+    roomId=params['roomId']
+    query_list = [
+        Room.room_id == roomId
+    ]
+    ans = Room.query.filter(*query_list).first()
+
     return jsonify({'error': False,
-                    'record': {'startTime': '2021-6-2,15:20',
-                               'endTime': '2021-6-3,16:40',
-                               'speed': 'high',
-                               'fee': 2333.3}})
+                    'RDR': {'startTime': ans.start_time,
+                               'endTime': ans.end_time,
+                               'speed': ans.speed,
+                               'fee': ans.fee}})
 
 
 @app.route('/receptionist/getBill', methods=['POST'])
@@ -78,8 +85,14 @@ def create_bill():
     """
     params = request.get_json(force=True)
     print(request.path, " : ", params)
+    roomId=params['roomId']
+    query_list = [
+        Room.room_id == roomId
+    ]
+    ans = Room.query.filter(*query_list).first()
+
     return jsonify({'error': False,
-                    'fee': 123.3})
+                    'bill': {'fee': ans.fee}})
 
 
 # FINISH
@@ -186,7 +199,6 @@ def set_default_params():
 @app.route('/administrator/checkRoomState', methods=['POST'])
 def check_room_state():
     """管理员检查房间状态
-
     :return: { roomStates:[ roomState:
                            {roomId:int,
                             isCheckIn:bool,
