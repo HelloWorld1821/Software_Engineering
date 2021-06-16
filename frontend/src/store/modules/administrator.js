@@ -3,10 +3,10 @@
  * @Author: l
  * @Date: 2021-06-03 14:17:10
  * @LastEditors: l
- * @LastEditTime: 2021-06-14 14:21:05
+ * @LastEditTime: 2021-06-16 19:07:55
  * @FilePath: \DistributedControlSystem\frontend\src\store\modules\administrator.js
  */
-const api = 'http://127.0.0.1:5000/administrator';
+const api = '/api/administrator';
 import axios from 'axios'
 export default{
     state:{

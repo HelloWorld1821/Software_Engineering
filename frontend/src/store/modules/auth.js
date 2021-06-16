@@ -3,11 +3,11 @@
  * @Author: l
  * @Date: 2021-06-02 15:34:01
  * @LastEditors: l
- * @LastEditTime: 2021-06-14 14:27:32
+ * @LastEditTime: 2021-06-16 19:08:11
  * @FilePath: \DistributedControlSystem\frontend\src\store\modules\auth.js
  */
 // const api = 'http://10.28.174.15:5000/auth';
-const api = 'http://127.0.0.1:5000/auth';
+const api = '/api/auth';
 import axios from 'axios'
 
 export default{

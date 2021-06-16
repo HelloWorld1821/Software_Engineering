@@ -3,11 +3,11 @@
  * @Author: l
  * @Date: 2021-06-03 14:01:04
  * @LastEditors: l
- * @LastEditTime: 2021-06-04 14:20:37
+ * @LastEditTime: 2021-06-16 19:06:02
  * @FilePath: \DistributedControlSystem\frontend\src\store\modules\manager.js
  */
 
-const api = 'http://127.0.0.1:5000/manager';
+const api = '/api/manager';
 import axios from 'axios'
 export default {
     state: {

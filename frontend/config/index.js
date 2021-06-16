@@ -3,7 +3,7 @@
  * @Author: l
  * @Date: 2021-05-31 13:38:16
  * @LastEditors: l
- * @LastEditTime: 2021-06-03 14:57:44
+ * @LastEditTime: 2021-06-16 19:05:06
  * @FilePath: \DistributedControlSystem\frontend\config\index.js
  */
 'use strict'
@@ -18,8 +18,15 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
-
+    proxyTable: {
+      '/api': {
+        target: 'http://127.0.0.1:5000',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': ''
+        }
+      }
+    },
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
@@ -82,13 +89,5 @@ module.exports = {
     bundleAnalyzerReport: process.env.npm_config_report
   },
 
-  proxyTable: {
-    '/api': {
-      target: 'http://127.0.0.1:5000/auth/login',
-      changeOrigin: true,
-      pathRewrite: {
-        '^/api': ''
-      }
-    }
-},
+ 
 }

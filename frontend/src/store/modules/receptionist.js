@@ -3,10 +3,10 @@
  * @Author: l
  * @Date: 2021-06-03 14:12:06
  * @LastEditors: l
- * @LastEditTime: 2021-06-04 15:18:23
+ * @LastEditTime: 2021-06-16 19:08:25
  * @FilePath: \DistributedControlSystem\frontend\src\store\modules\receptionist.js
  */
-const api = 'http://127.0.0.1:5000/receptionist';
+const api = '/api/receptionist';
 import axios from 'axios';
 export default{
     state:{

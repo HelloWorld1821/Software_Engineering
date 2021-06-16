@@ -3,10 +3,10 @@
  * @Author: l
  * @Date: 2021-06-03 13:45:26
  * @LastEditors: l
- * @LastEditTime: 2021-06-05 13:24:06
+ * @LastEditTime: 2021-06-16 19:08:32
  * @FilePath: \DistributedControlSystem\frontend\src\store\modules\room.js
  */
-const api = 'http://127.0.0.1:5000/room';
+const api = '/api/room';
 import axios from 'axios';
 export default{
     state:{
