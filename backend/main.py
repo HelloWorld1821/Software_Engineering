@@ -1,6 +1,7 @@
 from app import *
 from flask import request, jsonify
 from database import *
+from sqlalchemy import func
 import utils
 
 
@@ -49,6 +50,7 @@ def login():
         return jsonify({'error': False, 'type': ans.type})
     
 
+# FINISH
 @app.route('/receptionist/getRDR', methods=['POST'])
 def create_RDR():
     """前台开详单
@@ -65,18 +67,27 @@ def create_RDR():
     params = request.get_json(force=True)
     print(request.path, " : ", params)
     roomId=params['roomId']
-    query_list = [
-        Room.room_id == roomId
-    ]
-    ans = Room.query.filter(*query_list).first()
+    times_used = User.query.filter(User.room_id == roomId).first().times_used
+    ans = Room.query.filter(Room.room_id == roomId).filter(Room.times_used == times_used).all()
+
+    start_time_list = []
+    end_time_list = []
+    speed_list = []
+    fee_list = []
+    for i in ans:
+        start_time_list.append(i.start_time)
+        end_time_list.append(i.end_time)
+        speed_list.append(i.speed)
+        fee_list.append(i.fee)
 
     return jsonify({'error': False,
-                    'RDR': {'startTime': ans.start_time,
-                               'endTime': ans.end_time,
-                               'speed': ans.speed,
-                               'fee': ans.fee}})
+                    'RDR': {'startTime': start_time_list,
+                               'endTime': end_time_list,
+                               'speed': speed_list,
+                               'fee': fee_list}})
 
 
+# FINISH
 @app.route('/receptionist/getBill', methods=['POST'])
 def create_bill():
     """前台开账单
@@ -84,16 +95,17 @@ def create_bill():
     :return: { fee:double ,
                 error:bool }
     """
+
     params = request.get_json(force=True)
     print(request.path, " : ", params)
     roomId=params['roomId']
-    query_list = [
-        Room.room_id == roomId
-    ]
-    ans = Room.query.filter(*query_list).first()
+    times_used = User.query.filter(User.room_id == roomId).first().times_used
+    fee = db.session.query(func.sum(Room.fee)).filter(Room.room_id == roomId).filter(Room.times_used == times_used).scalar()
+    if fee is None:
+        fee = 0
 
     return jsonify({'error': False,
-                    'bill': {'fee': ans.fee}})
+                    'bill': {'fee': fee}})
 
 
 # FINISH
