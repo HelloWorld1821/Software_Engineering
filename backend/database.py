@@ -10,7 +10,7 @@ class User(db.Model):
     username = db.Column(db.String(80), unique=True)
     password = db.Column(db.String(80), nullable=True)
     type = db.Column(db.Enum('receptionist','manager','administrator','room'))
-    times_used = db.Column(db.Integer, default=1)
+    times_used = db.Column(db.Integer, default=0)
     room_id = db.Column(db.Integer, nullable=True)
     status = db.Column(db.Enum('in','out'), default='out')
 
@@ -51,4 +51,11 @@ def db_init():
     db.session.add(User(username='room_2',password='room',type='room',room_id=102))
     db.session.add(User(username='room_3',password='room',type='room',room_id=103))
     db.session.add(User(username='room_4',password='room',type='room',room_id=104))
+
+    # 测试数据
+    db.session.add(Room(room_id=101,speed='High',fee=261,times_used=1))
+    db.session.add(Room(room_id=101,speed='Low',fee=988,times_used=1))
+    db.session.add(Room(room_id=101,speed='High',fee=661,times_used=2))
+    db.session.add(Room(room_id=102,speed='High',fee=333,times_used=1))
+    
     db.session.commit()
