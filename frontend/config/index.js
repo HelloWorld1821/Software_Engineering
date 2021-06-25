@@ -3,7 +3,7 @@
  * @Author: l
  * @Date: 2021-05-31 13:38:16
  * @LastEditors: l
- * @LastEditTime: 2021-06-16 19:05:06
+ * @LastEditTime: 2021-06-25 13:32:10
  * @FilePath: \DistributedControlSystem\frontend\config\index.js
  */
 'use strict'
@@ -21,6 +21,7 @@ module.exports = {
     proxyTable: {
       '/api': {
         target: 'http://127.0.0.1:5000',
+        // target:'http://10.28.247.102:5000',
         changeOrigin: true,
         pathRewrite: {
           '^/api': ''
@@ -28,7 +29,8 @@ module.exports = {
       }
     },
     // Various Dev Server settings
-    host: 'localhost', // can be overwritten by process.env.HOST
+    // host: 'localhost', // can be overwritten by process.env.HOST
+    host: '10.128.208.213',
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,

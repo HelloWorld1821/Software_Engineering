@@ -3,11 +3,11 @@
  * @Author: l
  * @Date: 2021-06-01 14:39:02
  * @LastEditors: l
- * @LastEditTime: 2021-06-04 12:55:14
+ * @LastEditTime: 2021-06-25 14:34:58
  * @FilePath: \DistributedControlSystem\frontend\src\components\VNav.vue
 -->
 <template>
-  <nav class="vnav">
+  <!-- <nav class="vnav">
     <div class="container">
       <a class="nav-brand">Distributed Control System</a>
       <div class='nav-collapse'>
@@ -22,7 +22,34 @@
       </ul>
       </div>
     </div>
-  </nav>
+  </nav> -->
+
+  <el-menu
+    :default-active="activeIndex"
+    class="my-menu"
+    mode="horizontal"
+    router="true"
+  >
+    <el-menu-item index="1" route="/home">主页面</el-menu-item>
+    <!-- <el-submenu index="2">
+      <template slot="title">我的工作台</template>
+      <el-menu-item index="2-1">选项1</el-menu-item>
+      <el-menu-item index="2-2">选项2</el-menu-item>
+      <el-menu-item index="2-3">选项3</el-menu-item>
+      <el-submenu index="2-4">
+        <template slot="title">选项4</template>
+        <el-menu-item index="2-4-1">选项1</el-menu-item>
+        <el-menu-item index="2-4-2">选项2</el-menu-item>
+        <el-menu-item index="2-4-3">选项3</el-menu-item>
+      </el-submenu>
+    </el-submenu> -->
+    <el-menu-item index="2" route="/login">登录</el-menu-item>
+    <el-menu-item index="3" route="/register">注册</el-menu-item>
+    <el-menu-item index="4" route="/room">用户</el-menu-item>
+    <el-menu-item index="5" route="/administrator">管理员</el-menu-item>
+    <el-menu-item index="6" route="/receptionist">前台</el-menu-item>
+    <el-menu-item index="7" route="/manager">经理</el-menu-item>
+  </el-menu>
 </template>
 
 <script>
@@ -33,88 +60,4 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-* {
-  list-style: none;
-}
-.vnav {
-  font-family: "Work Sans", Arial, sans-serif;
-  font-size: 12px;
-  padding-bottom: 16px;
-  padding-left: 16px;
-  padding-right: 16px;
-  padding-top: 16px;
-  text-size-adjust: 100%;
-  line-height: 28.8px;
-  /* background-color: pink; */
-  /* border-width: 100px;
-  border-color: aqua; */
-  /* border-block-color: black; */
-}
-.nav-brand {
-    -webkit-text-size-adjust: 100%;
-    -webkit-tap-highlight-color: transparent;
-    font-weight: 300;
-    font-family: "Work Sans", Arial, sans-serif;
-    -webkit-box-direction: normal;
-    box-sizing: inherit;
-    text-decoration: none;
-    background-color: transparent;
-    touch-action: manipulation;
-    transition: .3s all ease;
-    display: inline-block;
-    padding-top: 0.3125rem;
-    padding-bottom: 0.3125rem;
-    font-size: 1.25rem;
-    line-height: inherit;
-    white-space: nowrap;
-    text-transform: uppercase;
-    letter-spacing: .1em;
-    color: white
-}
-.nav-collapse{
-    font-size: 1rem;
-    font-weight: 300;
-    line-height: 1.8;
-    color: #868e96;
-    -webkit-box-direction: normal;
-    box-sizing: inherit;
-    flex-basis: 100%;
-    -webkit-box-align: center;
-    align-items: center;
-    display: inline-block !important;
-}
-.menu {
-  display: flex;
-  box-sizing: border-box;
-  flex-direction: row;
-  margin-inline-start: 488.875px;
-  margin-left: 488.875px;
-}
-.menu > ul > li {
-  text-size-adjust: 100%;
-  font-size: 1rem;
-  font-weight: 300;
-  line-height: 1.8;
-  color: #868e96;
-  font-family: "Work Sans", Arial, sans-serif;
-  list-style: none;
-  box-sizing: inherit;
-}
-.menu > li > a {
-  line-height: 1.8;
-  font-family: "Work Sans", Arial, sans-serif;
-  list-style: none;
-  box-sizing: inherit;
-  text-decoration: none;
-  background-color: transparent;
-  touch-action: manipulation;
-  transition: 0.3s all ease;
-  display: block;
-  padding: 1.6em 1em;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-weight: 400;
-  color: white;
-}
 </style>

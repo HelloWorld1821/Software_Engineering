@@ -16,6 +16,7 @@
   "dependencies": {
     "@vue/composition-api": "^1.0.0-rc.10",
     "axios": "^0.21.1",
+    "element-ui": "^2.15.2",
     "vue": "^2.6.13",
     "vue-router": "^3.0.1",
     "vue-socket.io": "^3.0.10",

@@ -52,10 +52,18 @@ def create_RDR():
     params = request.get_json(force=True)
     print(request.path, " : ", params)
     return jsonify({'error': False,
-                    'RDR': {'startTime': '2021-6-2,15:20',
-                               'endTime': '2021-6-3,16:40',
-                               'speed': 'high',
-                               'fee': 2333.3}})
+                    'RDR': [{ 
+                                "endTime": "Fri, 25 Jun 2021 12:41:31 GMT",
+                                "fee": 261.0,
+                                "speed": "High",
+                                "startTime": "Fri, 25 Jun 2021 12:41:31 GMT"},
+                            {
+                                "endTime": "Fri, 25 Jun 2021 12:41:31 GMT",
+                                "fee": 988.0,
+                                "speed": "Low",
+                                "startTime": "Fri, 25 Jun 2021 12:41:31 GMT"       
+                            }
+                               ]})
 
 
 @app.route('/receptionist/getBill', methods=['POST'])

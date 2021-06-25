@@ -3,7 +3,7 @@
  * @Author: l
  * @Date: 2021-05-31 13:38:16
  * @LastEditors: l
- * @LastEditTime: 2021-06-14 14:17:53
+ * @LastEditTime: 2021-06-25 14:29:56
  * @FilePath: \DistributedControlSystem\frontend\src\App.vue
 -->
 <template>
@@ -50,8 +50,8 @@ export default {
   -moz-osx-font-smoothing: grayscale; */
   text-align: center;
   color: #2c3e50;
-  background: url('assets/bg_1.jpg');
-  background-size: 100% 100%; 
+  /* background: url('assets/bg_1.jpg'); */
+  /* background-size: 100% 100%;  */
   /* background-color: pink; */
   height: 100%;
   width: 100%;
