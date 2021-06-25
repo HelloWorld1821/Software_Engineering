@@ -25,7 +25,7 @@ class User(db.Model):
     def __repr__(self) -> str:
         return self.__str__()
 
-class Room(db.Model):
+class RoomRecode(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     room_id = db.Column(db.Integer, nullable=True)
     start_time = db.Column(db.DateTime, default=datetime.datetime.now)
@@ -41,6 +41,18 @@ class Room(db.Model):
     def __repr__(self) -> str:
         return self.__str__()
 
+class Room(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    room_id = db.Column(db.Integer, nullable=True)
+    mode = db.Column(db.String(80))
+    speed = db.Column(db.Enum("High", "Medium", "Low", "Zero"))
+    current_temp = db.Column(db.Integer, nullable=True)
+    target_temp = db.Column(db.Integer, nullable=True)
+
+class Statistics(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    totalNum = db.Column(db.Integer)
+
 def db_init():
     db.drop_all()
     db.create_all()
@@ -52,10 +64,16 @@ def db_init():
     db.session.add(User(username='room_3',password='room',type='room',room_id=103))
     db.session.add(User(username='room_4',password='room',type='room',room_id=104))
 
-    # 测试数据
-    db.session.add(Room(room_id=101,speed='High',fee=261,times_used=1))
-    db.session.add(Room(room_id=101,speed='Low',fee=988,times_used=1))
-    db.session.add(Room(room_id=101,speed='High',fee=661,times_used=2))
-    db.session.add(Room(room_id=102,speed='High',fee=333,times_used=1))
+    # 测试数据1
+    db.session.add(RoomRecode(room_id=101,speed='High',fee=261,times_used=1))
+    db.session.add(RoomRecode(room_id=101,speed='Low',fee=988,times_used=1))
+    db.session.add(RoomRecode(room_id=101,speed='High',fee=661,times_used=2))
+    db.session.add(RoomRecode(room_id=102,speed='High',fee=333,times_used=1))
+
+    # 测试数据2
+    db.session.add(Room(room_id=101,mode='cold',speed='Zero',current_temp=26,target_temp=26))
+    db.session.add(Room(room_id=102,mode='cold',speed='Zero',current_temp=26,target_temp=26))
+    db.session.add(Room(room_id=103,mode='cold',speed='Zero',current_temp=26,target_temp=26))
+    db.session.add(Room(room_id=104,mode='cold',speed='Zero',current_temp=26,target_temp=26))
     
     db.session.commit()
