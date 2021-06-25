@@ -167,11 +167,14 @@ def check_report():
 @app.route('/administrator/setDefaultParams', methods=['POST'])
 def set_default_params():
     """管理员设置默认参数
-    mode:str
-    tempSection:int[4]
+    defaultMode:str {hot,cold}
+    coldHigh:int 温度范围 4个数
+    coldLow:int  
+    hotHigh:int
+    hotLow:int
     defaultTemp: int
     feeRate: double
-    scheduleNum: int
+    scheduledNum: int
     :return: {error:bool}
     """
     params = request.get_json(force=True)
