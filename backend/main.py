@@ -18,9 +18,23 @@ def login_admin():
     :return:
     """
     params = request.get_json(force=True)
-    
-    print(request.path, " : ", params)
-    return jsonify({'error': False})
+    # print(request.path, " : ", params)
+    username = params['userName']
+    password = params['password']
+    # print(username, ',', password)
+    query_list = [
+        User.username == username,
+        User.password == password
+    ]
+    print('标记1-----------------')
+    ans = User.query.filter(*query_list).first()
+
+    if ans is None:
+        print('登录失败')
+        return jsonify({'error': True})
+    else:
+        print('登录成功')
+        return jsonify({'error': False, 'role': ans.type})
 
 
 # 登录 FINISH
@@ -38,20 +52,23 @@ def login():
     }
     """
     params = request.get_json(force=True)
-    print(request.path, " : ", params)
-    username = params['username']
+    # print(request.path, " : ", params)
+    username = params['userName']
     password = params['password']
-    print(username, ',', password)
+    # print(username, ',', password)
     query_list = [
         User.username == username,
         User.password == password
     ]
+    print('标记1-----------------')
     ans = User.query.filter(*query_list).first()
 
     if ans is None:
+        print('登录失败')
         return jsonify({'error': True})
     else:
-        return jsonify({'error': False, 'type': ans.type})
+        print('登录成功')
+        return jsonify({'error': False, 'role': ans.type})
     
 
 # 详单 FINISH
@@ -227,7 +244,7 @@ def set_default_params():
 
 
 # 管理员检查房间状态 FINISH
-@app.route('/administrator/checkRoomState', methods=['POST'])
+@app.route('/administrator/checkRoomsState', methods=['POST'])
 def check_room_state():
     """管理员检查房间状态
     :return: { roomStates:[ roomState:
@@ -243,21 +260,21 @@ def check_room_state():
     
     ans = Room.query.all()
 
-    roomStates = []
+    roomsState = []
     for i in ans:
         isCheckIn = User.query.filter(User.room_id == i.room_id).first().status
-        roomStates.append({
+        roomsState.append({'roomState':{
             'roomId': i.room_id,
             'isCheckIn': isCheckIn=='in',
             'mode': i.mode,
             'speed': i.speed,
             'currTemp': i.current_temp,
             'targetTemp': i.target_temp
-        })
+        }})
 
     return jsonify({
         'error': False,
-        'roomStates': roomStates
+        'roomsState': roomsState
     })
 
     # return jsonify({'error': False,
@@ -282,8 +299,8 @@ def check_room_state():
     #                                ]})
 
 
-@app.route('/room/getRoomState', methods=['POST'])
-def get_room_state():
+@app.route('/room/updateRoomState', methods=['POST'])
+def update_room_state():
     """
     客户定期请求空调信息
     :params:{
@@ -348,5 +365,5 @@ def hello_world():
 
 
 if __name__ == '__main__':
-    db_init()  # 这行代码，如果数据库没有发生变化，则跑一次即可
+    # db_init()  # 这行代码，如果数据库没有发生变化，则跑一次即可
     app.run(port=5000, debug=True, host='0.0.0.0')
