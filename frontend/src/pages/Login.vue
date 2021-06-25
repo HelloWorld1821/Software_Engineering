@@ -3,7 +3,7 @@
  * @Author: l
  * @Date: 2021-06-01 10:29:38
  * @LastEditors: l
- * @LastEditTime: 2021-06-25 18:26:41
+ * @LastEditTime: 2021-06-25 20:49:09
  * @FilePath: \DistributedControlSystem\frontend\src\pages\Login.vue
 -->
 <template>
@@ -112,5 +112,11 @@ export default defineComponent({
   margin-right: 35%;
   margin-left: 35%;
   margin-top: 50px;
+  border-radius: 30px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  padding-top: 30px;
+  padding-left: 40px;
+  padding-right: 40px;
+  padding-bottom: 25px;
 }
 </style>

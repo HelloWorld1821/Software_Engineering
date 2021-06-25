@@ -3,7 +3,7 @@
  * @Author: l
  * @Date: 2021-06-01 15:38:49
  * @LastEditors: l
- * @LastEditTime: 2021-06-25 20:38:46
+ * @LastEditTime: 2021-06-25 23:07:23
  * @FilePath: \DistributedControlSystem\frontend\src\pages\Receptionist.vue
 -->
 <template>
@@ -32,7 +32,7 @@
           <p>fee:{{RDR.fee}}</p>
         </div>
       </div> -->
-    <el-tabs :tab-position="tabPosition" style="height: 100%">
+    <el-tabs :tab-position="tabPosition" style="height: 1000px">
       <el-tab-pane label="获取账单">
         <div class="content">
           <div class="search-header">
@@ -52,7 +52,7 @@
                   </el-input>
                 </div>
               </el-col>
-              <el-col :span="2" :offset="0" align="middle" type="flex">
+              <el-col :span="2" :offset="1" align="middle" type="flex">
                 <div class="grid-content bg-purple-light">
                   <el-button
                     type="primary"
@@ -100,7 +100,7 @@
                   </el-input>
                 </div>
               </el-col>
-              <el-col :span="2" :offset="0" align="middle" type="flex">
+              <el-col :span="2" :offset="1" align="middle" type="flex">
                 <div class="grid-content bg-purple-light">
                   <el-button
                     type="primary"
@@ -114,14 +114,14 @@
           </div>
 
           <div class="rdr-table">
-            <el-table :data="RDR" border style="width: 100%">
-              <el-table-column prop="startTime" label="起始时间" width="250">
+            <el-table :data="RDR" border style="width: 100%" >
+              <el-table-column prop="startTime" label="起始时间" width="250" >
               </el-table-column>
               <el-table-column prop="endTime" label="结束时间" width="250">
               </el-table-column>
               <el-table-column prop="speed" label="风速" width="250"> 
               </el-table-column>
-              <el-table-column prop="fee" label="费用" > 
+              <el-table-column prop="fee" label="费用" width="300"> 
               </el-table-column>
             </el-table>
           </div>

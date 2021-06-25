@@ -3,12 +3,12 @@
  * @Author: l
  * @Date: 2021-06-01 15:36:52
  * @LastEditors: l
- * @LastEditTime: 2021-06-14 15:29:16
+ * @LastEditTime: 2021-06-25 23:54:46
  * @FilePath: \DistributedControlSystem\frontend\src\pages\Administrator.vue
 -->
 <template>
   <div>
-    <h2>Admistrator</h2>
+    <!-- <h2>Admistrator</h2>
     <div class="rooms-state-div">
       <input
         type="button"
@@ -37,7 +37,35 @@
       <br>
       <input type="button" value="set defualt params" @click="setDefaultParams">
 
-    </div>
+    </div> -->
+
+<el-tabs :tab-position="tabPosition" style="height:1000px">
+    <el-tab-pane label="监视房间">
+        <div class="content">
+             <div class="rooms-table">
+            <el-table :data="roomsState" border style="width: 100%" >
+              <el-table-column prop="roomId" label="房间ID" width="160" >
+              </el-table-column>
+               <el-table-column prop="state" label="送风状态" width="160" >
+              </el-table-column>
+              <el-table-column prop="mode" label="空调模式" width="160">
+              </el-table-column>
+              <el-table-column prop="speed" label="当前风速" width="160"> 
+              </el-table-column>
+              <el-table-column prop="currTemp" label="当前温度" width="160"> 
+              </el-table-column>
+              <el-table-column prop="targetTemp" label="目标温度" width="" >
+              </el-table-column>
+            </el-table>
+          </div>
+        </div>
+    </el-tab-pane>
+    <el-tab-pane label="设置参数">
+        <div class="content">
+
+        </div>
+    </el-tab-pane>
+</el-tabs>
   </div>
 </template>
 
@@ -46,7 +74,7 @@ import { mapActions, mapState } from "vuex";
 export default {
   data: function () {
     return {
-
+      tabPosition: 'left',
     };
   },
   computed: {
@@ -56,19 +84,15 @@ export default {
     ...mapActions("administrator", ["checkRoomsState","setDefaultParams"]),
   },
   mounted:function(){
-    // console.log("do it ...")
-    // console.log("checkRoomsState...");
     let that= this;
     that.checkRoomsState();
     if(this.timer){
       clearInterval(this.timer);
     }else{
       this.timer = setInterval(()=>{
-          // console.log("do it ...")
-          // console.log("checkRoomsState...");
           let that =this;
           that.checkRoomsState();
-      },1000);
+      },10000);
     }
   },
   destroyed:function(){
@@ -77,12 +101,12 @@ export default {
 };
 </script>
 
-<style>
-.rooms-state-div {
-  margin-left: 20%;
-  background-color: white;
-  margin-right: 20%;
-  margin-top: 10px;
+<style >
+.content {
+  margin-top: 50px;
+  margin-left: 10%;
+  margin-right: 10%;
+  background-color: pink;
 }
 
 </style>

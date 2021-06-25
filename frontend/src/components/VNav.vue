@@ -3,7 +3,7 @@
  * @Author: l
  * @Date: 2021-06-01 14:39:02
  * @LastEditors: l
- * @LastEditTime: 2021-06-25 14:34:58
+ * @LastEditTime: 2021-06-25 23:03:17
  * @FilePath: \DistributedControlSystem\frontend\src\components\VNav.vue
 -->
 <template>
@@ -44,7 +44,7 @@
       </el-submenu>
     </el-submenu> -->
     <el-menu-item index="2" route="/login">登录</el-menu-item>
-    <el-menu-item index="3" route="/register">注册</el-menu-item>
+    <!-- <el-menu-item index="3" route="/register">注册</el-menu-item> -->
     <el-menu-item index="4" route="/room">用户</el-menu-item>
     <el-menu-item index="5" route="/administrator">管理员</el-menu-item>
     <el-menu-item index="6" route="/receptionist">前台</el-menu-item>

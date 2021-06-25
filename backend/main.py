@@ -120,14 +120,48 @@ def check_report():
     params = request.get_json(force=True)
     print(request.path, " : ", params)
     return jsonify({'error': False,
-                    'report': {'totalNum': 20,
-                               'commonTemp': 23,
-                               'commonSpeed': 'mid',
-                               'satisfyNum': 10,
-                               'scheduledNum': 30,
-                               'RDRNum': 25,
-                               'totalFee': 12450.0
-                               }})
+                      "report": [
+                                    {
+                                    "RDRNum": 13,
+                                    "commonSpeed": "Low",
+                                    "commonTemp": 15,
+                                    "dateTime": "2021/06/23",
+                                    "satisfyNum": 26,
+                                    "scheduledNum": 37,
+                                    "totalFee": 15.8,
+                                    "totalNum": 11
+                                    },
+                                    {
+                                    "RDRNum": 13,
+                                    "commonSpeed": "Medium",
+                                    "commonTemp": 16,
+                                    "dateTime": "2021/06/24",
+                                    "satisfyNum": 26,
+                                    "scheduledNum": 37,
+                                    "totalFee": 16.8,
+                                    "totalNum": 20
+                                    },
+                                    {
+                                    "RDRNum": 14,
+                                    "commonSpeed": "High",
+                                    "commonTemp": 17,
+                                    "dateTime": "2021/06/25",
+                                    "satisfyNum": 27,
+                                    "scheduledNum": 38,
+                                    "totalFee": 17.8,
+                                    "totalNum": 30
+                                    },
+                                    {
+                                    "RDRNum": 15,
+                                    "commonSpeed": "Low",
+                                    "commonTemp": 17,
+                                    "dateTime": "2021/06/26",
+                                    "satisfyNum": 28,
+                                    "scheduledNum": 39,
+                                    "totalFee": 18.8,
+                                    "totalNum": 40
+                                    }],
+  })
 
 
 @app.route('/administrator/setDefaultParams', methods=['POST'])
@@ -162,24 +196,24 @@ def check_room_state():
     params = request.get_json(force=True)
     print(request.path, " : ", params)
     return jsonify({'error': False,
-                    'roomsState': [{'roomState': {'roomId': 1,
-                                                  'isCheckIn': False,
-                                                  'mode': 'hot',
-                                                  'speed': 'low',
-                                                  'currTemp': 23,
-                                                  'targetTemp': 25}},
-                                   {'roomState': {'roomId': 2,
-                                                  'isCheckIn': False,
-                                                  'mode': 'cold',
-                                                  'speed': 'high',
-                                                  'currTemp': 26,
-                                                  'targetTemp': 5}},
-                                   {'roomState': {'roomId': 3,
-                                                  'isCheckIn': True,
-                                                  'mode': 'hot',
-                                                  'speed': 'mid',
-                                                  'currTemp': 12,
-                                                  'targetTemp': 15}}
+                    'roomsState': [ {'roomId': 1,
+                                    'state':'on',
+                                    'mode': 'hot',
+                                    'speed': 'low',
+                                    'currTemp': 23,
+                                    'targetTemp': 25},
+                                   {'roomId': 2,
+                                    'state': 'off',
+                                    'mode': 'cold',
+                                    'speed': 'high',
+                                    'currTemp': 26,
+                                    'targetTemp': 5},
+                                    {'roomId': 3,
+                                    'state': 'on',
+                                    'mode': 'hot',
+                                    'speed': 'mid',
+                                    'currTemp': 12,
+                                    'targetTemp': 15}
                                    ]})
 
 

@@ -3,7 +3,7 @@
  * @Author: l
  * @Date: 2021-06-03 14:01:04
  * @LastEditors: l
- * @LastEditTime: 2021-06-16 19:06:02
+ * @LastEditTime: 2021-06-25 22:07:44
  * @FilePath: \DistributedControlSystem\frontend\src\store\modules\manager.js
  */
 
@@ -36,13 +36,7 @@ export default {
             state.endTime = endTime;
         },
         setReport(state, report) {
-            state.report.totalNum = report.totalNum;
-            state.report.commonTemp = report.commonTemp;
-            state.report.commonSpeed = report.commonSpeed;
-            state.report.satisfyNum = report.satisfyNum;
-            state.report.scheduledNum = report.scheduledNum;
-            state.report.RDRNum = report.RDRNum;
-            state.report.totalFee = report.totalFee;
+            state.report=report;
         },
 
     },
