@@ -6,13 +6,14 @@ class Rooom:
         self.current_speed = None
         self.target_temp = None
         self.target_speed = None
+        self.fee = 0
     
-    # 开机
+    # 送风
     def power_on(self):
         self.power = True
         return True
 
-    # 关机
+    # 没送风
     def power_off(self):
         self.power = False
         return True
@@ -22,3 +23,16 @@ class Rooom:
 
     def set_target_speed(self, target_speed):
         self.target_speed = target_speed
+
+    def get_target_speed(self):
+        return self.target_speed
+
+    def get_state(self):
+        ret = {}
+        ret['fee']=self.fee
+        ret['currTemp']=self.current_temp
+        ret['targetTemp']=self.target_temp
+        ret['acState'] = 'on' if self.power == True else 'off'
+        if ret['acState'] != 'off':
+            ret['speed']=self.current_speed
+        return ret

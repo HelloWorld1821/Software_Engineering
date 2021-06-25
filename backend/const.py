@@ -23,9 +23,9 @@ MID_SPEED_KWH_PER_MIN = 0.5
 LOW_SPEED_KWH_PER_MIN = 0.33
 
 KWH_PER_MIN = {
-    'high':1,
-    'mid':0.5,
-    'low':0.33
+    'HIGH':1,
+    'MID':0.5,
+    'LOW':0.33
 }
 
 HIGH_SPEED_MIN_PER_KWH = 1
@@ -45,7 +45,7 @@ MID_SPEED_TMP_PER_MIN = 0.5
 HIGH_SPEED_TMP_PER_MIN = 0.6
 
 TMP_PER_MIN = {
-    'low':0.4,
-    'mid':0.5,
-    'high':0.6
+    'LOW':0.4,
+    'MID':0.5,
+    'HIGH':0.6
 }

@@ -30,7 +30,7 @@ class RoomRecode(db.Model):
     room_id = db.Column(db.Integer, nullable=True)
     start_time = db.Column(db.DateTime, default=datetime.datetime.now)
     end_time = db.Column(db.DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now)
-    speed = db.Column(db.Enum("High", "Medium", "Low"))
+    speed = db.Column(db.Enum("HIGH", "MID", "LOW"))
     fee = db.Column(db.Float, default=0.0)
     times_used = db.Column(db.Integer, nullable=True)
 
@@ -45,7 +45,7 @@ class Room(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     room_id = db.Column(db.Integer, nullable=True)
     mode = db.Column(db.String(80))
-    speed = db.Column(db.Enum("High", "Medium", "Low", "Zero"))
+    speed = db.Column(db.Enum("HIGH", "MID", "LOW", "ZERO"))
     current_temp = db.Column(db.Integer, nullable=True)
     target_temp = db.Column(db.Integer, nullable=True)
 
@@ -65,10 +65,10 @@ def db_init():
     db.session.add(User(username='room_4',password='room',type='room',room_id=104))
 
     # 测试数据1
-    db.session.add(RoomRecode(room_id=101,speed='High',fee=261,times_used=1))
-    db.session.add(RoomRecode(room_id=101,speed='Low',fee=988,times_used=1))
-    db.session.add(RoomRecode(room_id=101,speed='High',fee=661,times_used=2))
-    db.session.add(RoomRecode(room_id=102,speed='High',fee=333,times_used=1))
+    db.session.add(RoomRecode(room_id=101,speed='HIGH',fee=261,times_used=1))
+    db.session.add(RoomRecode(room_id=101,speed='LOW',fee=988,times_used=1))
+    db.session.add(RoomRecode(room_id=101,speed='HIGH',fee=661,times_used=2))
+    db.session.add(RoomRecode(room_id=102,speed='HIGH',fee=333,times_used=1))
 
     # 测试数据2
     db.session.add(Room(room_id=101,mode='cold',speed='Zero',current_temp=26,target_temp=26))

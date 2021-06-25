@@ -16,7 +16,7 @@ class Queuee:
     
     # 创建服务对象
     @staticmethod
-    def create_service_object(room_id,cur_temp,cur_speed,target_temp,target_speed,mode):
+    def create_service_object(room_id,cur_temp,cur_speed,target_temp,target_speed):
         service_object = ServiceObject()
         service_object.init_room_id(room_id=room_id)
         service_object.init_servive_start_time()
@@ -60,6 +60,7 @@ class Queuee:
     # 把服务对象加入到服务队列中
     def add_into_service_queue(self,service_object:ServiceObject):
         with self.service_lock:
+            service_object.current_speed = service_object.target_speed
             self.service_queue[service_object.room_id] = service_object
             # 初始化时钟
             service_object.wait_clock = 0

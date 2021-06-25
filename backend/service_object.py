@@ -9,8 +9,8 @@ class ServiceObject:
         self.current_temp = DEFAULT_TMP
         self.target_temp = DEFAULT_TMP
 
-        self.current_speed = 'mid'
-        self.target_speed = 'mid'
+        self.current_speed = 'MID'
+        self.target_speed = 'MID'
 
         self.fee = 0
 
@@ -41,16 +41,16 @@ class ServiceObject:
 
         # 判断优先级
         if self.target_speed is not None:
-            if self.target_fan_speed == 'high':
+            if self.target_speed == 'HIGH':
                 self.priority = 1
-            elif self.target_fan_speed == 'mid':
+            elif self.target_speed == 'MID':
                 self.priority = 2
             else:
                 self.priority = 3
         else:
-            if self.speed == 'high':
+            if self.speed == 'HIGH':
                 self.priority = 1
-            elif self.speed == 'mid':
+            elif self.speed == 'MID':
                 self.priority = 2
             else:
                 self.priority = 3

@@ -1,4 +1,4 @@
-from backend.const import DEFAULT_TMP, FEE_PER_KWH, KWH_PER_MIN, POWER_OFF_TMP_PER_MIN, TMP_PER_MIN
+from const import DEFAULT_TMP, FEE_PER_KWH, KWH_PER_MIN, POWER_OFF_TMP_PER_MIN, TMP_PER_MIN
 from database import *
 import threading
 from time import sleep
@@ -14,7 +14,7 @@ class Scheduler:
         self.default_temp = 26
         self.schedule_num = 3
         self.SLAVE_NUM = 4
-        self.RR_SLOT = 60
+        self.RR_SLOT = 5
 
         self.queue = Queuee()
         self.max_object_num = 3
@@ -42,8 +42,14 @@ class Scheduler:
                 self.queue.service_queue[room_id].service_clock += 1
         # 更新费用和当前温度
         for room_id in self.rooms:
+            # print('room_id = ',room_id)
             if room_id in self.queue.service_queue:
+                # print(list(self.rooms.keys()))
+                # print(list(self.queue.service_queue.keys()))
                 self.rooms[room_id].current_temp += TMP_PER_MIN[self.queue.service_queue[room_id].current_speed] / 60 * mode_factor
+                # A = self.queue.service_queue[room_id].current_speed
+                # TMP_PER_MIN[self.queue.service_queue[room_id].current_speed] / 60 * mode_factor
+                # TMP_PER_MIN[A] / 60 * mode_factor
                 self.rooms[room_id].fee += KWH_PER_MIN[self.queue.service_queue[room_id].current_speed] / 60 * self.fee_rate
             elif self.rooms[room_id].current_temp != self.default_temp:
                 self.rooms[room_id].current_temp -= POWER_OFF_TMP_PER_MIN
@@ -63,25 +69,37 @@ class Scheduler:
                 # 等待队列不为空 且 服务队列仍然有空位
                 self.queue.pop_wait_queue()
                 self.queue.add_into_service_queue(object)
+                self.rooms[object.room_id].power_on()
+                self.rooms[object.room_id].current_speed=self.rooms[object.room_id].target_speed
             else:
                 # 服务队列已满
                 object_with_lowest_priority = self.queue.get_service_object_with_lowest_priority_from_service_queue()
 
                 if object.priority < object_with_lowest_priority.priority:
                     # 优先级调度
+                    print('优先级调度')
                     self.queue.pop_wait_queue()
                     self.queue.add_into_service_queue(object)
-                    if self.queue.service_count != self.max_object_num:
+                    self.rooms[object.room_id].power_on()
+                    self.rooms[object.room_id].current_speed=self.rooms[object.room_id].target_speed
+                    if len(self.queue.service_queue) != self.max_object_num:
                         self.queue.pop_service_by_room_id(object_with_lowest_priority.room_id)
                         self.queue.add_into_wait_queue(object_with_lowest_priority)
+                        self.rooms[object_with_lowest_priority.room_id].power_off()
+                        self.rooms[object_with_lowest_priority.room_id].current_speed = None
                 elif object.priority == object_with_lowest_priority.priority:
                     # 时间片轮转
                     if object.wait_clock >= self.RR_SLOT:  # 等待时间已满，强行替换
+                        print('时间片调度')
                         self.queue.pop_wait_queue()
                         self.queue.add_into_service_queue(object)
-                        if self.queue.service_count != self.max_object_num:
+                        self.rooms[object.room_id].power_on()
+                        self.rooms[object.room_id].current_speed=self.rooms[object.room_id].target_speed
+                        if len(self.queue.service_queue) != self.max_object_num:
                             self.queue.pop_service_by_room_id(object_with_lowest_priority.room_id)
                             self.queue.add_into_wait_queue(object_with_lowest_priority)
+                            self.rooms[object_with_lowest_priority.room_id].power_off()
+                            self.rooms[object_with_lowest_priority.room_id].current_speed = None
 
     # 设置参数
     def set_para(self,mode,fee_rate,temp_section,default_temp,schedule_num):
@@ -91,19 +109,20 @@ class Scheduler:
         self.default_temp = default_temp
         self.schedule_num = schedule_num
     
+    # 获取房间状态
     def get_slave_state(self,roomId):
-        roomId = roomId - 100 -1
-        if 0< roomId < self.SLAVE_NUM:
-            return self.slaves[roomId].get_state()
+        print('roomid = ',roomId)
+        if 100 < roomId and roomId < 100 + self.SLAVE_NUM+1:
+            return self.rooms[roomId].get_state()
         return {}
     
     # 处理开机、关机、调温、调风请求
     def deal_with_require(self, roomId, targetTemp,targetSpeed,acState):
         if acState == 'On':
             # 送风
-            if self.rooms[roomId].power == False:
-                self.rooms[roomId].power_on()
-            if targetSpeed == self.rooms[roomId].get_speed():
+            # if self.rooms[roomId].power == False:
+            #     self.rooms[roomId].power_on()
+            if targetSpeed == self.rooms[roomId].get_target_speed():
                 # 说明是调温指令
                 self.rooms[roomId].set_target_temp(targetTemp)
                 print('调温')

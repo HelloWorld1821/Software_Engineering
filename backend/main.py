@@ -1,3 +1,4 @@
+from threading import Thread
 from app import *
 from flask import request, jsonify
 from database import *
@@ -6,6 +7,7 @@ import utils
 from scheduler import Scheduler
 
 scheduler = Scheduler()
+t = Thread(target=scheduler.schedule)
 
 # 登录 FINISH
 @app.route('/auth/loginAdmin', methods=['POST'])
@@ -205,7 +207,7 @@ def check_report():
     return jsonify({'error': False,
                     'report': {'totalNum': 20,
                                'commonTemp': 23,
-                               'commonSpeed': 'mid',
+                               'commonSpeed': 'MID',
                                'satisfyNum': 10,
                                'scheduledNum': 30,
                                'RDRNum': 25,
@@ -213,7 +215,7 @@ def check_report():
                                }})
 
 
-# 设置默认参数 FINISH
+# 管理员设置默认参数 FINISH
 @app.route('/administrator/setDefaultParams', methods=['POST'])
 def set_default_params():
     """管理员设置默认参数
@@ -282,7 +284,7 @@ def update_room_state():
     }
     :return: {
         roomState:{
-            speed:str,      # 风速：{"High", "Medium", "Low"}
+            speed:str,      # 风速：{"HIGH", "MID", "LOW"}
             currTemp:int,   # 当前温度
             targetTemp:int, # 目标温度
             fee:double,     # 费用
@@ -308,7 +310,7 @@ def change_room_state():
     params:{
         roomId:int,         # 房间号
         targetTemp:int,     # 目标温度
-        targetSpeed:str,    # 目标风速：{"High", "Medium", "Low"}
+        targetSpeed:str,    # 目标风速：{"HIGH", "MID", "LOW"}
         acState:str         # 开机/关机：{"On", "Off"}
     }
     :return: {
@@ -331,4 +333,5 @@ def change_room_state():
 
 if __name__ == '__main__':
     # db_init()  # 这行代码，如果数据库没有发生变化，则跑一次即可
+    t.start()
     app.run(port=5000, debug=True, host='0.0.0.0')
