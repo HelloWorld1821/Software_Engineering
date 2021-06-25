@@ -10,7 +10,7 @@ class User(db.Model):
     username = db.Column(db.String(80), unique=True)
     password = db.Column(db.String(80), nullable=True)
     type = db.Column(db.Enum('receptionist','manager','administrator','room'))
-    times_used = db.Column(db.Integer, default=0)
+    times_used = db.Column(db.Integer, default=1)
     room_id = db.Column(db.Integer, nullable=True)
     status = db.Column(db.Enum('in','out'), default='out')
 
