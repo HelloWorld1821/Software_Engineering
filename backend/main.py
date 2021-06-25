@@ -3,6 +3,10 @@ from flask import request, jsonify
 from database import *
 from sqlalchemy import func
 import utils
+from scheduler import Scheduler
+
+scheduler = Scheduler()
+
 
 
 # 这个暂时不用写
@@ -19,7 +23,7 @@ def login_admin():
     return jsonify({'error': False})
 
 
-# FINISH
+# 登录 FINISH
 @app.route('/auth/login', methods=['POST'])
 def login():
     """
@@ -50,7 +54,7 @@ def login():
         return jsonify({'error': False, 'type': ans.type})
     
 
-# FINISH
+# 详单 FINISH
 @app.route('/receptionist/getRDR', methods=['POST'])
 def create_RDR():
     """前台开详单
@@ -68,26 +72,30 @@ def create_RDR():
     print(request.path, " : ", params)
     roomId=params['roomId']
     times_used = User.query.filter(User.room_id == roomId).first().times_used
-    ans = Room.query.filter(Room.room_id == roomId).filter(Room.times_used == times_used).all()
+    ans = RoomRecode.query.filter(RoomRecode.room_id == roomId).filter(RoomRecode.times_used == times_used).all()
 
+    RDR = []
     start_time_list = []
     end_time_list = []
     speed_list = []
     fee_list = []
     for i in ans:
-        start_time_list.append(i.start_time)
-        end_time_list.append(i.end_time)
-        speed_list.append(i.speed)
-        fee_list.append(i.fee)
+        # start_time_list.append(i.start_time)
+        # end_time_list.append(i.end_time)
+        # speed_list.append(i.speed)
+        # fee_list.append(i.fee)
+        RDR.append({
+            'startTime':i.start_time,
+            'endTime':i.end_time,
+            'speed':i.speed,
+            'fee':i.fee
+        })
 
     return jsonify({'error': False,
-                    'RDR': {'startTime': start_time_list,
-                               'endTime': end_time_list,
-                               'speed': speed_list,
-                               'fee': fee_list}})
+                    'RDR': RDR})
 
 
-# FINISH
+# 账单 FINISH
 @app.route('/receptionist/getBill', methods=['POST'])
 def create_bill():
     """前台开账单
@@ -100,7 +108,7 @@ def create_bill():
     print(request.path, " : ", params)
     roomId=params['roomId']
     times_used = User.query.filter(User.room_id == roomId).first().times_used
-    fee = db.session.query(func.sum(Room.fee)).filter(Room.room_id == roomId).filter(Room.times_used == times_used).scalar()
+    fee = db.session.query(func.sum(RoomRecode.fee)).filter(RoomRecode.room_id == roomId).filter(RoomRecode.times_used == times_used).scalar()
     if fee is None:
         fee = 0
 
@@ -108,7 +116,7 @@ def create_bill():
                     'bill': {'fee': fee}})
 
 
-# FINISH
+# 开房 FINISH
 @app.route('/receptionist/checkIn', methods=['POST'])
 def check_in():
     """前台开房
@@ -139,7 +147,7 @@ def check_in():
         return jsonify({'error': False, 'idCard': idCard})
 
 
-# FINISH
+# 退房 FINISH
 @app.route('/receptionist/checkOut', methods=['POST'])
 def check_out():
     """前台退房
@@ -194,6 +202,7 @@ def check_report():
                                }})
 
 
+# 设置默认参数 FINISH
 @app.route('/administrator/setDefaultParams', methods=['POST'])
 def set_default_params():
     """管理员设置默认参数
@@ -205,10 +214,19 @@ def set_default_params():
     :return: {error:bool}
     """
     params = request.get_json(force=True)
+    mode = params['mode']
+    tempSection = params['tempSection']
+    defaultTemp = params['defaultTemp']
+    feeRate = params['feeRate']
+    scheduleNum = params['scheduleNum']
+
+    scheduler.set_para(mode,feeRate,tempSection,defaultTemp,scheduleNum)
+
     print(request.path, " : ", params)
     return jsonify({'error': False})
 
 
+# 管理员检查房间状态 FINISH
 @app.route('/administrator/checkRoomState', methods=['POST'])
 def check_room_state():
     """管理员检查房间状态
@@ -222,28 +240,46 @@ def check_room_state():
                             }],
                             error:bool }
     """
-    params = request.get_json(force=True)
-    print(request.path, " : ", params)
-    return jsonify({'error': False,
-                    'roomStates': [{'roomState': {'roomId': 1,
-                                                  'isCheckIn': False,
-                                                  'mode': 'hot',
-                                                  'speed': 'low',
-                                                  'currTemp': 23,
-                                                  'targetTemp': 25}},
-                                   {'roomState': {'roomId': 2,
-                                                  'isCheckIn': False,
-                                                  'mode': 'cold',
-                                                  'speed': 'high',
-                                                  'currTemp': 26,
-                                                  'targetTemp': 5}},
-                                   {'roomState': {'roomId': 3,
-                                                  'isCheckIn': True,
-                                                  'mode': 'hot',
-                                                  'speed': 'mid',
-                                                  'currTemp': 12,
-                                                  'targetTemp': 15}}
-                                   ]})
+    
+    ans = Room.query.all()
+
+    roomStates = []
+    for i in ans:
+        isCheckIn = User.query.filter(User.room_id == i.room_id).first().status
+        roomStates.append({
+            'roomId': i.room_id,
+            'isCheckIn': isCheckIn=='in',
+            'mode': i.mode,
+            'speed': i.speed,
+            'currTemp': i.current_temp,
+            'targetTemp': i.target_temp
+        })
+
+    return jsonify({
+        'error': False,
+        'roomStates': roomStates
+    })
+
+    # return jsonify({'error': False,
+    #                 'roomStates': [{'roomState': {'roomId': 1,
+    #                                               'isCheckIn': False,
+    #                                               'mode': 'hot',
+    #                                               'speed': 'low',
+    #                                               'currTemp': 23,
+    #                                               'targetTemp': 25}},
+    #                                {'roomState': {'roomId': 2,
+    #                                               'isCheckIn': False,
+    #                                               'mode': 'cold',
+    #                                               'speed': 'high',
+    #                                               'currTemp': 26,
+    #                                               'targetTemp': 5}},
+    #                                {'roomState': {'roomId': 3,
+    #                                               'isCheckIn': True,
+    #                                               'mode': 'hot',
+    #                                               'speed': 'mid',
+    #                                               'currTemp': 12,
+    #                                               'targetTemp': 15}}
+    #                                ]})
 
 
 @app.route('/room/getRoomState', methods=['POST'])
@@ -312,5 +348,5 @@ def hello_world():
 
 
 if __name__ == '__main__':
-    # db_init()  # 这行代码，如果数据库没有发生变化，则跑一次即可
+    db_init()  # 这行代码，如果数据库没有发生变化，则跑一次即可
     app.run(port=5000, debug=True, host='0.0.0.0')
