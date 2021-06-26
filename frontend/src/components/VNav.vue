@@ -3,7 +3,7 @@
  * @Author: l
  * @Date: 2021-06-01 14:39:02
  * @LastEditors: l
- * @LastEditTime: 2021-06-26 15:59:54
+ * @LastEditTime: 2021-06-26 21:42:42
  * @FilePath: \DistributedControlSystem\frontend\src\components\VNav.vue
 -->
 <template>
@@ -29,6 +29,9 @@
     class="my-menu"
     mode="horizontal"
     :router="true"
+    background-color="#545c64"
+    text-color="#fff"
+    active-text-color="#ffd04b"
   >
     <el-menu-item index="1" route="/home">主页面</el-menu-item>
     <!-- <el-submenu index="2">

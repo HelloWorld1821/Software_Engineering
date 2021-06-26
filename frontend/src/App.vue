@@ -3,7 +3,7 @@
  * @Author: l
  * @Date: 2021-05-31 13:38:16
  * @LastEditors: l
- * @LastEditTime: 2021-06-25 14:29:56
+ * @LastEditTime: 2021-06-26 21:45:23
  * @FilePath: \DistributedControlSystem\frontend\src\App.vue
 -->
 <template>
@@ -56,5 +56,8 @@ export default {
   height: 100%;
   width: 100%;
   position: fixed;
+}
+body{
+  margin: 0;
 }
 </style>

@@ -3,13 +3,13 @@
  * @Author: l
  * @Date: 2021-06-02 15:34:01
  * @LastEditors: l
- * @LastEditTime: 2021-06-26 12:54:27
+ * @LastEditTime: 2021-06-26 20:39:16
  * @FilePath: \DistributedControlSystem\frontend\src\store\modules\auth.js
  */
 // const api = 'http://10.28.174.15:5000/auth';
 const api = '/api/auth';
 import axios from 'axios'
-
+import router from '../../router';
 export default{
     state:{
         // roomId:'',
@@ -75,7 +75,27 @@ export default{
                         commit('room/setTempSectionLow',a.tempSectionLow, { root: true });
                         commit('room/setMode',a.mode,{root:true});
                     }
+                    switch (resposne.data.role) {
+                        case "room":
+                          router.replace("/room");
+                          
+                          break;
+                        case "administrator":
+                          router.replace("/administrator");
+                          break;
+                        case "manager":
+                          router.replace("/manager");
+                          break;
+                        case "receptionist":
+                          router.replace("/receptionist");
+                          break;
+                        default:
+                          console.log("illegal role");
+                          router.replace("/home");
+                          break;
+                      }
                 }
+                
             }).catch((error)=>{
                 console.error(error);
             });

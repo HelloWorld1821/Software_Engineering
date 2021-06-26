@@ -3,7 +3,7 @@
  * @Author: l
  * @Date: 2021-06-01 15:34:21
  * @LastEditors: l
- * @LastEditTime: 2021-06-26 16:23:12
+ * @LastEditTime: 2021-06-26 20:43:07
  * @FilePath: \DistributedControlSystem\frontend\src\pages\Room.vue
 -->
 <template>
@@ -244,6 +244,13 @@ export default {
         if (cTemp >= tTemp) {
           this.sleepMode = true; //打开休眠模式
           this.stopAirSupply();
+           
+          this.$notify({
+            title: '空调进入休眠状态',
+            message: '',
+            // position: 'bottom-left'
+          });
+      
         } else {
           if (tTemp - cTemp >= 1 && this.sleepMode == true) {
             this.sleepMode = false;

@@ -3,7 +3,7 @@
  * @Author: l
  * @Date: 2021-06-01 10:29:38
  * @LastEditors: l
- * @LastEditTime: 2021-06-25 20:49:09
+ * @LastEditTime: 2021-06-26 21:38:24
  * @FilePath: \DistributedControlSystem\frontend\src\pages\Login.vue
 -->
 <template>
@@ -42,18 +42,40 @@
       </label>
     </form> -->
     <el-form label-width="60px" size="small" class="login-form">
-      <el-form-item label="用户名">
+      <!-- <el-form-item label="用户名">
         <el-input v-model="userName"></el-input>
-      </el-form-item>
-      <el-form-item label="密码">
-        <el-input v-model="password"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="loginAdmin({ userName, password })">
-          登录
-        </el-button>
-        <el-button @click="reset">重置</el-button>
-      </el-form-item>
+      </el-form-item> -->
+      <el-row align="middle" type="flex">
+        <el-col :span="10"> 账号: </el-col>
+        <el-col :span="10">
+          <el-autocomplete
+            class="inline-input"
+            v-model="userName"
+            :fetch-suggestions="querySearch"
+            placeholder="请输入账号"
+          ></el-autocomplete>
+        </el-col>
+      </el-row>
+      <el-row align="middle" type="flex" style="margin-top: 20px">
+        <el-col :span="10"> 密码: </el-col>
+        <el-col :span="10">
+          <el-input
+            v-model="password"
+            show-password
+            placeholder="请输入密码"
+          ></el-input>
+        </el-col>
+      </el-row>
+      <el-row align="middle" type="flex" style="margin-top: 20px">
+        <el-col :span="8" :offset="3">
+          <el-button type="primary" @click="loginAdmin({ userName, password })">
+            登录
+          </el-button>
+        </el-col>
+        <el-col :span="10">
+          <el-button @click="reset">重置</el-button>
+        </el-col>
+      </el-row>
     </el-form>
   </div>
 </template>
@@ -67,6 +89,15 @@ export default defineComponent({
   name: "Login",
   data: function () {
     return {
+      userList: [
+        { value: "room_1" },
+        { value: "room_2" },
+        { value: "room_3" },
+        { value: "room_4" },
+        { value: "receptionist_1" },
+        { value: "manager_1" },
+        { value: "administrator_1" },
+      ],
       userName: "",
       password: "",
     };
@@ -75,34 +106,41 @@ export default defineComponent({
     ...mapState("auth", ["role"]),
   },
   watch: {
-    role: function () {
-      console.log("current role:", this.role);
-      switch (this.role) {
-        case "room":
-          this.$router.replace("/room");
-          break;
-        case "administrator":
-          this.$router.replace("/administrator");
-          break;
-        case "manager":
-          this.$router.replace("/manager");
-          break;
-        case "receptionist":
-          this.$router.replace("/receptionist");
-          break;
-        default:
-          console.log("illegal role");
-          this.$router.replace("/home");
-          break;
-      }
-    },
+    // role: function () {
+    //   console.log("current role:", this.role);
+    //   switch (this.role) {
+    //     case "room":
+    //       this.$router.replace("/room");
+    //       break;
+    //     case "administrator":
+    //       this.$router.replace("/administrator");
+    //       break;
+    //     case "manager":
+    //       this.$router.replace("/manager");
+    //       break;
+    //     case "receptionist":
+    //       this.$router.replace("/receptionist");
+    //       break;
+    //     default:
+    //       console.log("illegal role");
+    //       this.$router.replace("/home");
+    //       break;
+    //   }
   },
   methods: {
     ...mapActions("auth", ["loginAdmin"]),
-    reset: function(){
-      console.log('reset');
-      this.userName="";
-      this.password="";
+    reset: function () {
+      console.log("reset");
+      this.userName = "";
+      this.password = "";
+    },
+    querySearch(queryString, cb) {
+      var userList = this.userList;
+      var results = queryString
+        ? userList.filter(this.createFilter(queryString))
+        : userList;
+      // 调用 callback 返回建议列表的数据
+      cb(results);
     },
   },
 });

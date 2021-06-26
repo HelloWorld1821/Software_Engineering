@@ -3,7 +3,7 @@
  * @Author: l
  * @Date: 2021-06-01 15:38:49
  * @LastEditors: l
- * @LastEditTime: 2021-06-25 23:07:23
+ * @LastEditTime: 2021-06-26 21:08:34
  * @FilePath: \DistributedControlSystem\frontend\src\pages\Receptionist.vue
 -->
 <template>
@@ -65,19 +65,16 @@
             </el-row>
           </div>
 
-          <table class="bill-table">
-            <thead></thead>
-            <tbody>
-              <tr>
-                <td>房间ID:</td>
-                <td>{{ billRoomId }}</td>
-              </tr>
-              <tr>
-                <td>费用:</td>
-                <td>{{ bill.fee }}</td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="bill-form">
+            <el-form label-width="100px" size="small" class="login-form">
+              <el-form-item label="房间ID">
+                <el-row>{{ billRoomId }}</el-row>
+              </el-form-item>
+              <el-form-item label="费用">
+                <el-row>{{ bill.fee }}</el-row>
+              </el-form-item>
+            </el-form>
+          </div>
         </div>
       </el-tab-pane>
 
@@ -114,14 +111,14 @@
           </div>
 
           <div class="rdr-table">
-            <el-table :data="RDR" border style="width: 100%" >
-              <el-table-column prop="startTime" label="起始时间" width="250" >
+            <el-table :data="RDR" border style="width: 100%">
+              <el-table-column prop="startTime" label="起始时间" width="286">
               </el-table-column>
-              <el-table-column prop="endTime" label="结束时间" width="250">
+              <el-table-column prop="endTime" label="结束时间" width="286">
               </el-table-column>
-              <el-table-column prop="speed" label="风速" width="250"> 
+              <el-table-column prop="speed" label="风速" width="286">
               </el-table-column>
-              <el-table-column prop="fee" label="费用" width="300"> 
+              <el-table-column prop="fee" label="费用" width="">
               </el-table-column>
             </el-table>
           </div>
@@ -164,26 +161,20 @@ export default {
   margin-right: 10%;
   background-color: #fff;
 }
-.bill-div {
-  background-color: pink;
-}
-
-.bill-table {
-  border-collapse: collapse;
+.bill-form{
+  border-radius: 30px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  margin-right: 20%;
+  margin-left: 20%;
   margin-top: 50px;
-  width: 100%;
-  text-align: center;
+  margin-bottom: 50px;
+  padding-top: 50px;
+  padding-left: 40px;
+  padding-right: 40px;
+  padding-bottom: 25px;
 }
 
-.bill-table td,
-.bill-table th {
-  border: 2px solid #cad9ea;
-  color: #666;
-  height: 60px;
-  padding-right: 10px;
-  padding-left: 10px;
-}
-.rdr-table{
+.rdr-table {
   margin-top: 50px;
 }
 </style>
