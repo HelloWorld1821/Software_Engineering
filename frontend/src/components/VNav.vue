@@ -3,7 +3,7 @@
  * @Author: l
  * @Date: 2021-06-01 14:39:02
  * @LastEditors: l
- * @LastEditTime: 2021-06-26 12:40:50
+ * @LastEditTime: 2021-06-26 15:59:54
  * @FilePath: \DistributedControlSystem\frontend\src\components\VNav.vue
 -->
 <template>
@@ -28,7 +28,7 @@
     :default-active="activeIndex"
     class="my-menu"
     mode="horizontal"
-    router="true"
+    :router="true"
   >
     <el-menu-item index="1" route="/home">主页面</el-menu-item>
     <!-- <el-submenu index="2">

@@ -3,33 +3,20 @@
  * @Author: l
  * @Date: 2021-06-03 14:12:06
  * @LastEditors: l
- * @LastEditTime: 2021-06-16 19:08:25
+ * @LastEditTime: 2021-06-26 16:44:45
  * @FilePath: \DistributedControlSystem\frontend\src\store\modules\receptionist.js
  */
 const api = '/api/receptionist';
 import axios from 'axios';
 export default{
     state:{
-        billRoomId:10,
-        RDRRoomId:9,
+        billRoomId:'',
+        RDRRoomId:'',
         billIsOk:false,
         RDRIsOk:false,
-        RDR:[{
-            startTime: '2021-6-2,15:20',
-            endTime: '2021-6-3,16:40',
-            speed: 'high',
-            fee: 2333.3,
-        },
-        {
-            startTime: '2021-6-2,15:20',
-            endTime: '2021-6-3,16:40',
-            speed: 'high',
-            fee: 4666.3,
-        },
+        RDR:[
         ],
-        bill:{
-            fee:10.0,
-        }
+        bill:''
     },
     getter:{},
     mutations:{

@@ -3,7 +3,7 @@
  * @Author: l
  * @Date: 2021-06-03 14:01:04
  * @LastEditors: l
- * @LastEditTime: 2021-06-25 22:07:44
+ * @LastEditTime: 2021-06-26 16:45:37
  * @FilePath: \DistributedControlSystem\frontend\src\store\modules\manager.js
  */
 
@@ -11,18 +11,10 @@ const api = '/api/manager';
 import axios from 'axios'
 export default {
     state: {
-        startTime: '2021/6/4',
-        endTime: '2021/6/5',
+        startTime: '',
+        endTime: '',
         reportIsOk: false,
-        report: {
-            totalNum: 20,
-            commonTemp: 23,
-            commonSpeed: 'mid',
-            satisfyNum: 10,
-            scheduledNum: 30,
-            RDRNum: 25,
-            totalFee: 10.0
-        }
+        report:[]
     },
     getter: {},
     mutations: {

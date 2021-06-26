@@ -3,7 +3,7 @@
  * @Author: l
  * @Date: 2021-06-01 15:36:52
  * @LastEditors: l
- * @LastEditTime: 2021-06-26 01:03:01
+ * @LastEditTime: 2021-06-26 17:47:40
  * @FilePath: \DistributedControlSystem\frontend\src\pages\Administrator.vue
 -->
 <template>
@@ -45,17 +45,39 @@
         <div class="content">
           <div class="rooms-table">
             <el-table :data="roomsState" border style="width: 100%">
-              <el-table-column prop="roomId" label="房间ID" width="160">
+
+              <el-table-column label="房间ID" width="143">
+                <template slot-scope="scope">
+                  <i class="el-icon-user"></i>
+                  {{scope.row.roomId}}
+                </template>
               </el-table-column>
-              <el-table-column prop="state" label="送风状态" width="160">
+
+              <el-table-column label="送风状态" width="143">
+                <template slot-scope="scope">
+                  <!-- {{ scope.row.state }} -->
+                  <el-switch
+                    :disabled="true"
+                    v-model="scope.row.state"
+                    active-color="#13ce66"
+                    inactive-color="#ff4949"
+                    active-value="sending"
+                    inactive-value="not sending"
+                  >
+                  </el-switch>
+                </template>
               </el-table-column>
-              <el-table-column prop="mode" label="空调模式" width="160">
+              <el-table-column prop="mode" label="空调模式" width="143">
               </el-table-column>
-              <el-table-column prop="speed" label="当前风速" width="160">
+              <el-table-column prop="speed" label="当前风速" width="143">
               </el-table-column>
-              <el-table-column prop="currTemp" label="当前温度" width="160">
+              <el-table-column prop="currTemp" label="当前温度" width="143">
               </el-table-column>
-              <el-table-column prop="targetTemp" label="目标温度" width="">
+              <el-table-column prop="targetTemp" label="目标温度" width="143">
+              </el-table-column>
+              <el-table-column prop="servedTime" label="服务时间" width="143">
+              </el-table-column>
+              <el-table-column prop="fee" label="服务费用" width="">
               </el-table-column>
             </el-table>
           </div>
@@ -77,11 +99,19 @@
               <el-form-item label="制冷温控区间">
                 <el-row>
                   <el-col :span="8" :offset="2">
-                    <el-input type="number" v-model="params.coldLow" placeholder="最低温度"></el-input>
+                    <el-input
+                      type="number"
+                      v-model="params.coldLow"
+                      placeholder="最低温度"
+                    ></el-input>
                   </el-col>
                   <el-col :span="1" :offset="1">-</el-col>
                   <el-col :span="8" :offset="1">
-                    <el-input type="number" v-model="params.coldHigh" placeholder="最高温度"></el-input>
+                    <el-input
+                      type="number"
+                      v-model="params.coldHigh"
+                      placeholder="最高温度"
+                    ></el-input>
                   </el-col>
                 </el-row>
               </el-form-item>
@@ -89,35 +119,55 @@
               <el-form-item label="制热温控区间">
                 <el-row>
                   <el-col :span="8" :offset="2">
-                    <el-input type="number" v-model="params.hotLow" placeholder="最低温度"></el-input>
+                    <el-input
+                      type="number"
+                      v-model="params.hotLow"
+                      placeholder="最低温度"
+                    ></el-input>
                   </el-col>
                   <el-col :span="1" :offset="1">-</el-col>
                   <el-col :span="8" :offset="1">
-                    <el-input type="number" v-model="params.hotHigh" placeholder="最高温度"></el-input>
+                    <el-input
+                      type="number"
+                      v-model="params.hotHigh"
+                      placeholder="最高温度"
+                    ></el-input>
                   </el-col>
                 </el-row>
               </el-form-item>
 
               <el-form-item label="缺省温度">
-                  <el-row>
+                <el-row>
                   <el-col :span="8" :offset="8">
-                    <el-input type="number" v-model="params.defaultTemp" placeholder="缺省温度"></el-input>
+                    <el-input
+                      type="number"
+                      v-model="params.defaultTemp"
+                      placeholder="缺省温度"
+                    ></el-input>
                   </el-col>
                 </el-row>
               </el-form-item>
 
               <el-form-item label="费率">
-                   <el-row>
+                <el-row>
                   <el-col :span="8" :offset="8">
-                    <el-input type="number" v-model="params.feeRate" placeholder="费率"></el-input>
+                    <el-input
+                      type="number"
+                      v-model="params.feeRate"
+                      placeholder="费率"
+                    ></el-input>
                   </el-col>
                 </el-row>
               </el-form-item>
 
               <el-form-item label="服务对象数">
-                    <el-row>
+                <el-row>
                   <el-col :span="8" :offset="8">
-                    <el-input type="number" v-model="params.scheduledNum" placeholder="服务对象数"></el-input>
+                    <el-input
+                      type="number"
+                      v-model="params.scheduledNum"
+                      placeholder="服务对象数"
+                    ></el-input>
                   </el-col>
                 </el-row>
               </el-form-item>
@@ -142,14 +192,14 @@ export default {
     return {
       tabPosition: "left",
       params: {
-        defaultMode: "",
-        coldHigh: "",
-        coldLow: "",
-        hotHigh: "",
-        hotLow: "",
-        feeRate: "",
-        defaultTemp: "",
-        scheduledNum: "",
+        defaultMode: "cold",
+        coldHigh: 25,
+        coldLow: 18,
+        hotHigh: 30,
+        hotLow: 25,
+        feeRate: 1,
+        defaultTemp: 25,
+        scheduledNum: 3,
       },
     };
   },
@@ -168,7 +218,7 @@ export default {
       this.timer = setInterval(() => {
         let that = this;
         that.checkRoomsState();
-      }, 10000);
+      }, 1000);
     }
   },
   destroyed: function () {

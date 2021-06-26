@@ -3,7 +3,7 @@
  * @Author: l
  * @Date: 2021-06-01 15:34:21
  * @LastEditors: l
- * @LastEditTime: 2021-06-26 15:34:16
+ * @LastEditTime: 2021-06-26 16:23:12
  * @FilePath: \DistributedControlSystem\frontend\src\pages\Room.vue
 -->
 <template>
@@ -23,8 +23,8 @@
           <div>
             <el-input-number
               v-model="targetTemp"
-              :min="10"
-              :max="40"
+              :min=this.$store.state.room.roomParams.tempSectionLow
+              :max=this.$store.state.room.roomParams.tempSectionHigh
               size="small"
             >
             </el-input-number>
@@ -93,7 +93,7 @@
           ><div>
             <el-switch
 
-              disabled=true
+              :disabled="true"
               v-model="sleepMode"
               active-color="#13ce66"
               inactive-color="#ff4949"
@@ -105,11 +105,22 @@
         <el-col :span="8" :offset="0" class="temp">
           <div>送风状态:</div>
         </el-col>
-        <el-col :span="8" :offset="4">
+        <!-- <el-col :span="8" :offset="4">
           <div>
             {{ roomState.acState }}
           </div>
-        </el-col>
+        </el-col> -->
+         <el-col :span="4" :offset="6"
+          ><div>
+            <el-switch
+
+              :disabled="true"
+              v-model="isSupplyBool"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+            >
+            </el-switch></div
+        ></el-col>
       </el-row>
 
       <el-row style="margin-top: 20px">
@@ -151,22 +162,28 @@
 <script>
 import { mapActions, mapState } from "vuex";
 export default {
+
   data: function () {
     return {
-      targetTemp: null,
-      targetSpeed: null,
+      targetTemp:  this.$store.state.room.roomParams.defaultTemp,
+      targetSpeed: this.$store.state.room.roomParams.defaultSpeed,
       targetACState: "off",
       acStateBool: false,
       sleepMode: false, //是否开启休眠模式
+      isSupplyBool: false,
     };
   },
-  created() {
-    this.targetTemp = this.roomParams.targetTemp;
-    this.targetSpeed = this.roomParams.targetSpeed;
-  },
+  // created() {
+  //   this.targetTemp = this.roomParams.targetTemp;
+  //   this.targetSpeed = this.roomParams.targetSpeed;
+  // },
   computed: {
     ...mapState("room", ["roomId", "roomState", "roomParams"]),
+    // isSupplyBool:()=>{
+    //     return this.$store.state.room.roomState.acState;
+    // },
   },
+
   methods: {
     ...mapActions("room", ["updateRoomState", "changeRoomState"]),
 
@@ -210,7 +227,7 @@ export default {
       if (this.acStateBool == false) return;
       if (this.roomParams.mode == "cold") {
         //制冷模式
-        console.log('sleep on currTemp:',cTemp,'targetTemp:',tTemp,'mode',this.sleepMode);
+        // console.log('sleep on currTemp:',cTemp,'targetTemp:',tTemp,'mode',this.sleepMode);
         if (cTemp <= tTemp) {
           
           this.sleepMode = true; //打开休眠模式
@@ -266,6 +283,8 @@ export default {
       // console.log("roomState change , currTemp:",newValue.currTemp);
       var cTemp = parseFloat(newValue.currTemp);
       var tTemp = parseFloat(this.targetTemp);
+      if(newValue.acState == 'on') this.isSupplyBool = true;
+      if(newValue.acState == 'off') this.isSupplyBool =false;
       this.handlerTempChange(cTemp,tTemp);
     },
   },
@@ -278,7 +297,7 @@ export default {
       this.updateTimer = setInterval(() => {
         let that = this;
         that.updateRoomState({ roomId: that.roomId });
-      }, 4000);
+      }, 1000);
     }
   },
   destroyed: function () {
@@ -287,7 +306,7 @@ export default {
 
     //销毁时看作关机请求
     this.targetACState = "off";
-    this.changeRoomStateHere();
+    this.tryChangeRoomState();
   },
 };
 </script>
