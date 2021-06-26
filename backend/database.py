@@ -100,11 +100,6 @@ def db_init():
     db.session.add(User(username='room_3',password='room',type='room',room_id=103))
     db.session.add(User(username='room_4',password='room',type='room',room_id=104))
 
-    # 测试数据1
-    db.session.add(RoomRecode(room_id=101,speed='HIGH',fee=261,times_used=1))
-    db.session.add(RoomRecode(room_id=101,speed='LOW',fee=988,times_used=1))
-    db.session.add(RoomRecode(room_id=101,speed='HIGH',fee=661,times_used=2))
-    db.session.add(RoomRecode(room_id=102,speed='HIGH',fee=333,times_used=1))
 
     # 测试数据2
     db.session.add(Room(room_id=101,mode='cold',speed='',current_temp=32,target_temp=25,state='NOT SENDING',served_time=0,fee=0))
@@ -113,37 +108,26 @@ def db_init():
     db.session.add(Room(room_id=104,mode='cold',speed='',current_temp=29,target_temp=25,state='NOT SENDING',served_time=0,fee=0))
 
     # 测试数据3
-    dates=['2021-06-23','2021-06-24','2021-06-25','2021-06-22']
+    dates=['2021-06-22','2021-06-23','2021-06-24','2021-06-25']
     format_dates=[]
     for date in dates:
         format_dates.append(datetime.datetime.strptime(date,'%Y-%m-%d'))
-    db.session.add(NewStatistics(dateTime=format_dates[0],totalNum=10,satisfyNum=25,scheduledNum=36,RDRNum=12,totalFee=15.8))
-    db.session.add(NewStatistics(dateTime=format_dates[1],totalNum=20,satisfyNum=26,scheduledNum=37,RDRNum=13,totalFee=16.8))
-    db.session.add(NewStatistics(dateTime=format_dates[2],totalNum=30,satisfyNum=27,scheduledNum=38,RDRNum=14,totalFee=17.8))
-    db.session.add(NewStatistics(dateTime=format_dates[3],totalNum=40,satisfyNum=28,scheduledNum=39,RDRNum=15,totalFee=18.8))
+    db.session.add(NewStatistics(dateTime=format_dates[0],totalNum=23,satisfyNum=2,scheduledNum=28,RDRNum=3,totalFee=15.8))
+    db.session.add(NewStatistics(dateTime=format_dates[1],totalNum=12,satisfyNum=0,scheduledNum=15,RDRNum=13,totalFee=16.8))
+    db.session.add(NewStatistics(dateTime=format_dates[2],totalNum=36,satisfyNum=3,scheduledNum=38,RDRNum=0,totalFee=17.8))
+    db.session.add(NewStatistics(dateTime=format_dates[3],totalNum=32,satisfyNum=1,scheduledNum=40,RDRNum=21,totalFee=18.8))
     
     # 测试数据4
-    dates=['2021-06-23','2021-06-24','2021-06-25','2021-06-22']
+    dates=['2021-06-22','2021-06-23','2021-06-24','2021-06-25']
     format_dates=[]
     for date in dates:
         format_dates.append(datetime.datetime.strptime(date,'%Y-%m-%d'))
-    db.session.add(TempSpeed(dateTime=format_dates[0],currentTemp=15,currentSpeed='HIGH'))
-    db.session.add(TempSpeed(dateTime=format_dates[0],currentTemp=16,currentSpeed='LOW'))
-    db.session.add(TempSpeed(dateTime=format_dates[0],currentTemp=16,currentSpeed='HIGH'))
+    db.session.add(TempSpeed(dateTime=format_dates[0],currentTemp=24,currentSpeed='HIGH'))
+    db.session.add(TempSpeed(dateTime=format_dates[1],currentTemp=23,currentSpeed='MID'))
+    db.session.add(TempSpeed(dateTime=format_dates[2],currentTemp=19,currentSpeed='HIGH'))
+    db.session.add(TempSpeed(dateTime=format_dates[2],currentTemp=20,currentSpeed='MID'))
+    db.session.add(TempSpeed(dateTime=format_dates[3],currentTemp=22,currentSpeed='LOW'))
 
-    db.session.add(TempSpeed(dateTime=format_dates[1],currentTemp=15,currentSpeed='MID'))
-    db.session.add(TempSpeed(dateTime=format_dates[1],currentTemp=16,currentSpeed='HIGH'))
-    db.session.add(TempSpeed(dateTime=format_dates[1],currentTemp=15,currentSpeed='HIGH'))
-    db.session.add(TempSpeed(dateTime=format_dates[1],currentTemp=15,currentSpeed='LOW'))
-
-    db.session.add(TempSpeed(dateTime=format_dates[2],currentTemp=15,currentSpeed='HIGH'))
-    db.session.add(TempSpeed(dateTime=format_dates[2],currentTemp=17,currentSpeed='LOW'))
-    db.session.add(TempSpeed(dateTime=format_dates[2],currentTemp=17,currentSpeed='MID'))
-    db.session.add(TempSpeed(dateTime=format_dates[2],currentTemp=17,currentSpeed='MID'))
-
-    db.session.add(TempSpeed(dateTime=format_dates[3],currentTemp=17,currentSpeed='LOW'))
-    db.session.add(TempSpeed(dateTime=format_dates[3],currentTemp=15,currentSpeed='HIGH'))
-    db.session.add(TempSpeed(dateTime=format_dates[3],currentTemp=17,currentSpeed='LOW'))
 
 
     db.session.commit()

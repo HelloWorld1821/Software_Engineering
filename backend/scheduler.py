@@ -14,7 +14,7 @@ class Scheduler:
         self.fee_rate = 1.0
         self.temp_section = [18,25,25,30]
         self.default_temp = 25
-        self.default_speed = 'LOW'
+        self.default_speed = 'MID'
         self.schedule_num = 3
         self.SLAVE_NUM = 4
         self.RR_SLOT = 120   #时间片调度间隔：两分钟
@@ -89,7 +89,7 @@ class Scheduler:
                     # 如果目标温度在更新前后的温度之间,说明达到了目标温度
                     if previous_temp <= target_temp <= current_temp or previous_temp >= target_temp >= current_temp:
                         self.add_record('satisfyNum')
-                        
+
                     Room.query.filter(Room.room_id == room_id).update({
                         "mode":self.mode,
                         "speed":self.queue.service_queue[room_id].current_speed,

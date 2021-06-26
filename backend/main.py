@@ -41,8 +41,8 @@ def login_admin():
             attributes = {
                 'defaultTemp':scheduler.default_temp,
                 'defaultSpeed':scheduler.default_speed.lower(),
-                'tempSectionLow':scheduler.temp_section[0] if scheduler.mode == 'cold' else scheduler.temp_section[2],
-                'tempSectionHigh':scheduler.temp_section[1] if scheduler.mode == 'cold' else scheduler.temp_section[3],
+                'tempSectionLow':int(scheduler.temp_section[0] if scheduler.mode == 'cold' else scheduler.temp_section[2]),
+                'tempSectionHigh':int(scheduler.temp_section[1] if scheduler.mode == 'cold' else scheduler.temp_section[3]),
                 'roomId': ans.room_id,
                 'mode':scheduler.mode
             }
@@ -236,22 +236,6 @@ def check_report():
                         RDRNum:int , 生成RDR的次数
                         totalFee:double }}
     """
-    ###########################################################################
-    # 把id=1的行的各种次数都加1
-    # 这里select的条件是NewStatistics.id==1
-    # 实际的select条件应该为当天的时间
-    # 比如6月25日请求生成了一次RDR，那么要找到表格里date=06/25的那一行，将那个字段增加一
-    '''
-    ans = NewStatistics.query.filter(NewStatistics.id==1).first();
-    NewStatistics.query.filter(NewStatistics.id==1).update({
-                    'totalNum':ans.totalNum+1,
-                    'satisfyNum':ans.satisfyNum+1,
-                    'scheduledNum':ans.scheduledNum+1,
-                    'RDRNum':ans.RDRNum+1,
-    })
-    db.session.commit()
-    '''
-    ###########################################################################
 
     params = request.get_json(force=True)
     print(request.path, " : ", params)
@@ -259,7 +243,7 @@ def check_report():
     # 时间格式暂时按照图片里的YYYY/MM/DD，如2021/06/25
     # 起止日期，为date类
     startTime=datetime.datetime.strptime(params['startTime'],'%Y-%m-%d')
-    endTime=datetime.datetime.strptime(params['endTime'],'%Y-%m-%d')
+    endTime=datetime.datetime.strptime(params['endTime']+' 23:59:59','%Y-%m-%d %H:%M:%S')
 
 
     # 筛选出日期位于startDate和endDate之间的行
@@ -353,13 +337,18 @@ def set_default_params():
     :return: {error:bool}
     """
     params = request.get_json(force=True)
+    print(request.path, " : ", params)
     mode = params['defaultMode']
-    tempSection = params['tempSection']
-    defaultTemp = params['defaultTemp']
-    feeRate = params['feeRate']
-    scheduleNum = params['scheduleNum']
+    # tempSection = params['tempSection']
+    hotHigh = int(params['hotHigh'])
+    hotLow = int(params['hotLow'])
+    coldHigh = int(params['coldHigh'])
+    coldLow = int(params['coldLow'])
+    defaultTemp = int(params['defaultTemp'])
+    feeRate = float(params['feeRate'])
+    scheduleNum = int(params['scheduledNum'])
 
-    scheduler.set_para(mode,feeRate,tempSection,defaultTemp,scheduleNum)
+    scheduler.set_para(mode,feeRate,[coldLow,coldHigh,hotLow,hotHigh],defaultTemp,scheduleNum)
 
     print(request.path, " : ", params)
     return jsonify({'error': False})
