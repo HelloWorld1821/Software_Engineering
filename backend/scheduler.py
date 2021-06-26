@@ -44,15 +44,25 @@ class Scheduler:
         for room_id in self.rooms:
             # print('room_id = ',room_id)
             if room_id in self.queue.service_queue:
-                # print(list(self.rooms.keys()))
-                # print(list(self.queue.service_queue.keys()))
                 self.rooms[room_id].current_temp += TMP_PER_MIN[self.queue.service_queue[room_id].current_speed] / 60 * mode_factor
-                # A = self.queue.service_queue[room_id].current_speed
-                # TMP_PER_MIN[self.queue.service_queue[room_id].current_speed] / 60 * mode_factor
-                # TMP_PER_MIN[A] / 60 * mode_factor
                 self.rooms[room_id].fee += KWH_PER_MIN[self.queue.service_queue[room_id].current_speed] / 60 * self.fee_rate
+                Room.query.filter(Room.room_id == room_id).update({
+                    "mode":self.mode,
+                    "speed":self.queue.service_queue[room_id].current_speed,
+                    "current_temp":self.rooms[room_id].current_temp,
+                    "target_temp":self.rooms[room_id].target_temp,
+                    "state":"SENDING"
+                })  
             elif self.rooms[room_id].current_temp != self.default_temp:
                 self.rooms[room_id].current_temp -= POWER_OFF_TMP_PER_MIN
+                Room.query.filter(Room.room_id == room_id).update({
+                    "mode":self.mode,
+                    "speed":"ZERO",
+                    "current_temp":self.rooms[room_id].current_temp,
+                    "target_temp":self.rooms[room_id].target_temp,
+                    "state":"NOTSENDING"
+                })
+            db.session.commit()
         
     
     # 调度

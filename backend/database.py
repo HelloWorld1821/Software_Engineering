@@ -43,11 +43,12 @@ class RoomRecode(db.Model):
 
 class Room(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    room_id = db.Column(db.Integer, nullable=True)
-    mode = db.Column(db.String(80))
-    speed = db.Column(db.Enum("HIGH", "MID", "LOW", "ZERO"))
-    current_temp = db.Column(db.Integer, nullable=True)
-    target_temp = db.Column(db.Integer, nullable=True)
+    room_id = db.Column(db.Integer, nullable=True)              # 房间id
+    mode = db.Column(db.String(80))                             # 冷热模式
+    speed = db.Column(db.Enum("HIGH", "MID", "LOW", "ZERO"))    # 当前风速
+    current_temp = db.Column(db.Float, nullable=True)         # 当前温度
+    target_temp = db.Column(db.Float, nullable=True)          # 目标温度
+    state = db.Column(db.Enum("SENDING", "NOTSENDING"))         # 是否送风
 
 class Statistics(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -71,9 +72,9 @@ def db_init():
     db.session.add(RoomRecode(room_id=102,speed='HIGH',fee=333,times_used=1))
 
     # 测试数据2
-    db.session.add(Room(room_id=101,mode='cold',speed='Zero',current_temp=26,target_temp=26))
-    db.session.add(Room(room_id=102,mode='cold',speed='Zero',current_temp=26,target_temp=26))
-    db.session.add(Room(room_id=103,mode='cold',speed='Zero',current_temp=26,target_temp=26))
-    db.session.add(Room(room_id=104,mode='cold',speed='Zero',current_temp=26,target_temp=26))
+    db.session.add(Room(room_id=101,mode='cold',speed='Zero',current_temp=26,target_temp=26,state='NOTSENDING'))
+    db.session.add(Room(room_id=102,mode='cold',speed='Zero',current_temp=26,target_temp=26,state='NOTSENDING'))
+    db.session.add(Room(room_id=103,mode='cold',speed='Zero',current_temp=26,target_temp=26,state='NOTSENDING'))
+    db.session.add(Room(room_id=104,mode='cold',speed='Zero',current_temp=26,target_temp=26,state='NOTSENDING'))
     
     db.session.commit()

@@ -262,6 +262,7 @@ def check_room_state():
         roomsState.append({'roomState':{
             'roomId': i.room_id,
             'isCheckIn': isCheckIn=='in',
+            'state': i.state,
             'mode': i.mode,
             'speed': i.speed,
             'currTemp': i.current_temp,
@@ -302,7 +303,7 @@ def update_room_state():
         'roomState': roomState
     })
 
-# 处理房客的开关机、调温、调风请求
+# 处理房客的开关机、调温、调风请求 FINISH
 @app.route('/room/changeRoomState', methods=['POST'])
 def change_room_state():
     """
@@ -332,6 +333,6 @@ def change_room_state():
 
 
 if __name__ == '__main__':
-    # db_init()  # 这行代码，如果数据库没有发生变化，则跑一次即可
+    db_init()  # 这行代码，如果数据库没有发生变化，则跑一次即可
     t.start()
     app.run(port=5000, debug=True, host='0.0.0.0')
