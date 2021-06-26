@@ -14,7 +14,7 @@ class Scheduler:
         self.default_temp = 26
         self.schedule_num = 3
         self.SLAVE_NUM = 4
-        self.RR_SLOT = 5
+        self.RR_SLOT = 60   #时间片调度间隔：60s
 
         self.queue = Queuee()
         self.max_object_num = 3
@@ -53,8 +53,8 @@ class Scheduler:
                     "target_temp":self.rooms[room_id].target_temp,
                     "state":"SENDING"
                 })  
-            elif self.rooms[room_id].current_temp != self.default_temp:
-                self.rooms[room_id].current_temp -= POWER_OFF_TMP_PER_MIN
+            elif self.rooms[room_id].current_temp * mode_factor > self.default_temp* mode_factor:
+                self.rooms[room_id].current_temp -= POWER_OFF_TMP_PER_MIN /60 * mode_factor
                 Room.query.filter(Room.room_id == room_id).update({
                     "mode":self.mode,
                     "speed":"ZERO",
@@ -146,14 +146,22 @@ class Scheduler:
         else:
             # 不送风
             self.rooms[roomId].power_off()
-            with self.serv_queue.service_lock:
-                if roomId in self.queue.service_queue:
-                    self.queue.pop_service_by_room_id(roomId)
-                    del self.queue.service_queue[roomId]
-            with self.serv_queue.wait_lock:
-                for index, wait_obi in enumerate(self.queue.wait_queue):
-                    if wait_obi[-1].room_id == roomId:
-                        del self.queue.wait_queue[index]
+            # with self.queue.service_lock:
+            print('111111111111111111111111111111111111')
+            if roomId in self.queue.service_queue:
+                print('222222222222222222222222222222222222')
+                self.queue.pop_service_by_room_id(roomId)
+                print('3333333333333333333333333333333333333333333333333')
+                self.rooms[roomId].power_off()
+                self.rooms[roomId].current_speed = None
+                # del self.queue.service_queue[roomId]
+            # with self.queue.wait_lock:
+            print('44444444444444444444444444444444444444444')
+            for index, wait_obi in enumerate(self.queue.wait_queue):
+                print('55555555555555555555555555555555555555555')
+                if wait_obi[-1].room_id == roomId:
+                    print('6666666666666666666666666666666666666666666666')
+                    del self.queue.wait_queue[index]
             print('不送风')
 
     # 创建服务对象,并加入等待队列
