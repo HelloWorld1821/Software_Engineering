@@ -160,21 +160,13 @@ class Scheduler:
         else:
             # 不送风
             self.rooms[roomId].power_off()
-            # with self.queue.service_lock:
-            print('111111111111111111111111111111111111')
             if roomId in self.queue.service_queue:
-                print('222222222222222222222222222222222222')
                 self.queue.pop_service_by_room_id(roomId)
-                print('3333333333333333333333333333333333333333333333333')
                 self.rooms[roomId].power_off()
                 self.rooms[roomId].current_speed = None
                 # del self.queue.service_queue[roomId]
-            # with self.queue.wait_lock:
-            print('44444444444444444444444444444444444444444')
             for index, wait_obi in enumerate(self.queue.wait_queue):
-                print('55555555555555555555555555555555555555555')
                 if wait_obi[-1].room_id == roomId:
-                    print('6666666666666666666666666666666666666666666666')
                     del self.queue.wait_queue[index]
             print('不送风')
         return True
