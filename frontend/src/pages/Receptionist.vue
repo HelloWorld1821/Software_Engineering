@@ -3,7 +3,7 @@
  * @Author: l
  * @Date: 2021-06-01 15:38:49
  * @LastEditors: l
- * @LastEditTime: 2021-06-26 21:08:34
+ * @LastEditTime: 2021-06-27 00:59:37
  * @FilePath: \DistributedControlSystem\frontend\src\pages\Receptionist.vue
 -->
 <template>
@@ -91,7 +91,7 @@
                 <div class="grid-content input-roomid">
                   <el-input
                     placeholder="room id"
-                    v-model="inputBillRoomId"
+                    v-model="inputRDRRoomId"
                     clearable
                   >
                   </el-input>
@@ -112,13 +112,13 @@
 
           <div class="rdr-table">
             <el-table :data="RDR" border style="width: 100%">
-              <el-table-column prop="startTime" label="起始时间" width="286">
+              <el-table-column  sortable prop="startTime" label="起始时间" width="286">
               </el-table-column>
-              <el-table-column prop="endTime" label="结束时间" width="286">
+              <el-table-column  sortable prop="endTime" label="结束时间" width="286">
               </el-table-column>
-              <el-table-column prop="speed" label="风速" width="286">
+              <el-table-column  sortable prop="speed" label="风速" width="286">
               </el-table-column>
-              <el-table-column prop="fee" label="费用" width="">
+              <el-table-column  sortable prop="fee" label="费用" width="">
               </el-table-column>
             </el-table>
           </div>

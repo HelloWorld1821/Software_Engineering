@@ -3,7 +3,7 @@
  * @Author: l
  * @Date: 2021-06-01 15:40:54
  * @LastEditors: l
- * @LastEditTime: 2021-06-26 23:21:30
+ * @LastEditTime: 2021-06-27 01:01:03
  * @FilePath: \DistributedControlSystem\frontend\src\pages\Manager.vue
 -->
 <template>
@@ -48,21 +48,21 @@
           </div>
           <div class="report-table">
             <el-table :data="report" border style="width: 100%" >
-              <el-table-column prop="dateTime" label="date" width="163" >
+              <el-table-column  sortable prop="dateTime" label="date" width="163" >
               </el-table-column>
-               <el-table-column prop="RDRNum" label="RDRNum" width="163" >
+               <el-table-column  sortable prop="RDRNum" label="RDRNum" width="163" >
               </el-table-column>
-              <el-table-column prop="commonSpeed" label="commonSpeed" width="163">
+              <el-table-column  sortable prop="commonSpeed" label="commonSpeed" width="163">
               </el-table-column>
-              <el-table-column prop="commonTemp" label="commonTemp" width="163"> 
+              <el-table-column  sortable prop="commonTemp" label="commonTemp" width="163"> 
               </el-table-column>
-              <el-table-column prop="satisfyNum" label="satisfyNum" width="163"> 
+              <el-table-column  sortable prop="satisfyNum" label="satisfyNum" width="163"> 
               </el-table-column>
-              <el-table-column prop="scheduledNum" label="scheduledNum" width="163" >
+              <el-table-column  sortable prop="scheduledNum" label="scheduledNum" width="163" >
               </el-table-column>
               <!-- <el-table-column prop="totalFee" label="totalFee" width="143" >
               </el-table-column> -->
-              <el-table-column prop="totalNum" label="totalNum" width="" >
+              <el-table-column  sortable prop="totalNum" label="totalNum" width="" >
               </el-table-column>
             </el-table>
           </div>
