@@ -3,7 +3,7 @@
  * @Author: l
  * @Date: 2021-06-03 13:45:26
  * @LastEditors: l
- * @LastEditTime: 2021-06-26 12:54:13
+ * @LastEditTime: 2021-06-26 14:07:12
  * @FilePath: \DistributedControlSystem\frontend\src\store\modules\room.js
  */
 const api = '/api/room';
@@ -97,7 +97,7 @@ export default{
                 acState:payload.targetACState,
             }).then((response) => {
                 if (response.data.error == false) {
-                    console.log("changeRoomState fail..");
+                    // console.log("changeRoomState fail..");
                 } else {
                     ;
                 }

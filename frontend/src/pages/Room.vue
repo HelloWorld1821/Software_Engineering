@@ -3,7 +3,7 @@
  * @Author: l
  * @Date: 2021-06-01 15:34:21
  * @LastEditors: l
- * @LastEditTime: 2021-06-26 13:56:27
+ * @LastEditTime: 2021-06-26 15:34:16
  * @FilePath: \DistributedControlSystem\frontend\src\pages\Room.vue
 -->
 <template>
@@ -24,7 +24,7 @@
             <el-input-number
               v-model="targetTemp"
               :min="10"
-              :max="30"
+              :max="40"
               size="small"
             >
             </el-input-number>
@@ -84,6 +84,24 @@
         </el-col>
       </el-row>
       <el-row style="margin-top: 20px">
+        <el-col :span="8" :offset="0" class="state">
+          <div>
+            <div>休眠模式:</div>
+          </div>
+        </el-col>
+        <el-col :span="4" :offset="6"
+          ><div>
+            <el-switch
+
+              disabled=true
+              v-model="sleepMode"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+            >
+            </el-switch></div
+        ></el-col>
+      </el-row>
+      <el-row style="margin-top: 20px">
         <el-col :span="8" :offset="0" class="temp">
           <div>送风状态:</div>
         </el-col>
@@ -139,14 +157,15 @@ export default {
       targetSpeed: null,
       targetACState: "off",
       acStateBool: false,
+      sleepMode: false, //是否开启休眠模式
     };
   },
-  created(){
+  created() {
     this.targetTemp = this.roomParams.targetTemp;
     this.targetSpeed = this.roomParams.targetSpeed;
   },
   computed: {
-    ...mapState("room", ["roomId", "roomState","roomParams"]),
+    ...mapState("room", ["roomId", "roomState", "roomParams"]),
   },
   methods: {
     ...mapActions("room", ["updateRoomState", "changeRoomState"]),
@@ -154,50 +173,68 @@ export default {
     // 这个函数只是为了简化实现
     tryChangeRoomState() {
       // 启动定时器防止1s内多次操作，以最后一次为主
-      if(this.launchTimer != null){ //若原来计时器存在，则打断该请求
+      if (this.launchTimer != null) {
+        //若原来计时器存在，则打断该请求
         clearInterval(this.launchTimer);
       }
-        this.launchTimer = setTimeout(() => {
-          this.changeRoomState({
-            roomId:this.roomId,
-            targetTemp: this.targetTemp,
-            targetSpeed: this.targetSpeed,
-            targetACState: this.targetACState,
-          });
-        }, 1000);
-    },
-    //停止送风请求
-    stopAirSupply(){
-        console.log("stopAirSupply..");
+      this.launchTimer = setTimeout(() => {
         this.changeRoomState({
-            roomId:this.roomId,
-            targetTemp:this.targetTemp,
-            targetSpeed:this.targetSpeed,
-            targetACState:'off', //在服务器看来就是关闭空调
-        })
+          roomId: this.roomId,
+          targetTemp: this.targetTemp,
+          targetSpeed: this.targetSpeed,
+          targetACState: this.targetACState,
+        });
+      }, 1000);
     },
-
-    judgeStopAirSupply(targetTemp,currTemp){
-      if(this.acStateBool==false)//已经关机了，无需考虑温差
-        return false;
-      var cTemp = parseFloat(currTemp);
-      var tTemp = parseFloat(targetTemp)
-      if(this.roomParams.mode == 'cold'){
+    //停止送风请求，送停风请求
+    stopAirSupply() {
+      console.log("stopAirSupply..");
+      this.changeRoomState({
+        roomId: this.roomId,
+        targetTemp: this.targetTemp,
+        targetSpeed: this.targetSpeed,
+        targetACState: "off", //在服务器看来就是关闭空调,发送sleep消息，与off不一样
+      });
+    },
+    //启动送风服务，送送风请求
+    startAirSupply() {
+      console.log("startAirSupply..");
+      this.changeRoomState({
+        roomId: this.roomId,
+        targetTemp: this.targetTemp,
+        targetSpeed: this.targetSpeed,
+        targetACState: "on", //在服务器看来就是打开空调
+      });
+    },
+    handlerTempChange(cTemp, tTemp) {
+      if (this.acStateBool == false) return;
+      if (this.roomParams.mode == "cold") {
         //制冷模式
-        if(cTemp<= tTemp || cTemp-tTemp<=1)
-          return true; // 停止送风,发送停风请求
-        else
-          return false;
-      }else if (this.roomParams.mode == 'hot'){
+        console.log('sleep on currTemp:',cTemp,'targetTemp:',tTemp,'mode',this.sleepMode);
+        if (cTemp <= tTemp) {
+          
+          this.sleepMode = true; //打开休眠模式
+          this.stopAirSupply();
+        } else {
+          if (cTemp - tTemp >= 1 && this.sleepMode == true) {
+            this.sleepMode = false; //关闭休眠模式
+            this.startAirSupply();
+          } else {
+          }
+        }
+      } else if (this.roomParams.mode == "hot") {
         //制热模式
-         if(cTemp>= tTemp || tTemp-cTemp<=1)
-          return true; // 停止送风，发送停风请求
-        else
-          return false;
+        if (cTemp >= tTemp) {
+          this.sleepMode = true; //打开休眠模式
+          this.stopAirSupply();
+        } else {
+          if (tTemp - cTemp >= 1 && this.sleepMode == true) {
+            this.sleepMode = false;
+            this.startAirSupply();
+          }
+        }
       }
-      return false;
-
-    }
+    },
   },
   watch: {
     acStateBool: function (newValue, oldValue) {
@@ -207,41 +244,41 @@ export default {
     targetTemp: function (newValue, oldValue) {
       // console.log("targetTemp: " + oldValue + "-->" + newValue);
       this.$store.commit("room/setTargetTemp", newValue);
-
-      //温度改变时检查是否需要停风
-      if(this.judgeStopAirSupply(this.targetTemp,this.roomState.currTemp)==true)
-        this.stopAirSupply();
-      else
-        if(this.acStateBool==true)
-            this.tryChangeRoomState();
+      // var cTemp = parseInt(this.roomState.currTemp);
+      // var tTemp = parseInt(this.targetTemp);
+      // handlerTempChange(cTemp,tTemp);
+      
+      // 目标温度改变，关闭休眠模式
+      this.sleepMode = false;
+      this.tryChangeRoomState();
     },
     targetSpeed: function (newValue, oldValue) {
       // console.log("targetSpeed: " + oldValue + "-->" + newValue);
-      if(this.acStateBool==true)
-        this.tryChangeRoomState();
+      if (this.acStateBool == true) this.tryChangeRoomState();
     },
     targetACState: function (newValue, oldValue) {
       // console.log("targetACState: " + oldValue + "-->" + newValue);
+      // 空调状态改变，关闭休眠模式
+      this.sleepMode = false;
       this.tryChangeRoomState();
     },
-    roomState: function(newValue, oldValue){
+    roomState: function (newValue, oldValue) {
       // console.log("roomState change , currTemp:",newValue.currTemp);
-      // var cTemp = parseInt(newValue.currTemp);
-      // var tTemp = parseInt(this.targetTemp);
-      if(this.judgeStopAirSupply(this.targetTemp,newValue.currTemp)==true)
-        this.stopAirSupply();
-    }
+      var cTemp = parseFloat(newValue.currTemp);
+      var tTemp = parseFloat(this.targetTemp);
+      this.handlerTempChange(cTemp,tTemp);
+    },
   },
   mounted: function () {
     let that = this;
-    that.updateRoomState({roomId:that.roomId});
+    that.updateRoomState({ roomId: that.roomId });
     if (this.timer) {
       clearInterval(this.timer);
     } else {
       this.updateTimer = setInterval(() => {
         let that = this;
-        that.updateRoomState({roomId:that.roomId});
-      }, 5000);
+        that.updateRoomState({ roomId: that.roomId });
+      }, 4000);
     }
   },
   destroyed: function () {
@@ -249,7 +286,7 @@ export default {
     clearTimeout(this.launchTimer);
 
     //销毁时看作关机请求
-    this.targetACState='off';
+    this.targetACState = "off";
     this.changeRoomStateHere();
   },
 };
