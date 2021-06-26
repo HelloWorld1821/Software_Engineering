@@ -3,7 +3,7 @@
  * @Author: l
  * @Date: 2021-06-01 14:39:02
  * @LastEditors: l
- * @LastEditTime: 2021-06-26 21:42:42
+ * @LastEditTime: 2021-06-27 00:15:02
  * @FilePath: \DistributedControlSystem\frontend\src\components\VNav.vue
 -->
 <template>
@@ -25,40 +25,29 @@
   </nav> -->
 
   <el-menu
-    :default-active="activeIndex"
+    :default-active="$route.path"
     class="my-menu"
     mode="horizontal"
-    :router="true"
+    router
     background-color="#545c64"
     text-color="#fff"
     active-text-color="#ffd04b"
   >
-    <el-menu-item index="1" route="/home">主页面</el-menu-item>
-    <!-- <el-submenu index="2">
-      <template slot="title">我的工作台</template>
-      <el-menu-item index="2-1">选项1</el-menu-item>
-      <el-menu-item index="2-2">选项2</el-menu-item>
-      <el-menu-item index="2-3">选项3</el-menu-item>
-      <el-submenu index="2-4">
-        <template slot="title">选项4</template>
-        <el-menu-item index="2-4-1">选项1</el-menu-item>
-        <el-menu-item index="2-4-2">选项2</el-menu-item>
-        <el-menu-item index="2-4-3">选项3</el-menu-item>
-      </el-submenu>
-    </el-submenu> -->
-    <el-menu-item index="2" route="/login">登录</el-menu-item>
+    <el-menu-item index="/home" route="/home">主页面</el-menu-item>
+    <el-menu-item index="/login" route="/login">登录</el-menu-item>
     <!-- <el-menu-item index="3" route="/register">注册</el-menu-item> -->
-    <!-- <el-menu-item index="4" route="/room">用户</el-menu-item> -->
-    <el-menu-item index="5" route="/administrator">管理员</el-menu-item>
-    <el-menu-item index="6" route="/receptionist">前台</el-menu-item>
-    <el-menu-item index="7" route="/manager">经理</el-menu-item>
+    <el-menu-item index="/room" route="/room" :disabled="true">用户</el-menu-item>
+    <el-menu-item index="/administrator" route="/administrator" :disabled="true">管理员</el-menu-item>
+    <el-menu-item index="/receptionist" route="/receptionist" :disabled="true">前台</el-menu-item>
+    <el-menu-item index="/manager" route="/manager" :disabled="true">经理</el-menu-item>
   </el-menu>
 </template>
 
 <script>
 import { defineComponent } from "@vue/composition-api";
-
+import router from '../router';
 export default defineComponent({
+  
   setup() {},
 });
 </script>
