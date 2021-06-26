@@ -40,25 +40,31 @@ class ServiceObject:
         self.target_speed = speed
 
         # 判断优先级
-        if self.target_speed is not None:
-            if self.target_speed == 'HIGH':
-                self.priority = 1
-            elif self.target_speed == 'MID':
-                self.priority = 2
-            else:
-                self.priority = 3
+        if self.target_speed == 'HIGH':
+            self.priority = 1
+        elif self.target_speed == 'MID':
+            self.priority = 2
         else:
-            if self.speed == 'HIGH':
-                self.priority = 1
-            elif self.speed == 'MID':
-                self.priority = 2
-            else:
-                self.priority = 3
+            self.priority = 3
+        # if self.target_speed is not None:
+        #     if self.target_speed == 'HIGH':
+        #         self.priority = 1
+        #     elif self.target_speed == 'MID':
+        #         self.priority = 2
+        #     else:
+        #         self.priority = 3
+        # else:
+        #     if self.speed == 'HIGH':
+        #         self.priority = 1
+        #     elif self.speed == 'MID':
+        #         self.priority = 2
+        #     else:
+        #         self.priority = 3
         
-        if not self.target_temp:
-            self.target_temp = self.current_temp
-        if not self.target_speed:
-            self.target_speed = self.current_speed
+        # if not self.target_temp:
+        #     self.target_temp = self.current_temp
+        # if not self.target_speed:
+        #     self.target_speed = self.current_speed
 
     def start_serve(self):
         # 开始计费

@@ -1,3 +1,4 @@
+from const import INIT_TEMP
 from const import DEFAULT_TMP, FEE_PER_KWH, KWH_PER_MIN, POWER_OFF_TMP_PER_MIN, TMP_PER_MIN
 from database import *
 import threading
@@ -15,14 +16,14 @@ class Scheduler:
         self.default_speed = 'LOW'
         self.schedule_num = 3
         self.SLAVE_NUM = 4
-        self.RR_SLOT = 60   #时间片调度间隔：60s
+        self.RR_SLOT = 120   #时间片调度间隔：两分钟
 
         self.queue = Queuee()
         self.max_object_num = 3
 
         self.rooms = {}
         for i in range(self.SLAVE_NUM):
-            self.rooms[100+i+1] = Rooom(room_id=100+i+1,current_temp=self.default_temp)
+            self.rooms[100+i+1] = Rooom(room_id=100+i+1,current_temp=INIT_TEMP[100+i+1])
 
         # 调度队列
         self.blowing_list = []
@@ -54,7 +55,7 @@ class Scheduler:
                     "target_temp":self.rooms[room_id].target_temp,
                     "state":"SENDING"
                 })  
-            elif self.rooms[room_id].current_temp * mode_factor > self.default_temp* mode_factor:
+            elif self.rooms[room_id].current_temp * mode_factor > INIT_TEMP[room_id]* mode_factor:
                 self.rooms[room_id].current_temp -= POWER_OFF_TMP_PER_MIN /60 * mode_factor
                 Room.query.filter(Room.room_id == room_id).update({
                     "mode":self.mode,

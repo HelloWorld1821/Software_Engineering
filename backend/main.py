@@ -405,7 +405,7 @@ def update_room_state():
     """
     params = request.get_json(force=True)
     print(request.path, " : ", params)
-    roomId = params['roomId']
+    roomId = int(params['roomId'])
     roomState = scheduler.get_slave_state(roomId=roomId)
     return jsonify({
         'error': False,
@@ -428,8 +428,8 @@ def change_room_state():
     }
     """
     params = request.get_json(force=True)
-    roomId = params['roomId']
-    targetTemp = params['targetTemp']
+    roomId = int(params['roomId'])
+    targetTemp = int(params['targetTemp'])
     targetSpeed = params['targetSpeed'].upper()
     acState = params['acState']
     print(request.path, " : ", params)
@@ -442,6 +442,6 @@ def change_room_state():
 
 
 if __name__ == '__main__':
-    # db_init()  # 这行代码，如果数据库没有发生变化，则跑一次即可
+    db_init()  # 这行代码，如果数据库没有发生变化，则跑一次即可
     t.start()
     app.run(port=5000, debug=True, host='0.0.0.0')

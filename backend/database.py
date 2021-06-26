@@ -105,10 +105,10 @@ def db_init():
     db.session.add(RoomRecode(room_id=102,speed='HIGH',fee=333,times_used=1))
 
     # 测试数据2
-    db.session.add(Room(room_id=101,mode='cold',speed='Zero',current_temp=26,target_temp=26))
-    db.session.add(Room(room_id=102,mode='cold',speed='Zero',current_temp=26,target_temp=26))
-    db.session.add(Room(room_id=103,mode='cold',speed='Zero',current_temp=26,target_temp=26))
-    db.session.add(Room(room_id=104,mode='cold',speed='Zero',current_temp=26,target_temp=26))
+    db.session.add(Room(room_id=101,mode='cold',speed='Zero',current_temp=32,target_temp=26))
+    db.session.add(Room(room_id=102,mode='cold',speed='Zero',current_temp=28,target_temp=26))
+    db.session.add(Room(room_id=103,mode='cold',speed='Zero',current_temp=30,target_temp=26))
+    db.session.add(Room(room_id=104,mode='cold',speed='Zero',current_temp=29,target_temp=26))
 
     # 测试数据3
     dates=['2021/06/23','2021/06/24','2021/06/25','2021/06/26']
