@@ -34,5 +34,5 @@ class Rooom:
         ret['targetTemp']=self.target_temp
         ret['acState'] = 'on' if self.power == True else 'off'
         if ret['acState'] != 'off':
-            ret['speed']=self.current_speed
+            ret['speed']=self.current_speed.lower()
         return ret

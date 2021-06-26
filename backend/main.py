@@ -1,3 +1,4 @@
+import re
 from threading import Thread
 from app import *
 from flask import request, jsonify
@@ -18,6 +19,10 @@ def login_admin():
     password
     :return:
     """
+
+    params = request.get_json(force=True)
+    print(request.path, " : ", params)
+
     params = request.get_json(force=True)
     # print(request.path, " : ", params)
     username = params['userName']
@@ -31,7 +36,18 @@ def login_admin():
         return jsonify({'error': True})
     else:
         print('登录成功')
-        return jsonify({'error': False, 'role': ans.type})
+        ret = {'error': False, 'role': ans.type}
+        if ret['role'] == 'room':
+            attributes = {
+                'defaultTemp':scheduler.default_temp,
+                'defaultSpeed':scheduler.default_speed.lower(),
+                'tempSectionLow':scheduler.temp_section[0] if scheduler.mode == 'cold' else scheduler.temp_section[2],
+                'tempSectionHigh':scheduler.temp_section[1] if scheduler.mode == 'cold' else scheduler.temp_section[3],
+                'roomId': ans.room_id,
+                'mode':scheduler.mode
+            }
+            ret['attributes']=attributes
+        return jsonify(ret)
 
 
 # 这个暂时没什么用了 FINISH
@@ -414,7 +430,7 @@ def change_room_state():
     params = request.get_json(force=True)
     roomId = params['roomId']
     targetTemp = params['targetTemp']
-    targetSpeed = params['targetSpeed']
+    targetSpeed = params['targetSpeed'].upper()
     acState = params['acState']
     print(request.path, " : ", params)
 
@@ -426,6 +442,6 @@ def change_room_state():
 
 
 if __name__ == '__main__':
-    db_init()  # 这行代码，如果数据库没有发生变化，则跑一次即可
+    # db_init()  # 这行代码，如果数据库没有发生变化，则跑一次即可
     t.start()
     app.run(port=5000, debug=True, host='0.0.0.0')

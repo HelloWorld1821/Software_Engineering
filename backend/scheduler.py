@@ -10,8 +10,9 @@ class Scheduler:
     def __init__(self) -> None:
         self.mode = 'cold'
         self.fee_rate = 1.0
-        self.temp_section = [18,26,26,30]
-        self.default_temp = 26
+        self.temp_section = [18,25,25,30]
+        self.default_temp = 25
+        self.default_speed = 'LOW'
         self.schedule_num = 3
         self.SLAVE_NUM = 4
         self.RR_SLOT = 60   #时间片调度间隔：60s
@@ -128,7 +129,7 @@ class Scheduler:
     
     # 处理开机、关机、调温、调风请求
     def deal_with_require(self, roomId, targetTemp,targetSpeed,acState):
-        if acState == 'On':
+        if acState == 'on':
             # 送风
             # if self.rooms[roomId].power == False:
             #     self.rooms[roomId].power_on()
