@@ -1,3 +1,6 @@
+import datetime
+
+
 class Rooom:
     def __init__(self,room_id, current_temp) -> None:
         self.power = False
@@ -6,6 +9,8 @@ class Rooom:
         self.current_speed = None
         self.target_temp = None
         self.target_speed = None
+        self.start_time = None
+        self.last_fee = 0
         self.fee = 0
     
     # 送风
@@ -36,3 +41,11 @@ class Rooom:
         if ret['acState'] != 'off':
             ret['speed']=self.current_speed.lower()
         return ret
+
+    def start_service(self):
+        self.start_time = datetime.datetime.now()
+
+    def get_rdr_fee(self):
+        ans = self.fee - self.last_fee
+        self.last_fee = self.fee
+        return ans

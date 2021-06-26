@@ -353,7 +353,7 @@ def set_default_params():
     :return: {error:bool}
     """
     params = request.get_json(force=True)
-    mode = params['mode']
+    mode = params['defaultMode']
     tempSection = params['tempSection']
     defaultTemp = params['defaultTemp']
     feeRate = params['feeRate']
