@@ -111,7 +111,7 @@ def db_init():
     db.session.add(Room(room_id=104,mode='cold',speed='Zero',current_temp=29,target_temp=26))
 
     # 测试数据3
-    dates=['2021/06/23','2021/06/24','2021/06/25','2021/06/26']
+    dates=['2021/06/23','2021/06/24','2021/06/25','2021/06/22']
     format_dates=[]
     for date in dates:
         format_dates.append(datetime.datetime.strptime(date,'%Y/%m/%d'))
@@ -125,7 +125,7 @@ def db_init():
     db.session.add(Room(room_id=104,mode='cold',speed='Zero',current_temp=26,target_temp=26,state='NOTSENDING'))
     
     # 测试数据4
-    dates=['2021/06/23','2021/06/24','2021/06/25','2021/06/26']
+    dates=['2021/06/23','2021/06/24','2021/06/25','2021/06/22']
     format_dates=[]
     for date in dates:
         format_dates.append(datetime.datetime.strptime(date,'%Y/%m/%d'))
