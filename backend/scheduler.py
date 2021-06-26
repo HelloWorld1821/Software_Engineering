@@ -1,3 +1,4 @@
+from sqlalchemy.sql.expression import false
 from const import INIT_TEMP
 from const import DEFAULT_TMP, FEE_PER_KWH, KWH_PER_MIN, POWER_OFF_TMP_PER_MIN, TMP_PER_MIN
 from database import *
@@ -53,16 +54,20 @@ class Scheduler:
                     "speed":self.queue.service_queue[room_id].current_speed,
                     "current_temp":self.rooms[room_id].current_temp,
                     "target_temp":self.rooms[room_id].target_temp,
+                    "served_time":self.queue.service_queue[room_id].service_clock,
+                    "fee":self.rooms[room_id].fee,
                     "state":"SENDING"
-                })  
+                })
             elif self.rooms[room_id].current_temp * mode_factor > INIT_TEMP[room_id]* mode_factor:
                 self.rooms[room_id].current_temp -= POWER_OFF_TMP_PER_MIN /60 * mode_factor
                 Room.query.filter(Room.room_id == room_id).update({
                     "mode":self.mode,
-                    "speed":"ZERO",
+                    "speed":"",
                     "current_temp":self.rooms[room_id].current_temp,
                     "target_temp":self.rooms[room_id].target_temp,
-                    "state":"NOTSENDING"
+                    "served_time":0,
+                    "fee":self.rooms[room_id].fee,
+                    "state":"NOT SENDING"
                 })
             db.session.commit()
         
@@ -130,6 +135,13 @@ class Scheduler:
     
     # 处理开机、关机、调温、调风请求
     def deal_with_require(self, roomId, targetTemp,targetSpeed,acState):
+
+        tempSectionLow=self.temp_section[0] if self.mode == 'cold' else self.temp_section[2]
+        tempSectionHigh=self.temp_section[1] if self.mode == 'cold' else self.temp_section[3]
+
+        if tempSectionLow > targetTemp or tempSectionHigh < targetTemp:
+            return False
+
         if acState == 'on':
             # 送风
             # if self.rooms[roomId].power == False:
@@ -165,6 +177,7 @@ class Scheduler:
                     print('6666666666666666666666666666666666666666666666')
                     del self.queue.wait_queue[index]
             print('不送风')
+        return True
 
     # 创建服务对象,并加入等待队列
     def make_service_object(self,rooom:Rooom):

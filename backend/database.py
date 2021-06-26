@@ -45,10 +45,12 @@ class Room(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     room_id = db.Column(db.Integer, nullable=True)              # 房间id
     mode = db.Column(db.String(80))                             # 冷热模式
-    speed = db.Column(db.Enum("HIGH", "MID", "LOW", "ZERO"))    # 当前风速
+    speed = db.Column(db.Enum("HIGH", "MID", "LOW", ""))    # 当前风速
     current_temp = db.Column(db.Float, nullable=True)         # 当前温度
     target_temp = db.Column(db.Float, nullable=True)          # 目标温度
-    state = db.Column(db.Enum("SENDING", "NOTSENDING"))         # 是否送风
+    state = db.Column(db.Enum("SENDING", "NOT SENDING"))         # 是否送风
+    served_time = db.Column(db.Integer, nullable=True)     # 服务时间
+    fee = db.Column(db.Float, nullable=True)        #费用
 
 class Statistics(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -75,7 +77,7 @@ class TempSpeed(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     dateTime = db.Column(db.DateTime, default=datetime.datetime.now)
     currentTemp = db.Column(db.Integer, nullable=True)
-    currentSpeed = db.Column(db.Enum("High", "Medium", "Low", "Zero"))
+    currentSpeed = db.Column(db.Enum("High", "Medium", "Low", ""))
 
     def __str__(self) -> str:
         return 'id:{0},dataTime:{1},currentTemp:{2},currentSpeed:{3}'.format(
@@ -105,10 +107,10 @@ def db_init():
     db.session.add(RoomRecode(room_id=102,speed='HIGH',fee=333,times_used=1))
 
     # 测试数据2
-    db.session.add(Room(room_id=101,mode='cold',speed='Zero',current_temp=32,target_temp=26))
-    db.session.add(Room(room_id=102,mode='cold',speed='Zero',current_temp=28,target_temp=26))
-    db.session.add(Room(room_id=103,mode='cold',speed='Zero',current_temp=30,target_temp=26))
-    db.session.add(Room(room_id=104,mode='cold',speed='Zero',current_temp=29,target_temp=26))
+    db.session.add(Room(room_id=101,mode='cold',speed='',current_temp=32,target_temp=25,state='NOT SENDING',served_time=0,fee=0))
+    db.session.add(Room(room_id=102,mode='cold',speed='',current_temp=28,target_temp=25,state='NOT SENDING',served_time=0,fee=0))
+    db.session.add(Room(room_id=103,mode='cold',speed='',current_temp=30,target_temp=25,state='NOT SENDING',served_time=0,fee=0))
+    db.session.add(Room(room_id=104,mode='cold',speed='',current_temp=29,target_temp=25,state='NOT SENDING',served_time=0,fee=0))
 
     # 测试数据3
     dates=['2021/06/23','2021/06/24','2021/06/25','2021/06/26']
@@ -119,10 +121,6 @@ def db_init():
     db.session.add(NewStatistics(dateTime=format_dates[1],totalNum=20,satisfyNum=26,scheduledNum=37,RDRNum=13,totalFee=16.8))
     db.session.add(NewStatistics(dateTime=format_dates[2],totalNum=30,satisfyNum=27,scheduledNum=38,RDRNum=14,totalFee=17.8))
     db.session.add(NewStatistics(dateTime=format_dates[3],totalNum=40,satisfyNum=28,scheduledNum=39,RDRNum=15,totalFee=18.8))
-    db.session.add(Room(room_id=101,mode='cold',speed='Zero',current_temp=26,target_temp=26,state='NOTSENDING'))
-    db.session.add(Room(room_id=102,mode='cold',speed='Zero',current_temp=26,target_temp=26,state='NOTSENDING'))
-    db.session.add(Room(room_id=103,mode='cold',speed='Zero',current_temp=26,target_temp=26,state='NOTSENDING'))
-    db.session.add(Room(room_id=104,mode='cold',speed='Zero',current_temp=26,target_temp=26,state='NOTSENDING'))
     
     # 测试数据4
     dates=['2021/06/23','2021/06/24','2021/06/25','2021/06/26']
