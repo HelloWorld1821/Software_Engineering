@@ -3,7 +3,7 @@
  * @Author: l
  * @Date: 2021-06-03 14:17:10
  * @LastEditors: l
- * @LastEditTime: 2021-06-26 00:31:57
+ * @LastEditTime: 2021-06-27 01:39:18
  * @FilePath: \DistributedControlSystem\frontend\src\store\modules\administrator.js
  */
 const api = '/api/administrator';
@@ -42,13 +42,22 @@ export default{
         },
         setDefaultParams({commit},payload){
             console.log('setDefaultParams...');
+            let p =  payload;
             return axios.post(api + '/setDefaultParams', {
                 // mode:'cold',
                 // tempSection:[10,15,20,25],
                 // defaultTemp:20,
                 // feeRate:1.5,
                 // scheduledNum:3
-                payload
+                defaultMode:p.defaultMode,
+                defaultTemp:p.defaultTemp,
+                defaultSpeed:p.defaultSpeed,
+                feeRate:p.feeRate,
+                scheduledNum:p.scheduledNum,
+                coldHigh:p.coldHigh,
+                coldLow:p.coldLow,
+                hotHigh:p.hotHigh,
+                hotLow:p.hotLow
             }).then((response) => {
                 if (response.data.error == false) {
                     console.log('setDefaultParams succeed');

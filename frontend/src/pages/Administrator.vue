@@ -3,7 +3,7 @@
  * @Author: l
  * @Date: 2021-06-01 15:36:52
  * @LastEditors: l
- * @LastEditTime: 2021-06-26 17:47:40
+ * @LastEditTime: 2021-06-27 01:36:14
  * @FilePath: \DistributedControlSystem\frontend\src\pages\Administrator.vue
 -->
 <template>
@@ -217,7 +217,7 @@ export default {
     } else {
       this.timer = setInterval(() => {
         let that = this;
-        that.checkRoomsState();
+        // that.checkRoomsState();
       }, 1000);
     }
   },

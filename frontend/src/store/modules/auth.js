@@ -3,7 +3,7 @@
  * @Author: l
  * @Date: 2021-06-02 15:34:01
  * @LastEditors: l
- * @LastEditTime: 2021-06-26 20:39:16
+ * @LastEditTime: 2021-06-27 01:42:58
  * @FilePath: \DistributedControlSystem\frontend\src\store\modules\auth.js
  */
 // const api = 'http://10.28.174.15:5000/auth';
@@ -78,7 +78,6 @@ export default{
                     switch (resposne.data.role) {
                         case "room":
                           router.replace("/room");
-                          
                           break;
                         case "administrator":
                           router.replace("/administrator");
