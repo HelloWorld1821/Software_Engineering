@@ -4,6 +4,7 @@ from database import *
 from sqlalchemy import func
 import utils
 from scheduler import Scheduler
+import datetime
 
 scheduler = Scheduler()
 
@@ -206,17 +207,109 @@ def check_report():
                         RDRNum:int , 生成RDR的次数
                         totalFee:double }}
     """
+    ###########################################################################
+    # 把id=1的行的各种次数都加1
+    # 这里select的条件是NewStatistics.id==1
+    # 实际的select条件应该为当天的时间
+    # 比如6月25日请求生成了一次RDR，那么要找到表格里date=06/25的那一行，将那个字段增加一
+    '''
+    ans = NewStatistics.query.filter(NewStatistics.id==1).first();
+    NewStatistics.query.filter(NewStatistics.id==1).update({
+                    'totalNum':ans.totalNum+1,
+                    'satisfyNum':ans.satisfyNum+1,
+                    'scheduledNum':ans.scheduledNum+1,
+                    'RDRNum':ans.RDRNum+1,
+    })
+    db.session.commit()
+    '''
+    ###########################################################################
+
     params = request.get_json(force=True)
     print(request.path, " : ", params)
+
+    # 时间格式暂时按照图片里的YYYY/MM/DD，如2021/06/25
+    # 起止日期，为date类
+    startTime=datetime.datetime.strptime(params['startTime'],'%Y/%m/%d')
+    endTime=datetime.datetime.strptime(params['endTime'],'%Y/%m/%d')
+
+
+    # 筛选出日期位于startDate和endDate之间的行
+    ans = NewStatistics.query.filter(startTime<NewStatistics.dateTime).filter(NewStatistics.dateTime<endTime).all()
+
+    totalNumSum=0
+    satisfyNumSum=0
+    scheduledNumSum=0
+    RDRNumSum=0
+    totalFeeSum=0.0
+
+    report={}
+    for i in ans:
+        date=i.dateTime.strftime('%Y/%m/%d')
+        report[date]={
+            'totalNum':i.totalNum,
+            'satisfyNum':i.satisfyNum,
+            'scheduledNum':i.scheduledNum,
+            'RDRNum':i.RDRNum,
+            'totalFee':i.totalFee,
+        }
+        totalNumSum+=i.totalNum
+        satisfyNumSum+=i.satisfyNum
+        scheduledNumSum+=i.scheduledNum
+        RDRNumSum+=i.RDRNum
+        totalFeeSum+=i.totalFee
+
+    ans = TempSpeed.query.filter(startTime<TempSpeed.dateTime).filter(TempSpeed.dateTime<endTime).all()
+    common_temp_dict={}
+    common_speed_dict={}
+    for i in ans:
+        date=i.dateTime.strftime('%Y/%m/%d')
+        if date not in common_temp_dict.keys():
+            common_temp_dict[date]=[]
+        common_temp_dict[date].append(i.currentTemp)
+
+        if date not in common_speed_dict.keys():
+            common_speed_dict[date]=[]
+        common_speed_dict[date].append(i.currentSpeed)
+            
+    for date in common_temp_dict.keys():
+        report[date]['commonTemp']=max(common_temp_dict[date],key=common_temp_dict[date].count)
+    for date in common_speed_dict.keys():
+        report[date]['commonSpeed']=max(common_speed_dict[date],key=common_speed_dict[date].count)
+
+    report_list=[]
+    for key,value in report.items():
+        report_list.append({
+            'dateTime':key,
+            'totalNum':value['totalNum'],
+            'commonTemp':value['commonTemp'],
+            'commonSpeed':value['commonSpeed'],
+            'satisfyNum':value['satisfyNum'],
+            'scheduledNum':value['scheduledNum'],
+            'RDRNum':value['RDRNum'],
+            'totalFee':value['totalFee'] 
+        })
+        
+
+    total_temp_list=[]
+    total_speed_list=[]
+    for i in common_temp_dict.values():
+        total_temp_list.extend(i)
+    for i in common_speed_dict.values():
+        total_speed_list.extend(i)
+
     return jsonify({'error': False,
-                    'report': {'totalNum': 20,
-                               'commonTemp': 23,
-                               'commonSpeed': 'mid',
-                               'satisfyNum': 10,
-                               'scheduledNum': 30,
-                               'RDRNum': 25,
-                               'totalFee': 12450.0
-                               }})
+                    'report': report_list,
+                    'reportTotal':{
+                                'totalNum':totalNumSum,
+                                'commonTemp':max(total_temp_list,key=total_temp_list.count),
+                                'commonSpeed':max(total_speed_list,key=total_speed_list.count),
+                                'satisfyNum':satisfyNumSum,
+                                'scheduledNum':scheduledNumSum,
+                                'RDRNum':RDRNumSum,
+                                'totalFee':float('%.2f'%totalFeeSum) 
+                    }})
+
+
 
 
 # 设置默认参数 FINISH
@@ -365,5 +458,5 @@ def hello_world():
 
 
 if __name__ == '__main__':
-    # db_init()  # 这行代码，如果数据库没有发生变化，则跑一次即可
+    db_init()  # 这行代码，如果数据库没有发生变化，则跑一次即可
     app.run(port=5000, debug=True, host='0.0.0.0')
