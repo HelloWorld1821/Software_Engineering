@@ -40,7 +40,7 @@ class Scheduler:
         
         if ans is None:
             # 在NewStatistics中创建一个新的记录
-            db.session.add(NewStatistics(totalNum=0,satisfyNum=0,scheduledNum=0,RDRNum=0,totalFee=0.0))
+            db.session.add(NewStatistics(totalNum=1,satisfyNum=0,scheduledNum=0,RDRNum=0,totalFee=0.0))
             db.session.commit()
         else:
             if record_name == 'scheduledNum':
@@ -85,7 +85,7 @@ class Scheduler:
                 target_temp=self.rooms[room_id].target_temp
                 # 如果目标温度在更新前后的温度之间,说明达到了目标温度
                 if previous_temp <= target_temp <= current_temp or previous_temp >= target_temp >= current_temp:
-                    add_record('satisfyNum')
+                    self.add_record('satisfyNum')
                 # 更新费用
                 self.rooms[room_id].fee += KWH_PER_MIN[self.queue.service_queue[room_id].current_speed] / 60 * self.fee_rate
                 

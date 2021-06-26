@@ -107,7 +107,7 @@ def create_RDR():
     
     if ans is None:
         # 在NewStatistics中创建一个新的记录
-        db.session.add(NewStatistics(totalNum=0,satisfyNum=0,scheduledNum=0,RDRNum=0,totalFee=0.0))
+        db.session.add(NewStatistics(totalNum=0,satisfyNum=0,scheduledNum=0,RDRNum=1,totalFee=0.0))
         db.session.commit()
     else:
         NewStatistics.query.filter(NewStatistics.id==ans.id).update({
@@ -463,6 +463,6 @@ def change_room_state():
 
 
 if __name__ == '__main__':
-    # db_init()  # 这行代码，如果数据库没有发生变化，则跑一次即可
+    db_init()  # 这行代码，如果数据库没有发生变化，则跑一次即可
     t.start()
     app.run(port=5000, debug=True, host='0.0.0.0')
