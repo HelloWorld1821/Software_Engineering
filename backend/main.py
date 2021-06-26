@@ -385,15 +385,17 @@ def check_room_state():
     roomsState = []
     for i in ans:
         isCheckIn = User.query.filter(User.room_id == i.room_id).first().status
-        roomsState.append({'roomState':{
+        roomsState.append({
             'roomId': i.room_id,
             'isCheckIn': isCheckIn=='in',
-            'state': i.state,
+            'state': i.state.lower(),
             'mode': i.mode,
-            'speed': i.speed,
+            'speed': i.speed.lower(),
             'currTemp': i.current_temp,
-            'targetTemp': i.target_temp
-        }})
+            'targetTemp': i.target_temp,
+            'servedTime': i.served_time,
+            'fee':i.fee
+        })
 
     return jsonify({
         'error': False,
@@ -446,16 +448,17 @@ def change_room_state():
     """
     
     params = request.get_json(force=True)
+    print(request.path, " : ", params)
     roomId = int(params['roomId'])
     targetTemp = int(params['targetTemp'])
     targetSpeed = params['targetSpeed'].upper()
     acState = params['acState']
     print(request.path, " : ", params)
 
-    scheduler.deal_with_require(roomId, targetTemp,targetSpeed,acState)
+    ret = scheduler.deal_with_require(roomId, targetTemp,targetSpeed,acState)
 
     return jsonify({
-        'error': False
+        'error': not ret
     })
 
 
