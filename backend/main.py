@@ -98,6 +98,23 @@ def create_RDR():
                 
     """
 
+    # 开一次详单,向NewStatistics表里当天所在行的RDRNum字段加一
+    currentTime=datetime.datetime.now().strftime('%Y/%m/%d')
+    startTime=datetime.datetime.strptime(currentTime+' 00:00:00','%Y/%m/%d %H:%M:%S')
+    endTime=datetime.datetime.strptime(currentTime+' 23:59:59','%Y/%m/%d %H:%M:%S')
+
+    ans = NewStatistics.query.filter(startTime<=NewStatistics.dateTime).filter(NewStatistics.dateTime<=endTime).first()
+    
+    if ans is None:
+        # 在NewStatistics中创建一个新的记录
+        db.session.add(NewStatistics(totalNum=0,satisfyNum=0,scheduledNum=0,RDRNum=1,totalFee=0.0))
+        db.session.commit()
+    else:
+        NewStatistics.query.filter(NewStatistics.id==ans.id).update({
+                        'RDRNum':ans.RDRNum+1,
+        })
+        db.session.commit()
+
     params = request.get_json(force=True)
     print(request.path, " : ", params)
     roomId=params['roomId']
@@ -211,7 +228,7 @@ def check_report():
     startTime:str
     endTime:str
     :return: { error:bool,
-                report:{ totalNum:int , 使用空调次数
+                report:{ totalNum:int , 使用空调次数（每有一次送风请求，增加一次）
                         commonTemp:int , 最常使用的温度
                         commonSpeed:str , 最常使用的风速
                         satisfyNum:int , 到达目标温度的次数
@@ -429,6 +446,7 @@ def change_room_state():
         error:bool          # 处理请求过程是否发生错误，一般回送False
     }
     """
+    
     params = request.get_json(force=True)
     print(request.path, " : ", params)
     roomId = int(params['roomId'])

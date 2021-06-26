@@ -30,6 +30,34 @@ class Scheduler:
         self.blowing_list = []
         self.schedule_queue = []
 
+    # 增加NewStatistics中的各种记录字段数
+    def add_record(self,record_name):
+        currentTime=datetime.datetime.now().strftime('%Y/%m/%d')
+        startTime=datetime.datetime.strptime(currentTime+' 00:00:00','%Y/%m/%d %H:%M:%S')
+        endTime=datetime.datetime.strptime(currentTime+' 23:59:59','%Y/%m/%d %H:%M:%S')
+
+        ans = NewStatistics.query.filter(startTime<=NewStatistics.dateTime).filter(NewStatistics.dateTime<=endTime).first()
+        
+        if ans is None:
+            # 在NewStatistics中创建一个新的记录
+            db.session.add(NewStatistics(totalNum=1,satisfyNum=0,scheduledNum=0,RDRNum=0,totalFee=0.0))
+            db.session.commit()
+        else:
+            if record_name == 'scheduledNum':
+                NewStatistics.query.filter(NewStatistics.id==ans.id).update({
+                                'scheduledNum':ans.scheduledNum+1,
+                })
+            elif record_name == 'satisfyNum':
+                NewStatistics.query.filter(NewStatistics.id==ans.id).update({
+                                'satisfyNum':ans.satisfyNum+1,
+                })
+            elif record_name == 'totalNum':
+                NewStatistics.query.filter(NewStatistics.id==ans.id).update({
+                                'totalNum':ans.totalNum+1,
+                })
+            db.session.commit()
+
+
     # 更新服务时间、等待时间、费用、当前温度
     def update(self):
 
@@ -47,8 +75,20 @@ class Scheduler:
         for room_id in self.rooms:
             # print('room_id = ',room_id)
             if room_id in self.queue.service_queue:
+                # 更新前的温度
+                previous_temp=self.rooms[room_id].current_temp
+                # 更新温度
                 self.rooms[room_id].current_temp += TMP_PER_MIN[self.queue.service_queue[room_id].current_speed] / 60 * mode_factor
+                # 更新后的温度
+                current_temp=self.rooms[room_id].current_temp
+                # 目标温度
+                target_temp=self.rooms[room_id].target_temp
+                # 如果目标温度在更新前后的温度之间,说明达到了目标温度
+                if previous_temp <= target_temp <= current_temp or previous_temp >= target_temp >= current_temp:
+                    self.add_record('satisfyNum')
+                # 更新费用
                 self.rooms[room_id].fee += KWH_PER_MIN[self.queue.service_queue[room_id].current_speed] / 60 * self.fee_rate
+                
                 Room.query.filter(Room.room_id == room_id).update({
                     "mode":self.mode,
                     "speed":self.queue.service_queue[room_id].current_speed,
@@ -71,7 +111,7 @@ class Scheduler:
                 })
             db.session.commit()
         
-    
+
     # 调度
     def schedule(self):  
         while True:
@@ -84,6 +124,7 @@ class Scheduler:
                 continue
             elif len(self.queue.service_queue)< self.max_object_num:
                 # 等待队列不为空 且 服务队列仍然有空位
+                self.add_record('scheduledNum')
                 self.queue.pop_wait_queue()
                 self.queue.add_into_service_queue(object)
                 self.rooms[object.room_id].power_on()
@@ -95,6 +136,7 @@ class Scheduler:
                 if object.priority < object_with_lowest_priority.priority:
                     # 优先级调度
                     print('优先级调度')
+                    self.add_record('scheduledNum')
                     self.queue.pop_wait_queue()
                     self.queue.add_into_service_queue(object)
                     self.rooms[object.room_id].power_on()
@@ -108,6 +150,7 @@ class Scheduler:
                     # 时间片轮转
                     if object.wait_clock >= self.RR_SLOT:  # 等待时间已满，强行替换
                         print('时间片调度')
+                        self.add_record('scheduledNum')
                         self.queue.pop_wait_queue()
                         self.queue.add_into_service_queue(object)
                         self.rooms[object.room_id].power_on()
@@ -146,6 +189,12 @@ class Scheduler:
             # 送风
             # if self.rooms[roomId].power == False:
             #     self.rooms[roomId].power_on()
+            # 当处于送风状态时，将目标温度和目标风速信息写入数据库
+            # 并且使用空调次数+1
+            self.add_record('totalNum')
+            db.session.add(TempSpeed(currentTemp=targetTemp,currentSpeed=targetSpeed))
+            db.session.commit()
+
             if targetSpeed == self.rooms[roomId].get_target_speed():
                 # 说明是调温指令
                 self.rooms[roomId].set_target_temp(targetTemp)
