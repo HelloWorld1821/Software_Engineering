@@ -14,12 +14,19 @@ export default{
         RDRRoomId:9,
         billIsOk:false,
         RDRIsOk:false,
-        RDR:{
+        RDR:[{
             startTime: '2021-6-2,15:20',
             endTime: '2021-6-3,16:40',
             speed: 'high',
             fee: 2333.3,
         },
+        {
+            startTime: '2021-6-2,15:20',
+            endTime: '2021-6-3,16:40',
+            speed: 'high',
+            fee: 4666.3,
+        },
+        ],
         bill:{
             fee:10.0,
         }

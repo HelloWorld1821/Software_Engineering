@@ -3,7 +3,7 @@
  * @Author: l
  * @Date: 2021-06-02 15:34:01
  * @LastEditors: l
- * @LastEditTime: 2021-06-16 19:08:11
+ * @LastEditTime: 2021-06-26 12:54:27
  * @FilePath: \DistributedControlSystem\frontend\src\store\modules\auth.js
  */
 // const api = 'http://10.28.174.15:5000/auth';
@@ -12,18 +12,19 @@ import axios from 'axios'
 
 export default{
     state:{
-        roomId:'',
+        // roomId:'',
         userName:'',
         password:'',
         loading:false,
         error:'',
         role:'home',
+        // attributes:[],
     },
     getter:{},
     mutations:{     
-        setRoomId(state,roomId){
-            state.roomId = roomId;
-        },
+        // setRoomId(state,roomId){
+        //     state.roomId = roomId;
+        // },
         setUserName(state,userName){
             state.userName = userName;
         },
@@ -38,7 +39,8 @@ export default{
         },
         setRole(state,role){
             state.role=role;
-        }
+        },
+
     },
     actions:{
         // login(context){
@@ -62,24 +64,20 @@ export default{
                     commit('setLoading',false);
                     commit('setError','');
                     commit('setRole',resposne.data.role);
+                    if(resposne.data.role == 'room'){
+                        var a = resposne.data.attributes;
+                        // commit('setRoomId',a.roomId);
+                        console.log(a);
+                        commit('room/setRoomId',a.roomId, { root: true });     
+                        commit('room/setDefaultTemp',a.defaultTemp, { root: true });
+                        commit('room/setDefaultSpeed',a.defaultSpeed, { root: true });
+                        commit('room/setTempSectionHigh',a.tempSectionHigh, { root: true });
+                        commit('room/setTempSectionLow',a.tempSectionLow, { root: true });
+                        commit('room/setMode',a.mode,{root:true});
+                    }
                 }
             }).catch((error)=>{
-                console.error(error)
-            });
-        },
-        login({commit,state},payload){
-            console.log("login...");
-            return axios.get('/apid').then((resposne)=>{
-                // if(resposne.data.error == true){
-                //     commit('setLoading',false);//取消加载
-                //     commit('setError','username or password error.');//加载错误
-                // }else{
-                //     commit('setLoading',false);
-                //     commit('setError','');
-                // }
-                console.log(resposne)
-            }).catch((error)=>{
-                console.error(error)
+                console.error(error);
             });
         }
     },

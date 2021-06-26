@@ -3,24 +3,37 @@
  * @Author: l
  * @Date: 2021-06-03 13:45:26
  * @LastEditors: l
- * @LastEditTime: 2021-06-16 19:08:32
+ * @LastEditTime: 2021-06-26 12:54:13
  * @FilePath: \DistributedControlSystem\frontend\src\store\modules\room.js
  */
 const api = '/api/room';
 import axios from 'axios';
 export default{
     state:{
-        roomId:10,
+        roomId:'',
         roomState:{
-            speed:'low',
-            currTemp:25,
-            targetTemp:26,
-            fee:0.0,
-            acState:'on'
+            speed:'',
+            currTemp:'',
+            targetTemp:'',
+            fee:'',
+            acState:''
+        },
+        roomParams:{
+            tempSectionHigh:'',
+            tempSectionLow:'',
+            defaultTemp:'',
+            defaultSpeed:'',
+            mode:'',
         }
+      
+
     },
     getters:{},
     mutations:{
+        setRoomId(state,roomId){
+            state.roomId=roomId;
+        },
+
         setSpeed(state,speed){
             state.roomState.speed = speed;
         },
@@ -39,9 +52,26 @@ export default{
         setRoomState(state,roomState){
             state.roomState=roomState;
         },
-        setRoomId(state,roomId){
-            state.roomId=roomId;
+        
+        setTempSectionHigh(state,tempHigh){
+            state.roomParams.tempSectionHigh=tempHigh;
+        },
+        setTempSectionLow(state,tempLow){
+            state.roomParams.tempSectionLow=tempLow;
+        },
+        setDefaultTemp(state,defaultTemp){
+            state.roomParams.defaultTemp=defaultTemp;
+        },
+        setDefaultSpeed(state,defaultSpeed){
+            state.roomParams.defaultSpeed=defaultSpeed;
+        },
+        setMode(state,mode){
+            state.roomParams.mode=mode;
+        },
+        setRoomParams(state,params){
+            state.roomParams = params;
         }
+        
     },
     actions:{
         updateRoomState({commit},payload){
@@ -67,9 +97,9 @@ export default{
                 acState:payload.targetACState,
             }).then((response) => {
                 if (response.data.error == false) {
-                    // commit('setRoomState',response.data.roomState);
+                    console.log("changeRoomState fail..");
                 } else {
-                    // commit('setRDRIsOk', false);
+                    ;
                 }
             }).catch((error) => {
                 console.error(error)

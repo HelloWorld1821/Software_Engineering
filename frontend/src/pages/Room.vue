@@ -3,7 +3,7 @@
  * @Author: l
  * @Date: 2021-06-01 15:34:21
  * @LastEditors: l
- * @LastEditTime: 2021-06-25 18:09:13
+ * @LastEditTime: 2021-06-26 13:56:27
  * @FilePath: \DistributedControlSystem\frontend\src\pages\Room.vue
 -->
 <template>
@@ -37,10 +37,10 @@
           <div>目标风速:</div>
         </el-col>
         <el-col :offset="0" style="margin-top: 10px">
-          <el-radio-group v-model="radioSpeed">
-            <el-radio :label="3">Low</el-radio>
-            <el-radio :label="6">Mid</el-radio>
-            <el-radio :label="9">High</el-radio>
+          <el-radio-group v-model="targetSpeed">
+            <el-radio :label="'low'">Low</el-radio>
+            <el-radio :label="'mid'">Mid</el-radio>
+            <el-radio :label="'high'">High</el-radio>
           </el-radio-group>
         </el-col>
       </el-row>
@@ -69,53 +69,7 @@
       </el-row>
     </div>
 
-    <!-- <div class="user-panel">
-      <template>
-        <h2 class="mb-0">User Panel</h2>
-      </template>
-      <p>Your ID Card Number: {{ roomId }}</p>
-      <p>Is Running : {{ roomState.acState }}</p>
-      <p>The Speed: {{ roomState.speed }}</p>
-      <p>Current Temperature: {{ roomState.currTemp }}</p>
-      <p>Target Temperature: {{ roomState.targetTemp }}</p>
-      <p>Your Cost : {{ roomState.fee }}</p>
-    </div> -->
-    <!-- <div class="user-panel">
-      <el-container>
-        <el-header>User Panel</el-header>
-
-        <el-container class="display">
-          <el-aside>Your ID Card Number:</el-aside>
-          <el-main>{{ roomId }}</el-main>
-        </el-container>
-
-        <el-container class="display">
-          <el-aside>Is Running :</el-aside>
-          <el-main>{{ roomState.acState }}</el-main>
-        </el-container>
-
-        <el-container class="display">
-          <el-aside>The Speed:</el-aside>
-          <el-main>{{ roomState.speed }}</el-main>
-        </el-container>
-
-        <el-container class="display">
-          <el-aside>Current Temperature:</el-aside>
-          <el-main>{{ roomState.currTemp }}</el-main>
-        </el-container>
-
-        <el-container class="display">
-          <el-aside>Target Temperature:</el-aside>
-          <el-main>{{ roomState.targetTemp }}</el-main>
-        </el-container>
-
-        <el-container class="display">
-          <el-aside>Your Cost:</el-aside>
-          <el-main>{{ roomState.fee }}</el-main>
-        </el-container>
-      </el-container>
-    </div> -->
-        <div class="user-panel">
+    <div class="user-panel">
       <el-row style="margin-top: 20px">
         <el-col><h2>房间状态</h2></el-col>
       </el-row>
@@ -125,17 +79,17 @@
         </el-col>
         <el-col :span="8" :offset="4">
           <div>
-            {{roomId}}
+            {{ roomId }}
           </div>
         </el-col>
       </el-row>
       <el-row style="margin-top: 20px">
         <el-col :span="8" :offset="0" class="temp">
-          <div>空调状态:</div>
+          <div>送风状态:</div>
         </el-col>
         <el-col :span="8" :offset="4">
           <div>
-            {{roomState.acState}}
+            {{ roomState.acState }}
           </div>
         </el-col>
       </el-row>
@@ -144,22 +98,22 @@
         <el-col :span="8" :offset="0" class="temp">
           <div>当前温度:</div>
         </el-col>
-       <el-col :span="8" :offset="4">
+        <el-col :span="8" :offset="4">
           <div>
-            {{roomState.currTemp}}
+            {{ roomState.currTemp }}
           </div>
-       </el-col>
+        </el-col>
       </el-row>
 
-       <el-row style="margin-top: 20px">
+      <el-row style="margin-top: 20px">
         <el-col :span="8" :offset="0" class="temp">
           <div>当前风速:</div>
         </el-col>
-       <el-col :span="8" :offset="4">
+        <el-col :span="8" :offset="4">
           <div>
-            {{roomState.speed}}
+            {{ roomState.speed }}
           </div>
-       </el-col>
+        </el-col>
       </el-row>
 
       <el-row style="margin-top: 20px">
@@ -168,7 +122,7 @@
         </el-col>
         <el-col :span="8" :offset="4">
           <div>
-            {{roomState.fee}}
+            {{ roomState.fee }}
           </div>
         </el-col>
       </el-row>
@@ -181,74 +135,122 @@ import { mapActions, mapState } from "vuex";
 export default {
   data: function () {
     return {
-      targetTemp: 20,
-      targetSpeed: "low",
+      targetTemp: null,
+      targetSpeed: null,
       targetACState: "off",
-      acStateBool:false,
-      radioSpeed: 6,
+      acStateBool: false,
     };
   },
+  created(){
+    this.targetTemp = this.roomParams.targetTemp;
+    this.targetSpeed = this.roomParams.targetSpeed;
+  },
   computed: {
-    ...mapState("room", ["roomId", "roomState"]),
+    ...mapState("room", ["roomId", "roomState","roomParams"]),
   },
   methods: {
     ...mapActions("room", ["updateRoomState", "changeRoomState"]),
-    // addCurrTemp() {
-    //   this.targetTemp = this.targetTemp + 1;
-    // },
-    // subCurrTemp() {
-    //   if (this.targetTemp > 0) this.targetTemp = this.targetTemp - 1;
-    // },
-    // 这个函数只是为了简化参数
-    changeRoomStateHere() {
+
+    // 这个函数只是为了简化实现
+    tryChangeRoomState() {
       // 启动定时器防止1s内多次操作，以最后一次为主
-      
-      this.changeRoomState({
-        targetTemp: this.targetTemp,
-        targetSpeed: this.targetSpeed,
-        targetACState: this.targetACState,
-      });
+      if(this.launchTimer != null){ //若原来计时器存在，则打断该请求
+        clearInterval(this.launchTimer);
+      }
+        this.launchTimer = setTimeout(() => {
+          this.changeRoomState({
+            roomId:this.roomId,
+            targetTemp: this.targetTemp,
+            targetSpeed: this.targetSpeed,
+            targetACState: this.targetACState,
+          });
+        }, 1000);
     },
+    //停止送风请求
+    stopAirSupply(){
+        console.log("stopAirSupply..");
+        this.changeRoomState({
+            roomId:this.roomId,
+            targetTemp:this.targetTemp,
+            targetSpeed:this.targetSpeed,
+            targetACState:'off', //在服务器看来就是关闭空调
+        })
+    },
+
+    judgeStopAirSupply(targetTemp,currTemp){
+      if(this.acStateBool==false)//已经关机了，无需考虑温差
+        return false;
+      var cTemp = parseFloat(currTemp);
+      var tTemp = parseFloat(targetTemp)
+      if(this.roomParams.mode == 'cold'){
+        //制冷模式
+        if(cTemp<= tTemp || cTemp-tTemp<=1)
+          return true; // 停止送风,发送停风请求
+        else
+          return false;
+      }else if (this.roomParams.mode == 'hot'){
+        //制热模式
+         if(cTemp>= tTemp || tTemp-cTemp<=1)
+          return true; // 停止送风，发送停风请求
+        else
+          return false;
+      }
+      return false;
+
+    }
   },
   watch: {
-    radioSpeed: function (newValue, oldValue) {
-      if (newValue == 3) this.targetSpeed = "low";
-      if (newValue == 6) this.targetSpeed = "mid";
-      if (newValue == 9) this.targetSpeed = "high";
-    },
-    acStateBool:function(newValue,oldValue){
-      if(newValue == true) this.targetACState = "on";
-      if(newValue == false) this.targetACState = "off";
+    acStateBool: function (newValue, oldValue) {
+      if (newValue == true) this.targetACState = "on";
+      if (newValue == false) this.targetACState = "off";
     },
     targetTemp: function (newValue, oldValue) {
-      console.log("targetTemp: " + oldValue + "-->" + newValue);
+      // console.log("targetTemp: " + oldValue + "-->" + newValue);
       this.$store.commit("room/setTargetTemp", newValue);
-      this.changeRoomStateHere();
+
+      //温度改变时检查是否需要停风
+      if(this.judgeStopAirSupply(this.targetTemp,this.roomState.currTemp)==true)
+        this.stopAirSupply();
+      else
+        if(this.acStateBool==true)
+            this.tryChangeRoomState();
     },
     targetSpeed: function (newValue, oldValue) {
-      console.log("targetSpeed: " + oldValue + "-->" + newValue);
-      this.changeRoomStateHere();
+      // console.log("targetSpeed: " + oldValue + "-->" + newValue);
+      if(this.acStateBool==true)
+        this.tryChangeRoomState();
     },
-    targetACState: function (newVaule, oldValue) {
-      console.log("targetACState: " + oldValue + "-->" + newVaule);
-      this.changeRoomStateHere();
+    targetACState: function (newValue, oldValue) {
+      // console.log("targetACState: " + oldValue + "-->" + newValue);
+      this.tryChangeRoomState();
     },
+    roomState: function(newValue, oldValue){
+      // console.log("roomState change , currTemp:",newValue.currTemp);
+      // var cTemp = parseInt(newValue.currTemp);
+      // var tTemp = parseInt(this.targetTemp);
+      if(this.judgeStopAirSupply(this.targetTemp,newValue.currTemp)==true)
+        this.stopAirSupply();
+    }
   },
   mounted: function () {
     let that = this;
-    that.updateRoomState(that.roomId);
+    that.updateRoomState({roomId:that.roomId});
     if (this.timer) {
       clearInterval(this.timer);
     } else {
-      this.timer = setInterval(() => {
+      this.updateTimer = setInterval(() => {
         let that = this;
-        // that.checkRoomsState();
-        // that.updateRoomState(that.roomId);
-      }, 1000);
+        that.updateRoomState({roomId:that.roomId});
+      }, 5000);
     }
   },
   destroyed: function () {
-    clearInterval(this.timer);
+    clearInterval(this.updateTimer);
+    clearTimeout(this.launchTimer);
+
+    //销毁时看作关机请求
+    this.targetACState='off';
+    this.changeRoomStateHere();
   },
 };
 </script>
@@ -263,7 +265,7 @@ export default {
   float: right;
   width: 300px;
   height: 400px;
-    /* float: left; */
+  /* float: left; */
   border-radius: 30px;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 }

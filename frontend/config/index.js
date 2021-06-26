@@ -3,7 +3,7 @@
  * @Author: l
  * @Date: 2021-05-31 13:38:16
  * @LastEditors: l
- * @LastEditTime: 2021-06-25 13:32:10
+ * @LastEditTime: 2021-06-26 11:03:16
  * @FilePath: \DistributedControlSystem\frontend\config\index.js
  */
 'use strict'
@@ -20,8 +20,9 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-        target: 'http://127.0.0.1:5000',
-        // target:'http://10.28.247.102:5000',
+        // target: 'http://127.0.0.1:5000', //mine
+        // target:'http://10.28.247.102:5000',  local
+        target:'http://10.28.247.102:5000', //cck
         changeOrigin: true,
         pathRewrite: {
           '^/api': ''
