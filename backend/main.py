@@ -1,3 +1,4 @@
+from threading import Thread
 from app import *
 from flask import request, jsonify
 from database import *
@@ -7,10 +8,9 @@ from scheduler import Scheduler
 import datetime
 
 scheduler = Scheduler()
+t = Thread(target=scheduler.schedule)
 
-
-
-# 这个暂时不用写
+# 登录 FINISH
 @app.route('/auth/loginAdmin', methods=['POST'])
 def login_admin():
     """
@@ -23,12 +23,8 @@ def login_admin():
     username = params['userName']
     password = params['password']
     # print(username, ',', password)
-    query_list = [
-        User.username == username,
-        User.password == password
-    ]
-    print('标记1-----------------')
-    ans = User.query.filter(*query_list).first()
+
+    ans = User.query.filter(User.username == username).filter(User.password == password).first()
 
     if ans is None:
         print('登录失败')
@@ -38,7 +34,7 @@ def login_admin():
         return jsonify({'error': False, 'role': ans.type})
 
 
-# 登录 FINISH
+# 这个暂时没什么用了 FINISH
 @app.route('/auth/login', methods=['POST'])
 def login():
     """
@@ -312,7 +308,7 @@ def check_report():
 
 
 
-# 设置默认参数 FINISH
+# 管理员设置默认参数 FINISH
 @app.route('/administrator/setDefaultParams', methods=['POST'])
 def set_default_params():
     """管理员设置默认参数
@@ -342,7 +338,7 @@ def check_room_state():
     """管理员检查房间状态
     :return: { roomStates:[ roomState:
                            {roomId:int,
-                            isCheckIn:bool,
+                            state:str, # on/off 是否送风
                             mode:str,
                             speed:str,
                             currTemp:int,
@@ -359,6 +355,7 @@ def check_room_state():
         roomsState.append({'roomState':{
             'roomId': i.room_id,
             'isCheckIn': isCheckIn=='in',
+            'state': i.state,
             'mode': i.mode,
             'speed': i.speed,
             'currTemp': i.current_temp,
@@ -370,39 +367,18 @@ def check_room_state():
         'roomsState': roomsState
     })
 
-    # return jsonify({'error': False,
-    #                 'roomStates': [{'roomState': {'roomId': 1,
-    #                                               'isCheckIn': False,
-    #                                               'mode': 'hot',
-    #                                               'speed': 'low',
-    #                                               'currTemp': 23,
-    #                                               'targetTemp': 25}},
-    #                                {'roomState': {'roomId': 2,
-    #                                               'isCheckIn': False,
-    #                                               'mode': 'cold',
-    #                                               'speed': 'high',
-    #                                               'currTemp': 26,
-    #                                               'targetTemp': 5}},
-    #                                {'roomState': {'roomId': 3,
-    #                                               'isCheckIn': True,
-    #                                               'mode': 'hot',
-    #                                               'speed': 'mid',
-    #                                               'currTemp': 12,
-    #                                               'targetTemp': 15}}
-    #                                ]})
 
-
+# 向房客发送房间信息 FINISH
 @app.route('/room/updateRoomState', methods=['POST'])
 def update_room_state():
     """
     客户定期请求空调信息
     :params:{
         roomId:int          # 房间号
-        cookie ?            # 这玩意儿我不是很懂，我这边暂时不打算用
     }
     :return: {
         roomState:{
-            speed:str,      # 风速：{"High", "Medium", "Low"}
+            speed:str,      # 风速：{"HIGH", "MID", "LOW"}
             currTemp:int,   # 当前温度
             targetTemp:int, # 目标温度
             fee:double,     # 费用
@@ -413,18 +389,14 @@ def update_room_state():
     """
     params = request.get_json(force=True)
     print(request.path, " : ", params)
+    roomId = params['roomId']
+    roomState = scheduler.get_slave_state(roomId=roomId)
     return jsonify({
         'error': False,
-        'roomState': {
-            'speed': 'high',
-            'currTemp': 15,
-            'targetTemp': 25,
-            'fee': 103.2,
-            'acState': 'on'
-        }
+        'roomState': roomState
     })
 
-
+# 处理房客的开关机、调温、调风请求 FINISH
 @app.route('/room/changeRoomState', methods=['POST'])
 def change_room_state():
     """
@@ -432,7 +404,7 @@ def change_room_state():
     params:{
         roomId:int,         # 房间号
         targetTemp:int,     # 目标温度
-        targetSpeed:str,    # 目标风速：{"High", "Medium", "Low"}
+        targetSpeed:str,    # 目标风速：{"HIGH", "MID", "LOW"}
         acState:str         # 开机/关机：{"On", "Off"}
     }
     :return: {
@@ -445,18 +417,15 @@ def change_room_state():
     targetSpeed = params['targetSpeed']
     acState = params['acState']
     print(request.path, " : ", params)
+
+    scheduler.deal_with_require(roomId, targetTemp,targetSpeed,acState)
+
     return jsonify({
         'error': False
     })
 
 
-@app.route('/')
-def hello_world():
-    print(request.path)
-    print(request.full_path)
-    return "hello"
-
-
 if __name__ == '__main__':
     db_init()  # 这行代码，如果数据库没有发生变化，则跑一次即可
+    t.start()
     app.run(port=5000, debug=True, host='0.0.0.0')

@@ -30,7 +30,7 @@ class RoomRecode(db.Model):
     room_id = db.Column(db.Integer, nullable=True)
     start_time = db.Column(db.DateTime, default=datetime.datetime.now)
     end_time = db.Column(db.DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now)
-    speed = db.Column(db.Enum("High", "Medium", "Low"))
+    speed = db.Column(db.Enum("HIGH", "MID", "LOW"))
     fee = db.Column(db.Float, default=0.0)
     times_used = db.Column(db.Integer, nullable=True)
 
@@ -43,11 +43,12 @@ class RoomRecode(db.Model):
 
 class Room(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    room_id = db.Column(db.Integer, nullable=True)
-    mode = db.Column(db.String(80))
-    speed = db.Column(db.Enum("High", "Medium", "Low", "Zero"))
-    current_temp = db.Column(db.Integer, nullable=True)
-    target_temp = db.Column(db.Integer, nullable=True)
+    room_id = db.Column(db.Integer, nullable=True)              # 房间id
+    mode = db.Column(db.String(80))                             # 冷热模式
+    speed = db.Column(db.Enum("HIGH", "MID", "LOW", "ZERO"))    # 当前风速
+    current_temp = db.Column(db.Float, nullable=True)         # 当前温度
+    target_temp = db.Column(db.Float, nullable=True)          # 目标温度
+    state = db.Column(db.Enum("SENDING", "NOTSENDING"))         # 是否送风
 
 class Statistics(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -98,10 +99,10 @@ def db_init():
     db.session.add(User(username='room_4',password='room',type='room',room_id=104))
 
     # 测试数据1
-    db.session.add(RoomRecode(room_id=101,speed='High',fee=261,times_used=1))
-    db.session.add(RoomRecode(room_id=101,speed='Low',fee=988,times_used=1))
-    db.session.add(RoomRecode(room_id=101,speed='High',fee=661,times_used=2))
-    db.session.add(RoomRecode(room_id=102,speed='High',fee=333,times_used=1))
+    db.session.add(RoomRecode(room_id=101,speed='HIGH',fee=261,times_used=1))
+    db.session.add(RoomRecode(room_id=101,speed='LOW',fee=988,times_used=1))
+    db.session.add(RoomRecode(room_id=101,speed='HIGH',fee=661,times_used=2))
+    db.session.add(RoomRecode(room_id=102,speed='HIGH',fee=333,times_used=1))
 
     # 测试数据2
     db.session.add(Room(room_id=101,mode='cold',speed='Zero',current_temp=26,target_temp=26))
@@ -118,6 +119,10 @@ def db_init():
     db.session.add(NewStatistics(dateTime=format_dates[1],totalNum=20,satisfyNum=26,scheduledNum=37,RDRNum=13,totalFee=16.8))
     db.session.add(NewStatistics(dateTime=format_dates[2],totalNum=30,satisfyNum=27,scheduledNum=38,RDRNum=14,totalFee=17.8))
     db.session.add(NewStatistics(dateTime=format_dates[3],totalNum=40,satisfyNum=28,scheduledNum=39,RDRNum=15,totalFee=18.8))
+    db.session.add(Room(room_id=101,mode='cold',speed='Zero',current_temp=26,target_temp=26,state='NOTSENDING'))
+    db.session.add(Room(room_id=102,mode='cold',speed='Zero',current_temp=26,target_temp=26,state='NOTSENDING'))
+    db.session.add(Room(room_id=103,mode='cold',speed='Zero',current_temp=26,target_temp=26,state='NOTSENDING'))
+    db.session.add(Room(room_id=104,mode='cold',speed='Zero',current_temp=26,target_temp=26,state='NOTSENDING'))
     
     # 测试数据4
     dates=['2021/06/23','2021/06/24','2021/06/25','2021/06/26']
