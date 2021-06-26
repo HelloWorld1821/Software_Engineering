@@ -127,6 +127,7 @@ class Scheduler:
                 self.add_record('scheduledNum')
                 self.queue.pop_wait_queue()
                 self.queue.add_into_service_queue(object)
+                self.rooms[object.room_id].start_service()
                 self.rooms[object.room_id].power_on()
                 self.rooms[object.room_id].current_speed=self.rooms[object.room_id].target_speed
             else:
@@ -145,6 +146,15 @@ class Scheduler:
                         self.queue.pop_service_by_room_id(object_with_lowest_priority.room_id)
                         self.queue.add_into_wait_queue(object_with_lowest_priority)
                         self.rooms[object_with_lowest_priority.room_id].power_off()
+                        fee_this_time = self.rooms[object_with_lowest_priority.room_id].get_rdr_fee()
+                        db.session.add(RoomRecode(
+                            room_id=object_with_lowest_priority.room_id,
+                            start_time=self.rooms[object_with_lowest_priority.room_id].start_time,
+                            speed=self.rooms[object_with_lowest_priority.room_id].current_speed,
+                            fee=fee_this_time,
+                            times_used=1
+                            ))
+                        db.session.commit()
                         self.rooms[object_with_lowest_priority.room_id].current_speed = None
                 elif object.priority == object_with_lowest_priority.priority:
                     # 时间片轮转
@@ -159,6 +169,15 @@ class Scheduler:
                             self.queue.pop_service_by_room_id(object_with_lowest_priority.room_id)
                             self.queue.add_into_wait_queue(object_with_lowest_priority)
                             self.rooms[object_with_lowest_priority.room_id].power_off()
+                            fee_this_time = self.rooms[object_with_lowest_priority.room_id].get_rdr_fee()
+                            db.session.add(RoomRecode(
+                                room_id=object_with_lowest_priority.room_id,
+                                start_time=self.rooms[object_with_lowest_priority.room_id].start_time,
+                                speed=self.rooms[object_with_lowest_priority.room_id].current_speed,
+                                fee=fee_this_time,
+                                times_used=1
+                                ))
+                            db.session.commit()
                             self.rooms[object_with_lowest_priority.room_id].current_speed = None
 
     # 设置参数
@@ -212,6 +231,15 @@ class Scheduler:
             if roomId in self.queue.service_queue:
                 self.queue.pop_service_by_room_id(roomId)
                 self.rooms[roomId].power_off()
+                fee_this_time = self.rooms[roomId].get_rdr_fee()
+                db.session.add(RoomRecode(
+                    room_id=roomId,
+                    start_time=self.rooms[roomId].start_time,
+                    speed=self.rooms[roomId].current_speed,
+                    fee=fee_this_time,
+                    times_used=1
+                    ))
+                db.session.commit()
                 self.rooms[roomId].current_speed = None
                 # del self.queue.service_queue[roomId]
             for index, wait_obi in enumerate(self.queue.wait_queue):
