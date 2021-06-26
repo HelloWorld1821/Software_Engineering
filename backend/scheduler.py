@@ -32,9 +32,9 @@ class Scheduler:
 
     # 增加NewStatistics中的各种记录字段数
     def add_record(self,record_name):
-        currentTime=datetime.datetime.now().strftime('%Y/%m/%d')
-        startTime=datetime.datetime.strptime(currentTime+' 00:00:00','%Y/%m/%d %H:%M:%S')
-        endTime=datetime.datetime.strptime(currentTime+' 23:59:59','%Y/%m/%d %H:%M:%S')
+        currentTime=datetime.datetime.now().strftime('%Y-%m-%d')
+        startTime=datetime.datetime.strptime(currentTime+' 00:00:00','%Y-%m-%d %H:%M:%S')
+        endTime=datetime.datetime.strptime(currentTime+' 23:59:59','%Y-%m-%d %H:%M:%S')
 
         ans = NewStatistics.query.filter(startTime<=NewStatistics.dateTime).filter(NewStatistics.dateTime<=endTime).first()
         
@@ -72,44 +72,45 @@ class Scheduler:
             for room_id in self.queue.service_queue:
                 self.queue.service_queue[room_id].service_clock += 1
         # 更新费用和当前温度
-        for room_id in self.rooms:
-            # print('room_id = ',room_id)
-            if room_id in self.queue.service_queue:
-                # 更新前的温度
-                previous_temp=self.rooms[room_id].current_temp
-                # 更新温度
-                self.rooms[room_id].current_temp += TMP_PER_MIN[self.queue.service_queue[room_id].current_speed] / 60 * mode_factor
-                # 更新后的温度
-                current_temp=self.rooms[room_id].current_temp
-                # 目标温度
-                target_temp=self.rooms[room_id].target_temp
-                # 如果目标温度在更新前后的温度之间,说明达到了目标温度
-                if previous_temp <= target_temp <= current_temp or previous_temp >= target_temp >= current_temp:
-                    self.add_record('satisfyNum')
-                # 更新费用
-                self.rooms[room_id].fee += KWH_PER_MIN[self.queue.service_queue[room_id].current_speed] / 60 * self.fee_rate
-                
-                Room.query.filter(Room.room_id == room_id).update({
-                    "mode":self.mode,
-                    "speed":self.queue.service_queue[room_id].current_speed,
-                    "current_temp":self.rooms[room_id].current_temp,
-                    "target_temp":self.rooms[room_id].target_temp,
-                    "served_time":self.queue.service_queue[room_id].service_clock,
-                    "fee":self.rooms[room_id].fee,
-                    "state":"SENDING"
-                })
-            elif self.rooms[room_id].current_temp * mode_factor > INIT_TEMP[room_id]* mode_factor:
-                self.rooms[room_id].current_temp -= POWER_OFF_TMP_PER_MIN /60 * mode_factor
-                Room.query.filter(Room.room_id == room_id).update({
-                    "mode":self.mode,
-                    "speed":"",
-                    "current_temp":self.rooms[room_id].current_temp,
-                    "target_temp":self.rooms[room_id].target_temp,
-                    "served_time":0,
-                    "fee":self.rooms[room_id].fee,
-                    "state":"NOT SENDING"
-                })
-            db.session.commit()
+        with self.queue.service_lock:
+            for room_id in self.rooms:
+                # print('room_id = ',room_id)
+                if room_id in self.queue.service_queue:
+                    # 更新前的温度
+                    previous_temp=self.rooms[room_id].current_temp
+                    # 更新温度
+                    self.rooms[room_id].current_temp += TMP_PER_MIN[self.queue.service_queue[room_id].current_speed] / 60 * mode_factor
+                    # 更新后的温度
+                    current_temp=self.rooms[room_id].current_temp
+                    # 目标温度
+                    target_temp=self.rooms[room_id].target_temp
+                    # 更新费用
+                    self.rooms[room_id].fee += KWH_PER_MIN[self.queue.service_queue[room_id].current_speed] / 60 * self.fee_rate
+                    # 如果目标温度在更新前后的温度之间,说明达到了目标温度
+                    if previous_temp <= target_temp <= current_temp or previous_temp >= target_temp >= current_temp:
+                        self.add_record('satisfyNum')
+                        
+                    Room.query.filter(Room.room_id == room_id).update({
+                        "mode":self.mode,
+                        "speed":self.queue.service_queue[room_id].current_speed,
+                        "current_temp":self.rooms[room_id].current_temp,
+                        "target_temp":self.rooms[room_id].target_temp,
+                        "served_time":self.queue.service_queue[room_id].service_clock,
+                        "fee":self.rooms[room_id].fee,
+                        "state":"SENDING"
+                    })
+                elif self.rooms[room_id].current_temp * mode_factor > INIT_TEMP[room_id]* mode_factor:
+                    self.rooms[room_id].current_temp -= POWER_OFF_TMP_PER_MIN /60 * mode_factor
+                    Room.query.filter(Room.room_id == room_id).update({
+                        "mode":self.mode,
+                        "speed":"",
+                        "current_temp":self.rooms[room_id].current_temp,
+                        "target_temp":self.rooms[room_id].target_temp,
+                        "served_time":0,
+                        "fee":self.rooms[room_id].fee,
+                        "state":"NOT SENDING"
+                    })
+                db.session.commit()
         
 
     # 调度

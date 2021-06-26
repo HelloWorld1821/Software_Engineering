@@ -99,9 +99,9 @@ def create_RDR():
     """
 
     # 开一次详单,向NewStatistics表里当天所在行的RDRNum字段加一
-    currentTime=datetime.datetime.now().strftime('%Y/%m/%d')
-    startTime=datetime.datetime.strptime(currentTime+' 00:00:00','%Y/%m/%d %H:%M:%S')
-    endTime=datetime.datetime.strptime(currentTime+' 23:59:59','%Y/%m/%d %H:%M:%S')
+    currentTime=datetime.datetime.now().strftime('%Y-%m-%d')
+    startTime=datetime.datetime.strptime(currentTime+' 00:00:00','%Y-%m-%d %H:%M:%S')
+    endTime=datetime.datetime.strptime(currentTime+' 23:59:59','%Y-%m-%d %H:%M:%S')
 
     ans = NewStatistics.query.filter(startTime<=NewStatistics.dateTime).filter(NewStatistics.dateTime<=endTime).first()
     
@@ -258,8 +258,8 @@ def check_report():
 
     # 时间格式暂时按照图片里的YYYY/MM/DD，如2021/06/25
     # 起止日期，为date类
-    startTime=datetime.datetime.strptime(params['startTime'],'%Y/%m/%d')
-    endTime=datetime.datetime.strptime(params['endTime'],'%Y/%m/%d')
+    startTime=datetime.datetime.strptime(params['startTime'],'%Y-%m-%d')
+    endTime=datetime.datetime.strptime(params['endTime'],'%Y-%m-%d')
 
 
     # 筛选出日期位于startDate和endDate之间的行
@@ -273,7 +273,7 @@ def check_report():
 
     report={}
     for i in ans:
-        date=i.dateTime.strftime('%Y/%m/%d')
+        date=i.dateTime.strftime('%Y-%m-%d')
         report[date]={
             'totalNum':i.totalNum,
             'satisfyNum':i.satisfyNum,
@@ -291,7 +291,7 @@ def check_report():
     common_temp_dict={}
     common_speed_dict={}
     for i in ans:
-        date=i.dateTime.strftime('%Y/%m/%d')
+        date=i.dateTime.strftime('%Y-%m-%d')
         if date not in common_temp_dict.keys():
             common_temp_dict[date]=[]
         common_temp_dict[date].append(i.currentTemp)

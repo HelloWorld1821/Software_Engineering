@@ -77,7 +77,7 @@ class TempSpeed(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     dateTime = db.Column(db.DateTime, default=datetime.datetime.now)
     currentTemp = db.Column(db.Integer, nullable=True)
-    currentSpeed = db.Column(db.Enum("High", "Medium", "Low", ""))
+    currentSpeed = db.Column(db.Enum("HIGH", "MID", "LOW", ""))
 
     def __str__(self) -> str:
         return 'id:{0},dataTime:{1},currentTemp:{2},currentSpeed:{3}'.format(
@@ -113,37 +113,37 @@ def db_init():
     db.session.add(Room(room_id=104,mode='cold',speed='',current_temp=29,target_temp=25,state='NOT SENDING',served_time=0,fee=0))
 
     # 测试数据3
-    dates=['2021/06/23','2021/06/24','2021/06/25','2021/06/22']
+    dates=['2021-06-23','2021-06-24','2021-06-25','2021-06-22']
     format_dates=[]
     for date in dates:
-        format_dates.append(datetime.datetime.strptime(date,'%Y/%m/%d'))
+        format_dates.append(datetime.datetime.strptime(date,'%Y-%m-%d'))
     db.session.add(NewStatistics(dateTime=format_dates[0],totalNum=10,satisfyNum=25,scheduledNum=36,RDRNum=12,totalFee=15.8))
     db.session.add(NewStatistics(dateTime=format_dates[1],totalNum=20,satisfyNum=26,scheduledNum=37,RDRNum=13,totalFee=16.8))
     db.session.add(NewStatistics(dateTime=format_dates[2],totalNum=30,satisfyNum=27,scheduledNum=38,RDRNum=14,totalFee=17.8))
     db.session.add(NewStatistics(dateTime=format_dates[3],totalNum=40,satisfyNum=28,scheduledNum=39,RDRNum=15,totalFee=18.8))
     
     # 测试数据4
-    dates=['2021/06/23','2021/06/24','2021/06/25','2021/06/22']
+    dates=['2021-06-23','2021-06-24','2021-06-25','2021-06-22']
     format_dates=[]
     for date in dates:
-        format_dates.append(datetime.datetime.strptime(date,'%Y/%m/%d'))
-    db.session.add(TempSpeed(dateTime=format_dates[0],currentTemp=15,currentSpeed='High'))
-    db.session.add(TempSpeed(dateTime=format_dates[0],currentTemp=16,currentSpeed='Low'))
-    db.session.add(TempSpeed(dateTime=format_dates[0],currentTemp=16,currentSpeed='High'))
+        format_dates.append(datetime.datetime.strptime(date,'%Y-%m-%d'))
+    db.session.add(TempSpeed(dateTime=format_dates[0],currentTemp=15,currentSpeed='HIGH'))
+    db.session.add(TempSpeed(dateTime=format_dates[0],currentTemp=16,currentSpeed='LOW'))
+    db.session.add(TempSpeed(dateTime=format_dates[0],currentTemp=16,currentSpeed='HIGH'))
 
-    db.session.add(TempSpeed(dateTime=format_dates[1],currentTemp=15,currentSpeed='Medium'))
-    db.session.add(TempSpeed(dateTime=format_dates[1],currentTemp=16,currentSpeed='High'))
-    db.session.add(TempSpeed(dateTime=format_dates[1],currentTemp=15,currentSpeed='High'))
-    db.session.add(TempSpeed(dateTime=format_dates[1],currentTemp=15,currentSpeed='Low'))
+    db.session.add(TempSpeed(dateTime=format_dates[1],currentTemp=15,currentSpeed='MID'))
+    db.session.add(TempSpeed(dateTime=format_dates[1],currentTemp=16,currentSpeed='HIGH'))
+    db.session.add(TempSpeed(dateTime=format_dates[1],currentTemp=15,currentSpeed='HIGH'))
+    db.session.add(TempSpeed(dateTime=format_dates[1],currentTemp=15,currentSpeed='LOW'))
 
-    db.session.add(TempSpeed(dateTime=format_dates[2],currentTemp=15,currentSpeed='High'))
-    db.session.add(TempSpeed(dateTime=format_dates[2],currentTemp=17,currentSpeed='Low'))
-    db.session.add(TempSpeed(dateTime=format_dates[2],currentTemp=17,currentSpeed='Medium'))
-    db.session.add(TempSpeed(dateTime=format_dates[2],currentTemp=17,currentSpeed='Medium'))
+    db.session.add(TempSpeed(dateTime=format_dates[2],currentTemp=15,currentSpeed='HIGH'))
+    db.session.add(TempSpeed(dateTime=format_dates[2],currentTemp=17,currentSpeed='LOW'))
+    db.session.add(TempSpeed(dateTime=format_dates[2],currentTemp=17,currentSpeed='MID'))
+    db.session.add(TempSpeed(dateTime=format_dates[2],currentTemp=17,currentSpeed='MID'))
 
-    db.session.add(TempSpeed(dateTime=format_dates[3],currentTemp=17,currentSpeed='Low'))
-    db.session.add(TempSpeed(dateTime=format_dates[3],currentTemp=15,currentSpeed='High'))
-    db.session.add(TempSpeed(dateTime=format_dates[3],currentTemp=17,currentSpeed='Low'))
+    db.session.add(TempSpeed(dateTime=format_dates[3],currentTemp=17,currentSpeed='LOW'))
+    db.session.add(TempSpeed(dateTime=format_dates[3],currentTemp=15,currentSpeed='HIGH'))
+    db.session.add(TempSpeed(dateTime=format_dates[3],currentTemp=17,currentSpeed='LOW'))
 
 
     db.session.commit()
