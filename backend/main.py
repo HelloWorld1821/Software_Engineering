@@ -420,6 +420,8 @@ def update_room_state():
     print(request.path, " : ", params)
     roomId = int(params['roomId'])
     roomState = scheduler.get_slave_state(roomId=roomId)
+    roomState['currTemp'] = round(roomState['currTemp'],2)
+    roomState['fee']  =round(roomState['fee'],2)
     return jsonify({
         'error': False,
         'roomState': roomState
