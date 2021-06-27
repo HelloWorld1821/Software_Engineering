@@ -25,7 +25,7 @@ class User(db.Model):
     def __repr__(self) -> str:
         return self.__str__()
 
-class RoomRecode(db.Model):
+class RoomRecord(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     room_id = db.Column(db.Integer, nullable=True)
     start_time = db.Column(db.DateTime, default=datetime.datetime.now)
@@ -41,7 +41,7 @@ class RoomRecode(db.Model):
     def __repr__(self) -> str:
         return self.__str__()
 
-class Room(db.Model):
+class RoomInfo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     room_id = db.Column(db.Integer, nullable=True)              # 房间id
     mode = db.Column(db.String(80))                             # 冷热模式
@@ -102,10 +102,10 @@ def db_init():
 
 
     # 测试数据2
-    db.session.add(Room(room_id=101,mode='cold',speed='',current_temp=32,target_temp=25,state='NOT SENDING',served_time=0,fee=0))
-    db.session.add(Room(room_id=102,mode='cold',speed='',current_temp=28,target_temp=25,state='NOT SENDING',served_time=0,fee=0))
-    db.session.add(Room(room_id=103,mode='cold',speed='',current_temp=30,target_temp=25,state='NOT SENDING',served_time=0,fee=0))
-    db.session.add(Room(room_id=104,mode='cold',speed='',current_temp=29,target_temp=25,state='NOT SENDING',served_time=0,fee=0))
+    db.session.add(RoomInfo(room_id=101,mode='cold',speed='',current_temp=32,target_temp=25,state='NOT SENDING',served_time=0,fee=0))
+    db.session.add(RoomInfo(room_id=102,mode='cold',speed='',current_temp=28,target_temp=25,state='NOT SENDING',served_time=0,fee=0))
+    db.session.add(RoomInfo(room_id=103,mode='cold',speed='',current_temp=30,target_temp=25,state='NOT SENDING',served_time=0,fee=0))
+    db.session.add(RoomInfo(room_id=104,mode='cold',speed='',current_temp=29,target_temp=25,state='NOT SENDING',served_time=0,fee=0))
 
     # 测试数据3
     dates=['2021-06-22','2021-06-23','2021-06-24','2021-06-25']

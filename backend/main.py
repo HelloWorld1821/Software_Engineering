@@ -120,7 +120,7 @@ def create_RDR():
     print(request.path, " : ", params)
     roomId=params['roomId']
     times_used = User.query.filter(User.room_id == roomId).first().times_used
-    ans = RoomRecode.query.filter(RoomRecode.room_id == roomId).filter(RoomRecode.times_used == times_used).all()
+    ans = RoomRecord.query.filter(RoomRecord.room_id == roomId).filter(RoomRecord.times_used == times_used).all()
 
     RDR = []
     start_time_list = []
@@ -157,7 +157,7 @@ def create_bill():
     print(request.path, " : ", params)
     roomId=params['roomId']
     times_used = User.query.filter(User.room_id == roomId).first().times_used
-    fee = db.session.query(func.sum(RoomRecode.fee)).filter(RoomRecode.room_id == roomId).filter(RoomRecode.times_used == times_used).scalar()
+    fee = db.session.query(func.sum(RoomRecord.fee)).filter(RoomRecord.room_id == roomId).filter(RoomRecord.times_used == times_used).scalar()
     if fee is None:
         fee = 0
 
@@ -373,7 +373,7 @@ def check_room_state():
                             }],
                             error:bool }
     """
-    ans = Room.query.all()
+    ans = RoomInfo.query.all()
 
 
     roomsState = []

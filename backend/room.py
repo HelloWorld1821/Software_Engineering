@@ -1,7 +1,7 @@
 import datetime
 
 
-class Rooom:
+class Room:
     def __init__(self,room_id, current_temp) -> None:
         self.power = False
         self.room_id = room_id

@@ -4,7 +4,7 @@ import threading
 
 from service_object import *
 
-class Queuee:
+class Queues:
     def __init__(self) -> None:
         self.wait_count = 0
         self.index = 0
