@@ -3,12 +3,11 @@
  * @Author: l
  * @Date: 2021-05-31 13:38:16
  * @LastEditors: l
- * @LastEditTime: 2021-06-01 15:44:48
- * @FilePath: \client\src\router\index.js
+ * @LastEditTime: 2021-06-05 12:48:11
+ * @FilePath: \DistributedControlSystem\frontend\src\router\index.js
  */
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
 import Home from '@/pages/Home'
 import Login from '@/pages/Login'
 import Register from '@/pages/Register'

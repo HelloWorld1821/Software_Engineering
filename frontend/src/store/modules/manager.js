@@ -3,34 +3,55 @@
  * @Author: l
  * @Date: 2021-06-03 14:01:04
  * @LastEditors: l
- * @LastEditTime: 2021-06-03 14:11:49
+ * @LastEditTime: 2021-06-26 16:45:37
  * @FilePath: \DistributedControlSystem\frontend\src\store\modules\manager.js
  */
-export default{
-    state:{
-        report:{
-            totalNum: 20,
-            commonTemp: 23,
-            commonSpeed: 'mid',
-            satisfyNum: 10,
-            scheduledNum: 30,
-            RDRNum: 25,
-            totalFee: 12450.0
+
+const api = '/api/manager';
+import axios from 'axios'
+export default {
+    state: {
+        startTime: '',
+        endTime: '',
+        reportIsOk: false,
+        report:[]
+    },
+    getter: {},
+    mutations: {
+        setReportIsOk(state, isOK) {
+            state.reportIsOk = isOK;
+        },
+        setStartTime(state, startTime) {
+            state.startTime = startTime;
+        },
+        setEndTime(state, endTime) {
+            state.endTime = endTime;
+        },
+        setReport(state, report) {
+            state.report=report;
+        },
+
+    },
+    actions: {
+        checkReport({ commit }, payload) {
+            console.log('checkReport...');
+            return axios.post(api + '/checkReport', {
+                startTime: payload.startTime,
+                endTime: payload.endTime,
+            }).then((response) => {
+                if (response.data.error == false) {
+                    commit('setStartTime', payload.startTime);
+                    commit('setEndTime', payload.endTime);
+                    commit('setReportIsOk', true);
+                    commit('setReport', response.data.report);
+                } else {
+                    commit('setReprotIsOk', false);
+                }
+            }).catch((error) => {
+                console.error(error)
+            });
         }
     },
-    getter:{},
-    mutations:{
-        setReport(state,report){
-            state.totalNum = report.totalNum;
-            state.commonTemp=report.commonTemp;
-            state.commonSpeed=report.commonSpeed;
-            state.satisfyNum=report.satisfyNum;
-            state.scheduledNum=report.scheduledNum;
-            state.RDRNum=report.RDRNum;
-            state.totalFee=report.totalFee;
-        }
-    },
-    actions:{},
-    modules:{},
-    namespace:true,
+    modules: {},
+    namespaced: true,
 }

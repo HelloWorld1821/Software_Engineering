@@ -17,12 +17,12 @@ def login_admin():
     """
     userName
     password
-    :return:
+    :return: {error:bool.
+                role:str}  # room/administrator/manager/receptionist
     """
 
     params = request.get_json(force=True)
     print(request.path, " : ", params)
-
     params = request.get_json(force=True)
     # print(request.path, " : ", params)
     username = params['userName']
@@ -48,6 +48,7 @@ def login_admin():
             }
             ret['attributes']=attributes
         return jsonify(ret)
+
 
 
 # 这个暂时没什么用了 FINISH
@@ -89,7 +90,7 @@ def login():
 def create_RDR():
     """前台开详单
     roomId:int
-    :return: { record:{
+    :return: { RDR:{
                     startTime:str,
                     endTime:str,
                     speed:str,
@@ -142,12 +143,13 @@ def create_RDR():
                     'RDR': RDR})
 
 
+
 # 账单 FINISH
 @app.route('/receptionist/getBill', methods=['POST'])
 def create_bill():
     """前台开账单
     roomId:int
-    :return: { fee:double ,
+    :return: { bill:{fee:double },
                 error:bool }
     """
 
@@ -161,6 +163,7 @@ def create_bill():
 
     return jsonify({'error': False,
                     'bill': {'fee': fee}})
+
 
 
 # 开房 FINISH
@@ -324,16 +327,18 @@ def check_report():
 
 
 
-
 # 管理员设置默认参数 FINISH
 @app.route('/administrator/setDefaultParams', methods=['POST'])
 def set_default_params():
     """管理员设置默认参数
-    mode:str
-    tempSection:int[4]
+    defaultMode:str {hot,cold}
+    coldHigh:int 温度范围 4个数
+    coldLow:int  
+    hotHigh:int
+    hotLow:int
     defaultTemp: int
     feeRate: double
-    scheduleNum: int
+    scheduledNum: int
     :return: {error:bool}
     """
     params = request.get_json(force=True)
@@ -368,8 +373,8 @@ def check_room_state():
                             }],
                             error:bool }
     """
-    
     ans = Room.query.all()
+
 
     roomsState = []
     for i in ans:
