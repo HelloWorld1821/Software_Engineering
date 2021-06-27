@@ -3,174 +3,183 @@
  * @Author: l
  * @Date: 2021-06-01 15:34:21
  * @LastEditors: l
- * @LastEditTime: 2021-06-26 20:43:07
+ * @LastEditTime: 2021-06-27 14:25:43
  * @FilePath: \DistributedControlSystem\frontend\src\pages\Room.vue
 -->
 <template>
   <div>
-    <!-- <h1>用户房间{{ roomId }}</h1> -->
-    <!-- 空调控制器 -->
-    <div class="ac-control">
-      <el-row style="margin-top: 20px">
-        <el-col><h2>空调控制器</h2></el-col>
-      </el-row>
-
-      <el-row style="margin-top: 20px">
-        <el-col :span="8" :offset="0" class="temp">
-          <div>目标温度:</div>
-        </el-col>
-        <el-col :span="8" :offset="2">
-          <div>
-            <el-input-number
-              v-model="targetTemp"
-              :min=this.$store.state.room.roomParams.tempSectionLow
-              :max=this.$store.state.room.roomParams.tempSectionHigh
-              size="small"
-            >
-            </el-input-number>
-          </div>
-        </el-col>
-      </el-row>
-
-      <el-row style="margin-top: 20px">
-        <el-col :span="8" :offset="0" class="temp">
-          <div>目标风速:</div>
-        </el-col>
-        <el-col :offset="0" style="margin-top: 10px">
-          <el-radio-group v-model="targetSpeed">
-            <el-radio :label="'low'">Low</el-radio>
-            <el-radio :label="'mid'">Mid</el-radio>
-            <el-radio :label="'high'">High</el-radio>
-          </el-radio-group>
-        </el-col>
-      </el-row>
-
-      <el-row style="margin-top: 20px">
-        <el-col :span="8" :offset="0" class="state">
-          <div>
-            <div>空调状态:</div>
-          </div>
-        </el-col>
-        <el-col :span="4" :offset="5"
-          ><div>
-            <el-switch
-              v-model="acStateBool"
-              active-color="#13ce66"
-              inactive-color="#ff4949"
-            >
-            </el-switch></div
-        ></el-col>
-      </el-row>
-
-      <el-row class="update" style="margin-top: 30px">
-        <el-button size="medium" type="primary" @click="updateRoomState(roomId)"
-          >手动更新房间状态</el-button
-        >
-      </el-row>
+    <div class="background">
+      <img :src="imgSrc" width="100%" height="100%" alt="" />
     </div>
+    <el-row>
+      <el-col :span="10" :offset="2">
+        <div class="ac-control">
+          <el-row style="margin-top: 20px">
+            <el-col><h2>空调控制器</h2></el-col>
+          </el-row>
 
-    <div class="user-panel">
-      <el-row style="margin-top: 20px">
-        <el-col><h2>房间状态</h2></el-col>
-      </el-row>
-      <el-row style="margin-top: 20px">
-        <el-col :span="8" :offset="0" class="temp">
-          <div>房间ID:</div>
-        </el-col>
-        <el-col :span="8" :offset="4">
-          <div>
-            {{ roomId }}
-          </div>
-        </el-col>
-      </el-row>
-      <el-row style="margin-top: 20px">
-        <el-col :span="8" :offset="0" class="state">
-          <div>
-            <div>休眠模式:</div>
-          </div>
-        </el-col>
-        <el-col :span="4" :offset="6"
-          ><div>
-            <el-switch
+          <el-row style="margin-top: 20px">
+            <el-col :span="8" :offset="0" class="temp">
+              <div>目标温度:</div>
+            </el-col>
+            <el-col :span="8" :offset="2">
+              <div>
+                <el-input-number
+                  v-model="targetTemp"
+                  :min="this.$store.state.room.roomParams.tempSectionLow"
+                  :max="this.$store.state.room.roomParams.tempSectionHigh"
+                  size="small"
+                >
+                </el-input-number>
+              </div>
+            </el-col>
+          </el-row>
 
-              :disabled="true"
-              v-model="sleepMode"
-              active-color="#13ce66"
-              inactive-color="#ff4949"
+          <el-row style="margin-top: 20px">
+            <el-col :span="8" :offset="0" class="temp">
+              <div>目标风速:</div>
+            </el-col>
+            <el-col :offset="0" style="margin-top: 10px">
+              <el-radio-group v-model="targetSpeed">
+                <el-radio :label="'low'">Low</el-radio>
+                <el-radio :label="'mid'">Mid</el-radio>
+                <el-radio :label="'high'">High</el-radio>
+              </el-radio-group>
+            </el-col>
+          </el-row>
+
+          <el-row style="margin-top: 20px">
+            <el-col :span="8" :offset="0" class="state">
+              <div>
+                <div>空调状态:</div>
+              </div>
+            </el-col>
+            <el-col :span="4" :offset="5"
+              ><div>
+                <el-switch
+                  v-model="acStateBool"
+                  active-color="#13ce66"
+                  inactive-color="#ff4949"
+                >
+                </el-switch></div
+            ></el-col>
+          </el-row>
+
+          <el-row class="update" style="margin-top: 30px">
+            <el-button
+              size="medium"
+              type="primary"
+              @click="updateRoomState(roomId)"
+              >手动更新房间状态</el-button
             >
-            </el-switch></div
-        ></el-col>
-      </el-row>
-      <el-row style="margin-top: 20px">
-        <el-col :span="8" :offset="0" class="temp">
-          <div>送风状态:</div>
-        </el-col>
-        <!-- <el-col :span="8" :offset="4">
+          </el-row>
+        </div>
+      </el-col>
+
+
+      <el-col :span="10" >
+        <div class="user-panel">
+          <el-row style="margin-top: 20px">
+            <el-col><h2>房间状态</h2></el-col>
+          </el-row>
+          <el-row style="margin-top: 20px">
+            <el-col :span="8" :offset="0" class="temp">
+              <div>房间ID:</div>
+            </el-col>
+            <el-col :span="8" :offset="4">
+              <div>
+                {{ roomId }}
+              </div>
+            </el-col>
+          </el-row>
+          <el-row style="margin-top: 20px">
+            <el-col :span="8" :offset="0" class="state">
+              <div>
+                <div>休眠模式:</div>
+              </div>
+            </el-col>
+            <el-col :span="4" :offset="6"
+              ><div>
+                <el-switch
+                  :disabled="true"
+                  v-model="sleepMode"
+                  active-color="#13ce66"
+                  inactive-color="#ff4949"
+                >
+                </el-switch></div
+            ></el-col>
+          </el-row>
+          <el-row style="margin-top: 20px">
+            <el-col :span="8" :offset="0" class="temp">
+              <div>送风状态:</div>
+            </el-col>
+            <!-- <el-col :span="8" :offset="4">
           <div>
             {{ roomState.acState }}
           </div>
         </el-col> -->
-         <el-col :span="4" :offset="6"
-          ><div>
-            <el-switch
+            <el-col :span="4" :offset="6"
+              ><div>
+                <el-switch
+                  :disabled="true"
+                  v-model="isSupplyBool"
+                  active-color="#13ce66"
+                  inactive-color="#ff4949"
+                >
+                </el-switch></div
+            ></el-col>
+          </el-row>
 
-              :disabled="true"
-              v-model="isSupplyBool"
-              active-color="#13ce66"
-              inactive-color="#ff4949"
-            >
-            </el-switch></div
-        ></el-col>
-      </el-row>
+          <el-row style="margin-top: 20px">
+            <el-col :span="8" :offset="0" class="temp">
+              <div>当前温度:</div>
+            </el-col>
+            <el-col :span="8" :offset="4">
+              <div>
+                {{ roomState.currTemp }}
+              </div>
+            </el-col>
+          </el-row>
 
-      <el-row style="margin-top: 20px">
-        <el-col :span="8" :offset="0" class="temp">
-          <div>当前温度:</div>
-        </el-col>
-        <el-col :span="8" :offset="4">
-          <div>
-            {{ roomState.currTemp }}
-          </div>
-        </el-col>
-      </el-row>
+          <el-row style="margin-top: 20px">
+            <el-col :span="8" :offset="0" class="temp">
+              <div>当前风速:</div>
+            </el-col>
+            <el-col :span="8" :offset="4">
+              <div>
+                {{ roomState.speed }}
+              </div>
+            </el-col>
+          </el-row>
 
-      <el-row style="margin-top: 20px">
-        <el-col :span="8" :offset="0" class="temp">
-          <div>当前风速:</div>
-        </el-col>
-        <el-col :span="8" :offset="4">
-          <div>
-            {{ roomState.speed }}
-          </div>
-        </el-col>
-      </el-row>
-
-      <el-row style="margin-top: 20px">
-        <el-col :span="8" :offset="0" class="temp">
-          <div>当前费用:</div>
-        </el-col>
-        <el-col :span="8" :offset="4">
-          <div>
-            {{ roomState.fee }}
-          </div>
-        </el-col>
-      </el-row>
-    </div>
+          <el-row style="margin-top: 20px">
+            <el-col :span="8" :offset="0" class="temp">
+              <div>当前费用:</div>
+            </el-col>
+            <el-col :span="8" :offset="4">
+              <div>
+                {{ roomState.fee }}
+              </div>
+            </el-col>
+          </el-row>
+        </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
 import { mapActions, mapState } from "vuex";
 export default {
-
   data: function () {
     return {
-      targetTemp:  this.$store.state.room.roomParams.defaultTemp,
+      targetTemp: this.$store.state.room.roomParams.defaultTemp,
       targetSpeed: this.$store.state.room.roomParams.defaultSpeed,
       targetACState: "off",
       acStateBool: false,
       sleepMode: false, //是否开启休眠模式
       isSupplyBool: false,
+      imgSrc: require("../assets/images/room.jpg"),
     };
   },
   // created() {
@@ -229,7 +238,6 @@ export default {
         //制冷模式
         // console.log('sleep on currTemp:',cTemp,'targetTemp:',tTemp,'mode',this.sleepMode);
         if (cTemp <= tTemp) {
-          
           this.sleepMode = true; //打开休眠模式
           this.stopAirSupply();
         } else {
@@ -244,13 +252,12 @@ export default {
         if (cTemp >= tTemp) {
           this.sleepMode = true; //打开休眠模式
           this.stopAirSupply();
-           
+
           this.$notify({
-            title: '空调进入休眠状态',
-            message: '',
+            title: "空调进入休眠状态",
+            message: "",
             // position: 'bottom-left'
           });
-      
         } else {
           if (tTemp - cTemp >= 1 && this.sleepMode == true) {
             this.sleepMode = false;
@@ -271,7 +278,7 @@ export default {
       // var cTemp = parseInt(this.roomState.currTemp);
       // var tTemp = parseInt(this.targetTemp);
       // handlerTempChange(cTemp,tTemp);
-      
+
       // 目标温度改变，关闭休眠模式
       this.sleepMode = false;
       this.tryChangeRoomState();
@@ -290,9 +297,9 @@ export default {
       // console.log("roomState change , currTemp:",newValue.currTemp);
       var cTemp = parseFloat(newValue.currTemp);
       var tTemp = parseFloat(this.targetTemp);
-      if(newValue.acState == 'on') this.isSupplyBool = true;
-      if(newValue.acState == 'off') this.isSupplyBool =false;
-      this.handlerTempChange(cTemp,tTemp);
+      if (newValue.acState == "on") this.isSupplyBool = true;
+      if (newValue.acState == "off") this.isSupplyBool = false;
+      this.handlerTempChange(cTemp, tTemp);
     },
   },
   mounted: function () {
@@ -322,7 +329,7 @@ export default {
 .user-panel {
   background-color: white;
   margin-top: 100px;
-  margin-right: 20%;
+  margin-right: 25%;
   padding: 20px;
   /* display: inline-block; */
   float: right;
@@ -331,11 +338,13 @@ export default {
   /* float: left; */
   border-radius: 30px;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  /* z-index:1;
+    position: absolute; */
 }
 .ac-control {
   background-color: #fff;
   margin-top: 100px;
-  margin-left: 20%;
+  margin-left: 25%;
   padding-top: 30px;
   padding-left: 20px;
   padding-right: 20px;
@@ -343,9 +352,17 @@ export default {
   /* display: inline-block; */
   height: 400px;
   width: 300px;
-  float: left;
+  /* float: left; */
   /* float: left; */
   border-radius: 30px;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  /* z-index:1;
+  position: absolute; */
+}
+.background {
+  width: 100%;
+  height: 100%; /**宽高100%是为了图片铺满屏幕 */
+  z-index: -1;
+  position: absolute;
 }
 </style>
