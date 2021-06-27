@@ -3,7 +3,7 @@
  * @Author: l
  * @Date: 2021-06-01 09:39:42
  * @LastEditors: l
- * @LastEditTime: 2021-06-26 23:39:58
+ * @LastEditTime: 2021-06-27 09:33:18
  * @FilePath: \DistributedControlSystem\frontend\src\pages\Home.vue
 -->
 
@@ -14,7 +14,7 @@
     </el-row>
     <el-row style="margin-top:20px">
       <el-carousel :interval="4000" type="card" height="450px">
-        <el-carousel-item v-for="item in imgData2" :key="item">
+        <el-carousel-item v-for="item in imgData2" :key="item.id">
           <!-- <h3 class="medium">{{ item }}</h3>
          -->
           <img

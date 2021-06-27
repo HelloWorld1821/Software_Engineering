@@ -3,7 +3,7 @@
  * @Author: l
  * @Date: 2021-06-03 13:45:26
  * @LastEditors: l
- * @LastEditTime: 2021-06-26 14:07:12
+ * @LastEditTime: 2021-06-27 09:37:56
  * @FilePath: \DistributedControlSystem\frontend\src\store\modules\room.js
  */
 const api = '/api/room';
@@ -75,7 +75,7 @@ export default{
     },
     actions:{
         updateRoomState({commit},payload){
-            console.log('updateRoomState...');
+            // console.log('updateRoomState...');
             return axios.post(api + '/updateRoomState', {
                 roomId:payload.roomId,
             }).then((response) => {
