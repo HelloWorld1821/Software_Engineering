@@ -36,7 +36,7 @@
         </div>
       </div> -->
     <el-tabs :tab-position="tabPosition" style="height: 1000px">
-      <el-tab-pane label="获取账单">
+      <el-tab-pane label="获取账单" >
         <div class="content">
           <div class="search-header">
             <el-row align="middle" type="flex">
@@ -163,11 +163,14 @@ export default {
   margin-top: 50px;
   margin-left: 10%;
   margin-right: 10%;
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 30px;
+  
 }
 .bill-form{
   border-radius: 30px;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  font-size:20px;
+  /* box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1); */
   margin-right: 20%;
   margin-left: 20%;
   margin-top: 50px;
@@ -176,10 +179,17 @@ export default {
   padding-left: 40px;
   padding-right: 40px;
   padding-bottom: 25px;
+  
+}
+label {
+  /* 添加你的样式属性 */
+  color: white; /* 例如，设置字体颜色为黑色 (#333) */
+  font-size: 16px; /* 例如，设置字体大小为16像素 */
 }
 
 .rdr-table {
-  margin-top: 50px;
+ color:white;
+  
 }
 .background {
   width: 100%;

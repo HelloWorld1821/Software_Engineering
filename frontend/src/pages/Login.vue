@@ -44,12 +44,12 @@
         />
       </label>
     </form> -->
-    <div class="content">
+   
     <el-form label-width="60px" size="small" class="login-form">
       <!-- <el-form-item label="用户名">
         <el-input v-model="userName"></el-input>
       </el-form-item> -->
-      <el-row align="middle" type="flex">
+      <el-row align="middle" type="margin-top: 20px">
         <el-col :span="10"> 账号: </el-col>
         <el-col :span="10">
           <el-autocomplete
@@ -81,7 +81,6 @@
         </el-col>
       </el-row>
     </el-form>
-  </div>
   </div>
 </template>
 
@@ -153,7 +152,7 @@ export default defineComponent({
 </script>
 <style scoped>
 .background {
-  margin-top :0px; ;
+  top :0px; ;
   width: 100%;
   height: 100%; /**宽高100%是为了图片铺满屏幕 */
   z-index: -1;
@@ -161,9 +160,10 @@ export default defineComponent({
 }
 
 .login-form {
+  margin-top:10%;
   margin-right: 35%;
   margin-left: 35%;
-  /* margin-top: 50px; */
+
   border-radius: 30px;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   padding-top: 30px;
@@ -171,5 +171,9 @@ export default defineComponent({
   padding-right: 40px;
   padding-bottom: 25px;
   background-color: rgba(255, 255, 255, 0.8);
+
+
+
+ 
 }
 </style>

@@ -38,6 +38,9 @@
       <input type="button" value="set defualt params" @click="setDefaultParams">
 
     </div> -->
+    <div class="background">
+      <img :src="imgSrc" width="100%" height="100%" alt="" />
+    </div>
 
     <el-tabs :tab-position="tabPosition" style="height: 1000px">
       <!-- 管理员监视面板 -->
@@ -191,6 +194,7 @@ export default {
   data: function () {
     return {
       tabPosition: "left",
+      imgSrc: require("../assets/images/room.jpg"),
       params: {
         defaultMode: "cold",
         coldHigh: 25,
@@ -233,7 +237,7 @@ export default {
   margin-left: 10%;
   margin-right: 10%;
   /* background-color: pink; */
-  background-color: #fff;
+  background-color:transparent;
 }
 .params-form {
   border-radius: 30px;
@@ -245,5 +249,12 @@ export default {
   padding-left: 40px;
   padding-right: 40px;
   padding-bottom: 25px;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+.background {
+  width: 100%;
+  height: 100%; /**宽高100%是为了图片铺满屏幕 */
+  z-index: -1;
+  position: absolute;
 }
 </style>
