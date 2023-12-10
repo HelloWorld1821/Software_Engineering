@@ -8,6 +8,9 @@
 -->
 <template>
   <div>
+    <div class="background">
+      <img :src="imgSrc" width="100%" height="100%" alt="" />
+    </div>
     <el-tabs :tab-position="tabPosition" style="height:1000px">
       <el-tab-pane label="获取报表">
         <div class="content">
@@ -80,6 +83,7 @@ export default {
       inputStartTime: '',
       inputEndTime: '',
       tabPosition: 'left',
+      imgSrc: require("../assets/images/room.jpg"),
       pickerOptions: {
           shortcuts: [{
             text: '最近一周',
@@ -132,6 +136,7 @@ export default {
   margin-top: 50px;
   margin-right: 20%;
   margin-left: 20%;
+  
 }
 .report-table{
   margin-top: 50px;
@@ -140,6 +145,14 @@ export default {
   margin-top: 50px;
   margin-left: 10%;
   margin-right: 10%;
-  background-color: #fff;
+  border-radius: 30px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  background-color: rgba(255,255,255,0.8);
+}
+.background {
+  width: 100%;
+  height: 100%; /**宽高100%是为了图片铺满屏幕 */
+  z-index: -1;
+  position: absolute;
 }
 </style>

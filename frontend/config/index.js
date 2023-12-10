@@ -24,7 +24,7 @@ module.exports = {
         // target:'http://10.28.247.102:5000',  local
         // target:'http://10.28.247.102:5000', //cck
         // target:'http://192.168.43.188:5000',
-        target:'http://10.28.198.140:5000', //llm
+        target:'http:localhost:8080', //llm
         changeOrigin: true,
         pathRewrite: {
           '^/api': ''
@@ -33,7 +33,7 @@ module.exports = {
     },
     // Various Dev Server settings
     // host: 'localhost', // can be overwritten by process.env.HOST
-    host: '10.128.208.213',
+    host: "localhost",
     // host:'192.168.43.150',
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,

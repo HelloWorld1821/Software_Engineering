@@ -327,7 +327,7 @@ export default {
 
 <style>
 .user-panel {
-  background-color: white;
+  background-color: rgba(255,255,255,0.8);
   margin-top: 100px;
   margin-right: 25%;
   padding: 20px;
@@ -342,7 +342,7 @@ export default {
     position: absolute; */
 }
 .ac-control {
-  background-color: #fff;
+  background-color: rgba(255,255,255,0.8);
   margin-top: 100px;
   margin-left: 25%;
   padding-top: 30px;

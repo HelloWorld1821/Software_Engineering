@@ -8,6 +8,9 @@
 -->
 <template>
   <div>
+    <div class="background">
+      <img :src="imgSrc" width="100%" height="100%" alt="" />
+    </div>
     <!-- <form action="" method="post" claspxs="smart-green">
 
       <h1>Login</h1>
@@ -41,6 +44,7 @@
         />
       </label>
     </form> -->
+    <div class="content">
     <el-form label-width="60px" size="small" class="login-form">
       <!-- <el-form-item label="用户名">
         <el-input v-model="userName"></el-input>
@@ -78,6 +82,7 @@
       </el-row>
     </el-form>
   </div>
+  </div>
 </template>
 
 <script>
@@ -100,6 +105,7 @@ export default defineComponent({
       ],
       userName: "",
       password: "",
+      imgSrc: require("../assets/images/room.jpg"),
     };
   },
   computed: {
@@ -146,15 +152,24 @@ export default defineComponent({
 });
 </script>
 <style scoped>
+.background {
+  margin-top :0px; ;
+  width: 100%;
+  height: 100%; /**宽高100%是为了图片铺满屏幕 */
+  z-index: -1;
+  position: absolute;
+}
+
 .login-form {
   margin-right: 35%;
   margin-left: 35%;
-  margin-top: 50px;
+  /* margin-top: 50px; */
   border-radius: 30px;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   padding-top: 30px;
   padding-left: 40px;
   padding-right: 40px;
   padding-bottom: 25px;
+  background-color: rgba(255, 255, 255, 0.8);
 }
 </style>

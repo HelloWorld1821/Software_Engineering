@@ -8,6 +8,9 @@
 -->
 <template>
   <div>
+    <div class="background">
+      <img :src="imgSrc" width="100%" height="100%" alt="" />
+    </div>
     <!-- <h2>Receptionists</h2>
       <div class='bill-div'>
         Bill RoomId:
@@ -137,6 +140,7 @@ export default {
       tabPosition: "left",
       inputBillRoomId: 1,
       inputRDRRoomId: 2,
+      imgSrc: require("../assets/images/room.jpg"),
     };
   },
   computed: {
@@ -176,5 +180,11 @@ export default {
 
 .rdr-table {
   margin-top: 50px;
+}
+.background {
+  width: 100%;
+  height: 100%; /**宽高100%是为了图片铺满屏幕 */
+  z-index: -1;
+  position: absolute;
 }
 </style>
