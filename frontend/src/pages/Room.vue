@@ -1,5 +1,5 @@
 <!--
- * @Description: 
+ * @Description:
  * @Author: l
  * @Date: 2021-06-01 15:34:21
  * @LastEditors: l
@@ -8,9 +8,6 @@
 -->
 <template>
   <div>
-    <div class="background">
-      <img :src="imgSrc" width="100%" height="100%" alt="" />
-    </div>
     <el-row>
       <el-col :span="10" :offset="2">
         <div class="ac-control">
@@ -76,8 +73,7 @@
         </div>
       </el-col>
 
-
-      <el-col :span="10" >
+      <el-col :span="10">
         <div class="user-panel">
           <el-row style="margin-top: 20px">
             <el-col><h2>房间状态</h2></el-col>
@@ -171,7 +167,7 @@
 <script>
 import { mapActions, mapState } from "vuex";
 export default {
-  data: function () {
+  data: function() {
     return {
       targetTemp: this.$store.state.room.roomParams.defaultTemp,
       targetSpeed: this.$store.state.room.roomParams.defaultSpeed,
@@ -179,7 +175,7 @@ export default {
       acStateBool: false,
       sleepMode: false, //是否开启休眠模式
       isSupplyBool: false,
-      imgSrc: require("../assets/images/room.jpg"),
+      imgSrc: require("../assets/images/room.jpg")
     };
   },
   // created() {
@@ -187,7 +183,7 @@ export default {
   //   this.targetSpeed = this.roomParams.targetSpeed;
   // },
   computed: {
-    ...mapState("room", ["roomId", "roomState", "roomParams"]),
+    ...mapState("room", ["roomId", "roomState", "roomParams"])
     // isSupplyBool:()=>{
     //     return this.$store.state.room.roomState.acState;
     // },
@@ -208,7 +204,7 @@ export default {
           roomId: this.roomId,
           targetTemp: this.targetTemp,
           targetSpeed: this.targetSpeed,
-          targetACState: this.targetACState,
+          targetACState: this.targetACState
         });
       }, 1000);
     },
@@ -219,7 +215,7 @@ export default {
         roomId: this.roomId,
         targetTemp: this.targetTemp,
         targetSpeed: this.targetSpeed,
-        targetACState: "off", //在服务器看来就是关闭空调,发送sleep消息，与off不一样
+        targetACState: "off" //在服务器看来就是关闭空调,发送sleep消息，与off不一样
       });
     },
     //启动送风服务，送送风请求
@@ -229,7 +225,7 @@ export default {
         roomId: this.roomId,
         targetTemp: this.targetTemp,
         targetSpeed: this.targetSpeed,
-        targetACState: "on", //在服务器看来就是打开空调
+        targetACState: "on" //在服务器看来就是打开空调
       });
     },
     handlerTempChange(cTemp, tTemp) {
@@ -255,7 +251,7 @@ export default {
 
           this.$notify({
             title: "空调进入休眠状态",
-            message: "",
+            message: ""
             // position: 'bottom-left'
           });
         } else {
@@ -265,14 +261,14 @@ export default {
           }
         }
       }
-    },
+    }
   },
   watch: {
-    acStateBool: function (newValue, oldValue) {
+    acStateBool: function(newValue, oldValue) {
       if (newValue == true) this.targetACState = "on";
       if (newValue == false) this.targetACState = "off";
     },
-    targetTemp: function (newValue, oldValue) {
+    targetTemp: function(newValue, oldValue) {
       // console.log("targetTemp: " + oldValue + "-->" + newValue);
       this.$store.commit("room/setTargetTemp", newValue);
       // var cTemp = parseInt(this.roomState.currTemp);
@@ -283,26 +279,26 @@ export default {
       this.sleepMode = false;
       this.tryChangeRoomState();
     },
-    targetSpeed: function (newValue, oldValue) {
+    targetSpeed: function(newValue, oldValue) {
       // console.log("targetSpeed: " + oldValue + "-->" + newValue);
       if (this.acStateBool == true) this.tryChangeRoomState();
     },
-    targetACState: function (newValue, oldValue) {
+    targetACState: function(newValue, oldValue) {
       // console.log("targetACState: " + oldValue + "-->" + newValue);
       // 空调状态改变，关闭休眠模式
       this.sleepMode = false;
       this.tryChangeRoomState();
     },
-    roomState: function (newValue, oldValue) {
+    roomState: function(newValue, oldValue) {
       // console.log("roomState change , currTemp:",newValue.currTemp);
       var cTemp = parseFloat(newValue.currTemp);
       var tTemp = parseFloat(this.targetTemp);
       if (newValue.acState == "on") this.isSupplyBool = true;
       if (newValue.acState == "off") this.isSupplyBool = false;
       this.handlerTempChange(cTemp, tTemp);
-    },
+    }
   },
-  mounted: function () {
+  mounted: function() {
     let that = this;
     that.updateRoomState({ roomId: that.roomId });
     if (this.timer) {
@@ -314,20 +310,20 @@ export default {
       }, 1000);
     }
   },
-  destroyed: function () {
+  destroyed: function() {
     clearInterval(this.updateTimer);
     clearTimeout(this.launchTimer);
 
     //销毁时看作关机请求
     this.targetACState = "off";
     this.tryChangeRoomState();
-  },
+  }
 };
 </script>
 
 <style>
 .user-panel {
-  background-color: rgba(255,255,255,0.8);
+  background-color: rgba(255, 255, 255, 0.8);
   margin-top: 100px;
   margin-right: 25%;
   padding: 20px;
@@ -342,7 +338,7 @@ export default {
     position: absolute; */
 }
 .ac-control {
-  background-color: rgba(255,255,255,0.8);
+  background-color: rgba(255, 255, 255, 0.8);
   margin-top: 100px;
   margin-left: 25%;
   padding-top: 30px;

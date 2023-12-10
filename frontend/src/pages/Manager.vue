@@ -1,5 +1,5 @@
 <!--
- * @Description: 
+ * @Description:
  * @Author: l
  * @Date: 2021-06-01 15:40:54
  * @LastEditors: l
@@ -8,11 +8,13 @@
 -->
 <template>
   <div>
-    <div class="background">
-      <img :src="imgSrc" width="100%" height="100%" alt="" />
-    </div>
     <el-tabs :tab-position="tabPosition" style="height:1000px">
-      <el-tab-pane label="获取报表">
+      <el-tab-pane>
+        <template slot="label">
+          <div class="label" style="color:rgb(226, 183, 43);">
+            <h3>获取详单</h3>
+          </div>
+        </template>
         <div class="content">
           <div class="search-header">
             <el-row align="middle" type="flex">
@@ -39,33 +41,72 @@
               <el-col :span="2" :offset="5" align="middle" type="flex">
                 <div class="grid-content bg-purple-light">
                   <el-button
-                    type="primary"
-                    @click="checkReport({'startTime':start2end[0],'endTime':start2end[1]})"
+                    round
+                    @click="
+                      checkReport({
+                        startTime: start2end[0],
+                        endTime: start2end[1]
+                      })
+                    "
                   >
-                    获取报表report
+                    获取报表
                   </el-button>
                 </div>
               </el-col>
-              
             </el-row>
           </div>
           <div class="report-table">
-            <el-table :data="report" border style="width: 100%" >
-              <el-table-column  sortable prop="dateTime" label="date" width="163" >
+            <el-table :data="report" border style="width: 100%">
+              <el-table-column
+                sortable
+                prop="dateTime"
+                label="date"
+                width="163"
+              >
               </el-table-column>
-               <el-table-column  sortable prop="RDRNum" label="RDRNum" width="163" >
+              <el-table-column
+                sortable
+                prop="RDRNum"
+                label="RDRNum"
+                width="163"
+              >
               </el-table-column>
-              <el-table-column  sortable prop="commonSpeed" label="commonSpeed" width="163">
+              <el-table-column
+                sortable
+                prop="commonSpeed"
+                label="commonSpeed"
+                width="163"
+              >
               </el-table-column>
-              <el-table-column  sortable prop="commonTemp" label="commonTemp" width="163"> 
+              <el-table-column
+                sortable
+                prop="commonTemp"
+                label="commonTemp"
+                width="163"
+              >
               </el-table-column>
-              <el-table-column  sortable prop="satisfyNum" label="satisfyNum" width="163"> 
+              <el-table-column
+                sortable
+                prop="satisfyNum"
+                label="satisfyNum"
+                width="163"
+              >
               </el-table-column>
-              <el-table-column  sortable prop="scheduledNum" label="scheduledNum" width="163" >
+              <el-table-column
+                sortable
+                prop="scheduledNum"
+                label="scheduledNum"
+                width="163"
+              >
               </el-table-column>
               <!-- <el-table-column prop="totalFee" label="totalFee" width="143" >
               </el-table-column> -->
-              <el-table-column  sortable prop="totalNum" label="totalNum" width="" >
+              <el-table-column
+                sortable
+                prop="totalNum"
+                label="totalNum"
+                width=""
+              >
               </el-table-column>
             </el-table>
           </div>
@@ -78,76 +119,80 @@
 <script>
 import { mapState, mapActions } from "vuex";
 export default {
-  data: function () {
+  data: function() {
     return {
-      inputStartTime: '',
-      inputEndTime: '',
-      tabPosition: 'left',
+      inputStartTime: "",
+      inputEndTime: "",
+      tabPosition: "left",
       imgSrc: require("../assets/images/room.jpg"),
       pickerOptions: {
-          shortcuts: [{
-            text: '最近一周',
+        shortcuts: [
+          {
+            text: "最近一周",
             onClick(picker) {
               const end = new Date();
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit('pick', [start, end]);
+              picker.$emit("pick", [start, end]);
             }
-          }, {
-            text: '最近一个月',
+          },
+          {
+            text: "最近一个月",
             onClick(picker) {
               const end = new Date();
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-              picker.$emit('pick', [start, end]);
+              picker.$emit("pick", [start, end]);
             }
-          }, {
-            text: '最近三个月',
+          },
+          {
+            text: "最近三个月",
             onClick(picker) {
               const end = new Date();
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-              picker.$emit('pick', [start, end]);
+              picker.$emit("pick", [start, end]);
             }
-          }]
-        },
+          }
+        ]
+      },
       start2end: []
     };
   },
   computed: {
-    ...mapState("manager", ["report", "reportIsOk", "startTime", "endTime"]),
+    ...mapState("manager", ["report", "reportIsOk", "startTime", "endTime"])
   },
   methods: {
     ...mapActions("manager", ["checkReport"]),
-    tryCheckReport:(start,end)=>{
-      console.log("start2end:",start,end);
-      this.checkReport({'startTime':start,'endTime':end})
+    tryCheckReport: (start, end) => {
+      console.log("start2end:", start, end);
+      this.checkReport({ startTime: start, endTime: end });
     }
   },
-  watch:{
-
-  }
+  watch: {}
 };
 </script>
 
 <style>
 .report-div {
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.932);
   margin-top: 50px;
   margin-right: 20%;
   margin-left: 20%;
-  
 }
-.report-table{
+.report-table {
   margin-top: 50px;
+  background-color: rgba(93, 93, 93, 0.5);
 }
 .content {
   margin-top: 50px;
-  margin-left: 10%;
-  margin-right: 10%;
+  margin-left: 5%;
+  margin-right: 5%;
   border-radius: 30px;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-  background-color: rgba(255,255,255,0.8);
+  background-color: rgba(191, 191, 191, 0.8);
+
+  height: 600px;
 }
 .background {
   width: 100%;

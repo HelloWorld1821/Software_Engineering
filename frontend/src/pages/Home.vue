@@ -1,5 +1,5 @@
 <!--
- * @Description: 
+ * @Description:
  * @Author: l
  * @Date: 2021-06-01 09:39:42
  * @LastEditors: l
@@ -8,9 +8,11 @@
 -->
 
 <template>
-  <div class='content-div'>
+  <div class="content-div">
     <el-row>
-      <h2>Welcome to Kusa Hotel</h2>
+      <h2 style="text-emphasis-color: rgb(246, 223, 22);">
+        Welcome to bupt Hotel
+      </h2>
     </el-row>
     <el-row style="margin-top:20px">
       <el-carousel :interval="4000" type="card" height="450px">
@@ -39,7 +41,7 @@
 
 <script>
 export default {
-  data: function () {
+  data: function() {
     return {
       bannerH: 300,
       imgData2: [
@@ -47,16 +49,16 @@ export default {
         { id: 1, idView: require("../assets/images/2.jpg") },
         { id: 2, idView: require("../assets/images/3.jpg") },
         { id: 3, idView: require("../assets/images/4.jpg") },
-        { id: 4, idView: require("../assets/images/5.jpg") },
-      ],
+        { id: 4, idView: require("../assets/images/5.jpg") }
+      ]
     };
   },
   methods: {
     setBannerH() {
       this.bannerH = document.body.clientWidth / 4;
-    },
+    }
   },
-  mounted: function () {
+  mounted: function() {
     window.addEventListener(
       "resize",
       () => {
@@ -64,12 +66,12 @@ export default {
       },
       false
     );
-  },
+  }
 };
 </script>
 
 <style scope>
-.content-div{
+.content-div {
   margin-top: 50px;
   margin-right: 5%;
   margin-left: 5%;

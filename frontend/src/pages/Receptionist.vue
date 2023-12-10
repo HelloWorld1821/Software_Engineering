@@ -1,5 +1,5 @@
 <!--
- * @Description: 
+ * @Description:
  * @Author: l
  * @Date: 2021-06-01 15:38:49
  * @LastEditors: l
@@ -8,9 +8,6 @@
 -->
 <template>
   <div>
-    <div class="background">
-      <img :src="imgSrc" width="100%" height="100%" alt="" />
-    </div>
     <!-- <h2>Receptionists</h2>
       <div class='bill-div'>
         Bill RoomId:
@@ -36,7 +33,12 @@
         </div>
       </div> -->
     <el-tabs :tab-position="tabPosition" style="height: 1000px">
-      <el-tab-pane label="获取账单" >
+      <el-tab-pane>
+        <template slot="label">
+          <div class="label" style="color: rgb(226, 183, 43);">
+            <h3>获取账单</h3>
+          </div>
+        </template>
         <div class="content">
           <div class="search-header">
             <el-row align="middle" type="flex">
@@ -58,10 +60,10 @@
               <el-col :span="2" :offset="1" align="middle" type="flex">
                 <div class="grid-content bg-purple-light">
                   <el-button
-                    type="primary"
+                    round
                     @click="getBill({ roomId: inputBillRoomId })"
                   >
-                    获取账单Bill
+                    获取账单
                   </el-button>
                 </div>
               </el-col>
@@ -70,10 +72,20 @@
 
           <div class="bill-form">
             <el-form label-width="100px" size="small" class="login-form">
-              <el-form-item label="房间ID">
+              <el-form-item>
+                <template slot="label">
+                  <div class="label" style="color: rgb(0, 0, 0);">
+                    <h3>房间ID</h3>
+                  </div>
+                </template>
                 <el-row>{{ billRoomId }}</el-row>
               </el-form-item>
-              <el-form-item label="费用">
+              <el-form-item>
+                <template slot="label">
+                  <div class="label" style="color: rgb(0, 0, 0);">
+                    <h3>费用</h3>
+                  </div>
+                </template>
                 <el-row>{{ bill.fee }}</el-row>
               </el-form-item>
             </el-form>
@@ -81,7 +93,12 @@
         </div>
       </el-tab-pane>
 
-      <el-tab-pane label="获取详单">
+      <el-tab-pane>
+        <template slot="label">
+          <div class="label" style="color: rgb(226, 183, 43);">
+            <h3>获取详单</h3>
+          </div>
+        </template>
         <div class="content">
           <div class="search-header">
             <el-row align="middle" type="flex">
@@ -102,11 +119,8 @@
               </el-col>
               <el-col :span="2" :offset="1" align="middle" type="flex">
                 <div class="grid-content bg-purple-light">
-                  <el-button
-                    type="primary"
-                    @click="getRDR({ roomId: inputRDRRoomId })"
-                  >
-                    获取详单RDR
+                  <el-button round @click="getRDR({ roomId: inputRDRRoomId })">
+                    获取详单
                   </el-button>
                 </div>
               </el-col>
@@ -115,13 +129,23 @@
 
           <div class="rdr-table">
             <el-table :data="RDR" border style="width: 100%">
-              <el-table-column  sortable prop="startTime" label="起始时间" width="286">
+              <el-table-column
+                sortable
+                prop="startTime"
+                label="起始时间"
+                width="286"
+              >
               </el-table-column>
-              <el-table-column  sortable prop="endTime" label="结束时间" width="286">
+              <el-table-column
+                sortable
+                prop="endTime"
+                label="结束时间"
+                width="286"
+              >
               </el-table-column>
-              <el-table-column  sortable prop="speed" label="风速" width="286">
+              <el-table-column sortable prop="speed" label="风速" width="286">
               </el-table-column>
-              <el-table-column  sortable prop="fee" label="费用" width="">
+              <el-table-column sortable prop="fee" label="费用" width="">
               </el-table-column>
             </el-table>
           </div>
@@ -135,12 +159,12 @@
 import { computed } from "@vue/composition-api";
 import { mapActions, mapState } from "vuex";
 export default {
-  data: function () {
+  data: function() {
     return {
       tabPosition: "left",
       inputBillRoomId: 1,
       inputRDRRoomId: 2,
-      imgSrc: require("../assets/images/room.jpg"),
+      imgSrc: require("../assets/images/room.jpg")
     };
   },
   computed: {
@@ -150,46 +174,44 @@ export default {
       "RDR",
       "bill",
       "RDRIsOk",
-      "billIsOk",
-    ]),
+      "billIsOk"
+    ])
   },
   methods: {
-    ...mapActions("receptionist", ["getRDR", "getBill"]),
-  },
+    ...mapActions("receptionist", ["getRDR", "getBill"])
+  }
 };
 </script>
 <style>
 .content {
   margin-top: 50px;
-  margin-left: 10%;
-  margin-right: 10%;
-  background-color: rgba(255, 255, 255, 0.8);
+  margin-left: 5%;
+  margin-right: 5%;
+
+  height: 600px;
+
   border-radius: 30px;
-  
 }
-.bill-form{
+.search-header {
+  background-color: rgba(93, 93, 93, 0.5);
   border-radius: 30px;
-  font-size:20px;
-  /* box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1); */
-  margin-right: 20%;
-  margin-left: 20%;
+}
+.bill-form {
+  border-radius: 30px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.3);
+  margin-right: 5%;
+  margin-left: 5%;
   margin-top: 50px;
   margin-bottom: 50px;
   padding-top: 50px;
   padding-left: 40px;
   padding-right: 40px;
   padding-bottom: 25px;
-  
-}
-label {
-  /* 添加你的样式属性 */
-  color: white; /* 例如，设置字体颜色为黑色 (#333) */
-  font-size: 16px; /* 例如，设置字体大小为16像素 */
+  background-color: rgba(93, 93, 93, 0.5);
 }
 
 .rdr-table {
- color:white;
-  
+  margin-top: 50px;
 }
 .background {
   width: 100%;

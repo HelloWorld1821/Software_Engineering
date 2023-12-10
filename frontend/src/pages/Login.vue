@@ -1,5 +1,5 @@
 <!--
- * @Description: 
+ * @Description:
  * @Author: l
  * @Date: 2021-06-01 10:29:38
  * @LastEditors: l
@@ -8,9 +8,6 @@
 -->
 <template>
   <div>
-    <div class="background">
-      <img :src="imgSrc" width="100%" height="100%" alt="" />
-    </div>
     <!-- <form action="" method="post" claspxs="smart-green">
 
       <h1>Login</h1>
@@ -44,43 +41,47 @@
         />
       </label>
     </form> -->
-   
-    <el-form label-width="60px" size="small" class="login-form">
-      <!-- <el-form-item label="用户名">
+    <div class="content">
+      <el-form label-width="60px" size="small" class="login-form">
+        <!-- <el-form-item label="用户名">
         <el-input v-model="userName"></el-input>
       </el-form-item> -->
-      <el-row align="middle" type="margin-top: 20px">
-        <el-col :span="10"> 账号: </el-col>
-        <el-col :span="10">
-          <el-autocomplete
-            class="inline-input"
-            v-model="userName"
-            :fetch-suggestions="querySearch"
-            placeholder="请输入账号"
-          ></el-autocomplete>
-        </el-col>
-      </el-row>
-      <el-row align="middle" type="flex" style="margin-top: 20px">
-        <el-col :span="10"> 密码: </el-col>
-        <el-col :span="10">
-          <el-input
-            v-model="password"
-            show-password
-            placeholder="请输入密码"
-          ></el-input>
-        </el-col>
-      </el-row>
-      <el-row align="middle" type="flex" style="margin-top: 20px">
-        <el-col :span="8" :offset="3">
-          <el-button type="primary" @click="loginAdmin({ userName, password })">
-            登录
-          </el-button>
-        </el-col>
-        <el-col :span="10">
-          <el-button @click="reset">重置</el-button>
-        </el-col>
-      </el-row>
-    </el-form>
+        <el-row align="middle" type="flex">
+          <el-col :span="10"><h1>账号 ：</h1></el-col>
+          <el-col :span="10">
+            <el-autocomplete
+              class="inline-input"
+              v-model="userName"
+              :fetch-suggestions="querySearch"
+              placeholder="请输入账号"
+            ></el-autocomplete>
+          </el-col>
+        </el-row>
+        <el-row align="middle" type="flex" style="margin-top: 20px">
+          <el-col :span="10"><h1>密码:</h1></el-col>
+          <el-col :span="10">
+            <el-input
+              v-model="password"
+              show-password
+              placeholder="请输入密码"
+            ></el-input>
+          </el-col>
+        </el-row>
+        <el-row align="middle" type="flex" style="margin-top: 20px">
+          <el-col :span="8" :offset="3">
+            <el-button
+              type="primary"
+              @click="loginAdmin({ userName, password })"
+            >
+              <h1>登录</h1>
+            </el-button>
+          </el-col>
+          <el-col :span="10">
+            <el-button @click="reset"><h1>重置</h1></el-button>
+          </el-col>
+        </el-row>
+      </el-form>
+    </div>
   </div>
 </template>
 
@@ -91,7 +92,7 @@ import { defineComponent } from "@vue/composition-api";
 export default defineComponent({
   setup() {},
   name: "Login",
-  data: function () {
+  data: function() {
     return {
       userList: [
         { value: "room_1" },
@@ -100,15 +101,15 @@ export default defineComponent({
         { value: "room_4" },
         { value: "receptionist_1" },
         { value: "manager_1" },
-        { value: "administrator_1" },
+        { value: "administrator_1" }
       ],
       userName: "",
       password: "",
-      imgSrc: require("../assets/images/room.jpg"),
+      imgSrc: require("../assets/images/room.jpg")
     };
   },
   computed: {
-    ...mapState("auth", ["role"]),
+    ...mapState("auth", ["role"])
   },
   watch: {
     // role: function () {
@@ -134,7 +135,7 @@ export default defineComponent({
   },
   methods: {
     ...mapActions("auth", ["loginAdmin"]),
-    reset: function () {
+    reset: function() {
       console.log("reset");
       this.userName = "";
       this.password = "";
@@ -146,13 +147,14 @@ export default defineComponent({
         : userList;
       // 调用 callback 返回建议列表的数据
       cb(results);
-    },
-  },
+    }
+  }
 });
 </script>
 <style scoped>
 .background {
-  top :0px; ;
+  top: 0;
+  margin-top: 0px;
   width: 100%;
   height: 100%; /**宽高100%是为了图片铺满屏幕 */
   z-index: -1;
@@ -160,10 +162,9 @@ export default defineComponent({
 }
 
 .login-form {
-  margin-top:10%;
   margin-right: 35%;
   margin-left: 35%;
-
+  /* margin-top: 50px; */
   border-radius: 30px;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   padding-top: 30px;
@@ -171,9 +172,5 @@ export default defineComponent({
   padding-right: 40px;
   padding-bottom: 25px;
   background-color: rgba(255, 255, 255, 0.8);
-
-
-
- 
 }
 </style>

@@ -1,5 +1,5 @@
 <!--
- * @Description: 
+ * @Description:
  * @Author: l
  * @Date: 2021-05-31 13:38:16
  * @LastEditors: l
@@ -13,39 +13,41 @@
   </div>
 </template>
 
-
-
 <script>
-import VNav from './components/VNav'
+import VNav from "./components/VNav";
 export default {
   name: "App",
-  provide(){
-    return{
-      reload:this.reload
+  provide() {
+    return {
+      reload: this.reload
+    };
+  },
+  data() {
+    return {
+      isRouterAlive: true
+    };
+  },
+  methods: {
+    reload() {
+      this.isRouterAlive = false;
+      this.$nextTick(function() {
+        this.isRouterAlive = true;
+      });
     }
   },
-  data(){
-    return{
-      isRouterAlive:true,
-    }
-  },
-  methods:{
-    reload(){
-      this.isRouterAlive = false
-      this.$nextTick(function(){
-        this.isRouterAlive=true
-      })
-    }
-  },
-  components:{
+  components: {
     VNav
   }
 };
 </script>
 
 <style>
+@import "./assets/css/font_face.css";
+* {
+  font-family: "meet";
+}
 #app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  font-family: "meet";
   /* -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale; */
   text-align: center;
@@ -56,8 +58,9 @@ export default {
   height: 100%;
   width: 100%;
   position: fixed;
+  background: url("../src/assets/images/room.jpg");
 }
-body{
+body {
   margin: 0;
 }
 </style>

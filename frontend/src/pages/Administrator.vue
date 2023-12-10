@@ -1,5 +1,5 @@
 <!--
- * @Description: 
+ * @Description:
  * @Author: l
  * @Date: 2021-06-01 15:36:52
  * @LastEditors: l
@@ -41,18 +41,21 @@
     <div class="background">
       <img :src="imgSrc" width="100%" height="100%" alt="" />
     </div>
-
     <el-tabs :tab-position="tabPosition" style="height: 1000px">
       <!-- 管理员监视面板 -->
-      <el-tab-pane label="监视房间">
+      <el-tab-pane>
+        <template slot="label">
+          <div class="label" style="color: rgb(226, 183, 43);">
+            <h3>监视房间</h3>
+          </div>
+        </template>
         <div class="content">
           <div class="rooms-table">
             <el-table :data="roomsState" border style="width: 100%">
-
               <el-table-column label="房间ID" width="143">
                 <template slot-scope="scope">
                   <i class="el-icon-user"></i>
-                  {{scope.row.roomId}}
+                  {{ scope.row.roomId }}
                 </template>
               </el-table-column>
 
@@ -88,7 +91,12 @@
       </el-tab-pane>
 
       <!-- 设置参数面板 -->
-      <el-tab-pane label="设置参数">
+      <el-tab-pane>
+        <template slot="label">
+          <div class="label" style="color: rgb(226, 183, 43);">
+            <h3>设置参数</h3>
+          </div>
+        </template>
         <div class="content">
           <div class="params-form">
             <el-form label-width="100px" size="small" class="login-form">
@@ -191,10 +199,9 @@
 <script>
 import { mapActions, mapState } from "vuex";
 export default {
-  data: function () {
+  data: function() {
     return {
       tabPosition: "left",
-      imgSrc: require("../assets/images/room.jpg"),
       params: {
         defaultMode: "cold",
         coldHigh: 25,
@@ -204,16 +211,17 @@ export default {
         feeRate: 1,
         defaultTemp: 25,
         scheduledNum: 3,
-      },
+        imgSrc: require("../assets/images/1.jpg")
+      }
     };
   },
   computed: {
-    ...mapState("administrator", ["roomsState", "stateIsOk"]),
+    ...mapState("administrator", ["roomsState", "stateIsOk"])
   },
   methods: {
-    ...mapActions("administrator", ["checkRoomsState", "setDefaultParams"]),
+    ...mapActions("administrator", ["checkRoomsState", "setDefaultParams"])
   },
-  mounted: function () {
+  mounted: function() {
     let that = this;
     that.checkRoomsState();
     if (this.timer) {
@@ -225,19 +233,22 @@ export default {
       }, 1000);
     }
   },
-  destroyed: function () {
+  destroyed: function() {
     clearInterval(this.timer);
-  },
+  }
 };
 </script>
 
-<style >
+<style>
 .content {
   margin-top: 50px;
   margin-left: 10%;
   margin-right: 10%;
   /* background-color: pink; */
-  background-color:transparent;
+  background-color: #ffffff97;
+}
+.rooms-table {
+  padding-top: 60px;
 }
 .params-form {
   border-radius: 30px;
@@ -249,7 +260,6 @@ export default {
   padding-left: 40px;
   padding-right: 40px;
   padding-bottom: 25px;
-  background-color: rgba(255, 255, 255, 0.8);
 }
 .background {
   width: 100%;
