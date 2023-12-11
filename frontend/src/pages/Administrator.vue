@@ -38,18 +38,17 @@
       <input type="button" value="set defualt params" @click="setDefaultParams">
 
     </div> -->
-    <div class="background">
-      <img :src="imgSrc" width="100%" height="100%" alt="" />
-    </div>
-    <el-tabs :tab-position="tabPosition" style="height: 1000px">
+
+    <el-tabs :type="border - card" style="height:500px">
       <!-- 管理员监视面板 -->
       <el-tab-pane>
         <template slot="label">
           <div class="label" style="color: rgb(226, 183, 43);">
-            <h3>监视房间</h3>
+            <h2>监视房间</h2>
           </div>
         </template>
         <div class="content">
+          <h2>房间监视情况：</h2>
           <div class="rooms-table">
             <el-table :data="roomsState" border style="width: 100%">
               <el-table-column label="房间ID" width="143">
@@ -94,10 +93,11 @@
       <el-tab-pane>
         <template slot="label">
           <div class="label" style="color: rgb(226, 183, 43);">
-            <h3>设置参数</h3>
+            <h2>设置参数</h2>
           </div>
         </template>
         <div class="content">
+          <h2>设置参数：</h2>
           <div class="params-form">
             <el-form label-width="100px" size="small" class="login-form">
               <el-form-item label="默认模式">
@@ -210,8 +210,7 @@ export default {
         hotLow: 25,
         feeRate: 1,
         defaultTemp: 25,
-        scheduledNum: 3,
-        imgSrc: require("../assets/images/1.jpg")
+        scheduledNum: 3
       }
     };
   },
@@ -239,32 +238,47 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .content {
   margin-top: 50px;
-  margin-left: 10%;
-  margin-right: 10%;
+  margin-left: 5%;
+  margin-right: 5%;
   /* background-color: pink; */
-  background-color: #ffffff97;
+  backdrop-filter: blur(10px);
+  background: linear-gradient(rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.5));
+  box-shadow: 0 20px 40px 3px rgba(0, 0, 0, 0.253);
+  border-radius: 30px;
+  height: 500px;
 }
 .rooms-table {
   padding-top: 60px;
 }
+.login-form {
+  width: 100%;
+  padding-top: 60px;
+}
 .params-form {
   border-radius: 30px;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 12px 0 rgba(55, 55, 55, 0.245);
   margin-right: 20%;
   margin-left: 20%;
-  margin-bottom: 50px;
-  padding-top: 30px;
+
   padding-left: 40px;
   padding-right: 40px;
   padding-bottom: 25px;
+  background-color: rgba(221, 221, 221, 0.826);
 }
-.background {
-  width: 100%;
-  height: 100%; /**宽高100%是为了图片铺满屏幕 */
-  z-index: -1;
-  position: absolute;
+</style>
+<style>
+.el-tabs__item {
+  margin-top: 0px;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-bottom: 15px;
+}
+.el-tabs__nav-scroll {
+  backdrop-filter: blur(15px);
+  background: linear-gradient(rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.3));
+  box-shadow: 0 20px 40px 3px rgba(0, 0, 0, 0.253);
 }
 </style>

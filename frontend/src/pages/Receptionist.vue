@@ -32,11 +32,11 @@
           <p>fee:{{RDR.fee}}</p>
         </div>
       </div> -->
-    <el-tabs :tab-position="tabPosition" style="height: 1000px">
+    <el-tabs :type="border - card" style="height:500px">
       <el-tab-pane>
         <template slot="label">
           <div class="label" style="color: rgb(226, 183, 43);">
-            <h3>获取账单</h3>
+            <h2>获取账单</h2>
           </div>
         </template>
         <div class="content">
@@ -96,7 +96,7 @@
       <el-tab-pane>
         <template slot="label">
           <div class="label" style="color: rgb(226, 183, 43);">
-            <h3>获取详单</h3>
+            <h2>获取详单</h2>
           </div>
         </template>
         <div class="content">
@@ -182,18 +182,22 @@ export default {
   }
 };
 </script>
-<style>
+<style scoped>
 .content {
   margin-top: 50px;
   margin-left: 5%;
   margin-right: 5%;
 
-  height: 600px;
+  height: 500px;
 
   border-radius: 30px;
+  backdrop-filter: blur(10px);
+  background: linear-gradient(rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.5));
+  box-shadow: 0 20px 40px 1px rgba(0, 0, 0, 0.12);
 }
 .search-header {
-  background-color: rgba(93, 93, 93, 0.5);
+  backdrop-filter: blur(10px);
+  background: linear-gradient(rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.25));
   border-radius: 30px;
 }
 .bill-form {
@@ -207,7 +211,8 @@ export default {
   padding-left: 40px;
   padding-right: 40px;
   padding-bottom: 25px;
-  background-color: rgba(93, 93, 93, 0.5);
+  backdrop-filter: blur(10px);
+  background: linear-gradient(rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.25));
 }
 
 .rdr-table {
@@ -218,5 +223,18 @@ export default {
   height: 100%; /**宽高100%是为了图片铺满屏幕 */
   z-index: -1;
   position: absolute;
+}
+</style>
+<style>
+.el-tabs__item {
+  margin-top: -3px;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-bottom: 15px;
+}
+.el-tabs__nav-scroll {
+  backdrop-filter: blur(10px);
+  background: linear-gradient(rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.3));
+  box-shadow: 0 20px 40px 3px rgba(0, 0, 0, 0.253);
 }
 </style>

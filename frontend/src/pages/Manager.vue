@@ -8,11 +8,11 @@
 -->
 <template>
   <div>
-    <el-tabs :tab-position="tabPosition" style="height:1000px">
+    <el-tabs :type="border - card" style="height:500px">
       <el-tab-pane>
         <template slot="label">
           <div class="label" style="color:rgb(226, 183, 43);">
-            <h3>获取详单</h3>
+            <h2>获取报表</h2>
           </div>
         </template>
         <div class="content">
@@ -173,7 +173,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .report-div {
   background-color: rgba(255, 255, 255, 0.932);
   margin-top: 50px;
@@ -183,21 +183,42 @@ export default {
 .report-table {
   margin-top: 50px;
   background-color: rgba(93, 93, 93, 0.5);
+
+  border-radius: 30px;
 }
 .content {
-  margin-top: 50px;
+  margin-top: 20px;
   margin-left: 5%;
   margin-right: 5%;
   border-radius: 30px;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-  background-color: rgba(191, 191, 191, 0.8);
 
-  height: 600px;
+  backdrop-filter: blur(10px);
+  background: linear-gradient(rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.5));
+
+  box-shadow: 0 20px 40px 1px rgba(0, 0, 0, 0.12);
+
+  height: 500px;
 }
 .background {
   width: 100%;
   height: 100%; /**宽高100%是为了图片铺满屏幕 */
   z-index: -1;
   position: absolute;
+}
+.label {
+  margin-top: -5px;
+}
+</style>
+<style>
+.el-tabs__item {
+  margin-top: 0px;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-bottom: 15px;
+}
+.el-tabs__nav-scroll {
+  backdrop-filter: blur(15px);
+  background: linear-gradient(rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.3));
+  box-shadow: 0 20px 40px 3px rgba(0, 0, 0, 0.253);
 }
 </style>
