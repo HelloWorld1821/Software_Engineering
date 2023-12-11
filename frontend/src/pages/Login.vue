@@ -1,11 +1,3 @@
-<!--
- * @Description: 
- * @Author: l
- * @Date: 2021-06-01 10:29:38
- * @LastEditors: l
- * @LastEditTime: 2021-06-26 21:38:24
- * @FilePath: \DistributedControlSystem\frontend\src\pages\Login.vue
--->
 <template>
   <div>
     <div class="background">
@@ -16,46 +8,32 @@
       </div>
       <div class="right-section"></div>
     </div>
+    <!-- 主体 -->
     <div class="container">
       <div class="left-image">
         <img :src="imgSrc" height="70%" alt="left_image" />
       </div> 
+      <!-- 登录框 -->
       <div class="right-form">
         <el-form label-width="70px" size="small" class="login-form">
-          <!-- <el-form-item label="用户名">
-            <el-input v-model="userName"></el-input>
-          </el-form-item> -->
-          <h3>账号登录</h3>
-          <el-row align="middle" type="margin-top: 20px">
-            <el-col :span="10"> 账号: </el-col>
+          <el-row  type="flex" style="justify-content: center;margin-top: 20px ">
+            <h2>账号登录</h2>
+          </el-row>
+          <el-row  type="flex" style="margin-top: 40px;margin-bottom: 10px">
+            <el-col :span="6" class="login-text"> 账号: </el-col>
             <el-col :span="10">
-              <el-autocomplete class="inline-input" v-model="userName":fetch-suggestions="querySearch" placeholder="请输入您的账号"
-              ></el-autocomplete>
+              <el-autocomplete class="input" v-model="userName":fetch-suggestions="querySearch" placeholder="请输入您的账号" style="width: 200px;"></el-autocomplete>
             </el-col>
           </el-row>
-          <el-row align="middle" type="flex" style="margin-top: 20px">
-            <el-col :span="10"> 密码: </el-col>
+          <el-row  type="flex" style="margin-top: 20px">
+            <el-col :span="6" class="login-text"> 密码: </el-col>
             <el-col :span="10">
-              <el-input
-                v-model="password"
-                show-password
-                placeholder="请输入密码"
-              ></el-input>
+              <el-input v-model="password" show-password placeholder="请输入您的密码" style=" width: 200px"></el-input>
             </el-col>
           </el-row>
-          <el-row align="middle" type="flex" style="margin-top: 20px">
-            <el-col :span="8" :offset="3">
-              <el-button type="primary" @click="loginAdmin({ userName, password })">
-                登录
-              </el-button>
-            </el-col>
-            <el-col :span="10">
-              <el-button @click="reset">重置</el-button>
-            </el-col>
-          </el-row>
+            <el-button class="login-button" type="primary" @click="UserLogin({ userName, password })">登录</el-button>
         </el-form>
       </div>
-      
     </div>
   </div>
 </template>
@@ -87,7 +65,7 @@ export default defineComponent({
     ...mapState("auth", ["role"]),
   },
   methods: {
-    ...mapActions("auth", ["loginAdmin"]),
+    ...mapActions("auth", ["UserLogin"]),
     reset: function () {
       console.log("reset");
       this.userName = "";
@@ -98,7 +76,7 @@ export default defineComponent({
       var results = queryString
         ? userList.filter(this.createFilter(queryString))
         : userList;
-      // 调用 callback 返回建议列表的数据
+      // 调用 callback 返回
       cb(results);
     },
   },
@@ -106,15 +84,20 @@ export default defineComponent({
 </script>
 <style scoped>
 .background {
-  background-color: rgb(194, 220, 220);
+  background-color: rgba(194, 205, 220, 0.5);
   top :0px; ;
   width: 100%;
-  height: 100%; /**宽高100%是为了图片铺满屏幕 */
+  height: 100%;
   z-index: -1;
   position: absolute;
 }
 
 .header{
+  margin-top: 2.5%;
+  display: flex;
+}
+
+.bottom{
   margin-top: 2.5%;
   display: flex;
 }
@@ -150,9 +133,9 @@ export default defineComponent({
 }
 
 .left-image image{
-  width: 25%; /* 图片的最大宽度为容器宽度 */
+  width: 25%; 
   height: auto; /* 高度自动调整 */
-  object-fit: contain; /* 保持图片内容在框架内且不失真 */
+  object-fit: contain; 
   margin-left: 5%;
 }
 
@@ -166,12 +149,21 @@ export default defineComponent({
 }
 
 .login-form {
-  /* position: absolute; */
+  background-color: rgb(64, 91, 131,0.8);
+  color: white;
   right: 10%;
   height: 70%;
   width: 60%;
-  border-radius: 10px;
+  /* border-radius: 10px; */
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-  background-color: rgba(255, 255, 255, 0.8);
+  /* background-color: rgba(255, 255, 255, 0.8); */
+}
+
+.login-button{
+  margin-top: 40px; 
+  background-color: #1f3045;
+  border-color: #1f3045;
+  font-size: 18px;
+  width: 30%;
 }
 </style>

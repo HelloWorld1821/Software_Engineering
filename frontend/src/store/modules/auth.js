@@ -46,14 +46,14 @@ export default{
         // login(context){
         //     context.commit("xxx")
         // }
-        loginAdmin({commit,state},payload){
-            console.log("loginAdmin...");
+        UserLogin({commit,state},payload){
+            console.log("UserLogin...");
             
             commit('setLoading',true);//显示正在加载中
             commit('setUserName',payload.userName);//更新userName
             commit('setPassword',payload.password);//更新password
             let that = this;
-            return axios.post(api + '/loginAdmin',{
+            return axios.post(api + '/UserLogin',{
                 userName:state.userName,
                 password:state.password,
             }).then((resposne)=>{
