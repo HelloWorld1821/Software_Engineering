@@ -18,7 +18,7 @@ module.exports = {
     assetsSubDirectory: "static",
     assetsPublicPath: "/",
     proxyTable: {
-      "/user": {
+      "/api": {
         // target: 'http://127.0.0.1:5000', //mine
         // target:'http://10.28.247.102:5000',  local
         // target:'http://10.28.247.102:5000', //cck
@@ -26,7 +26,7 @@ module.exports = {
         target: "http://localhost:8000", //llm
         changeOrigin: true,
         pathRewrite: {
-          "^/user": ""
+          "^/api": ""
         }
       }
     },
