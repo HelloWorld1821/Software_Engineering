@@ -34,7 +34,12 @@
               </el-row>
               <el-row style="margin-top: 20px">
                 <el-col :span="8" :offset="0" class="temp">
-                  <div>预设温度:{{ targetTemp }}</div>
+                  <div>预设温度:</div>
+                </el-col>
+                <el-col :span="8" :offset="4">
+                  <div>
+                    {{ targetTemp }}
+                  </div>
                 </el-col>
               </el-row>
               <el-row style="margin-top: 20px">
@@ -54,7 +59,7 @@
                 </el-col>
                 <el-col :span="8" :offset="4">
                   <div>
-                    {{ roomState.speed }}
+                    {{ fan_speed }}
                   </div>
                 </el-col>
               </el-row>
@@ -187,7 +192,7 @@ export default {
   data: function() {
     return {
       targetTemp: this.$store.state.room.roomParams.defaultTemp,
-      targetSpeed: this.$store.state.room.roomParams.defaultSpeed,
+      fan_speed: this.$store.state.room.roomParams.defaultSpeed,
       targetACState: "off",
       acStateBool: false,
       sleepMode: false, //是否开启休眠模式
@@ -196,7 +201,7 @@ export default {
   },
   // created() {
   //   this.targetTemp = this.roomParams.targetTemp;
-  //   this.targetSpeed = this.roomParams.targetSpeed;
+  //   this.fan_speed = this.roomParams.fan_speed;
   // },
   computed: {
     ...mapState("room", ["roomId", "roomState", "roomParams"])
@@ -206,38 +211,63 @@ export default {
   },
 
   methods: {
-    ...mapActions("room", ["updateRoomState", "changeRoomState"]),
-
+    ...mapActions("room", ["request_on","request_off","request_temp","request_speed"]),
+    on (){
+      this.request_on({
+          room_id: this.roomId,
+        });
+    },
+    off(){
+      this.request_off({
+          room_id: this.roomId,
+        });
+    },
     decreaseTemp() {
       if (this.targetTemp > this.$store.state.room.roomParams.tempSectionLow) {
         this.targetTemp -= 1;
-        this.tryChangeRoomState(); // 执行相应的操作
+        // this.tryChangeRoomState(); // 执行相应的操作
+        this.request_temp({
+          room_id: this.roomId,
+          target_temperature: this.targetTemp,
+        });
       }
     },
     increaseTemp() {
       if (this.targetTemp < this.$store.state.room.roomParams.tempSectionHigh) {
         this.targetTemp += 1;
-        this.tryChangeRoomState(); // 执行相应的操作
+        // this.tryChangeRoomState(); // 执行相应的操作
+        this.request_temp({
+          room_id: this.roomId,
+          target_temperature: this.targetTemp,
+        });
       }
     },
 
     increaseSpeed() {
-      if (this.targetSpeed === "low") {
-        this.targetSpeed = "mid";
-      } else if (this.targetSpeed === "mid") {
-        this.targetSpeed = "high";
+      if (this.fan_speed === "low") {
+        this.fan_speed = "medium";
+      } else if (this.fan_speed === "medium") {
+        this.fan_speed = "high";
       } // You can add more conditions if needed
       // Call the backend or perform any other actions if required
-      this.tryChangeRoomState();
+      // this.tryChangeRoomState();
+      this.request_speed({
+          room_id: this.roomId,
+          fan_speed: this.fan_speed,
+        });
     },
     decreaseSpeed() {
-      if (this.targetSpeed === "high") {
-        this.targetSpeed = "mid";
-      } else if (this.targetSpeed === "mid") {
-        this.targetSpeed = "low";
+      if (this.fan_speed === "high") {
+        this.fan_speed = "medium";
+      } else if (this.fan_speed === "medium") {
+        this.fan_speed = "low";
       } // You can add more conditions if needed
       // Call the backend or perform any other actions if required
-      this.tryChangeRoomState();
+      // this.tryChangeRoomState();
+      this.request_speed({
+          room_id: this.roomId,
+          fan_speed: this.fan_speed,
+        });
     },
     // 这个函数只是为了简化实现
     tryChangeRoomState() {
@@ -250,7 +280,7 @@ export default {
         this.changeRoomState({
           roomId: this.roomId,
           targetTemp: this.targetTemp,
-          targetSpeed: this.targetSpeed,
+          fan_speed: this.fan_speed,
           targetACState: this.targetACState
         });
       }, 1000);
@@ -261,7 +291,7 @@ export default {
       this.changeRoomState({
         roomId: this.roomId,
         targetTemp: this.targetTemp,
-        targetSpeed: this.targetSpeed,
+        fan_speed: this.fan_speed,
         targetACState: "off" //在服务器看来就是关闭空调,发送sleep消息，与off不一样
       });
     },
@@ -271,7 +301,7 @@ export default {
       this.changeRoomState({
         roomId: this.roomId,
         targetTemp: this.targetTemp,
-        targetSpeed: this.targetSpeed,
+        fan_speed: this.fan_speed,
         targetACState: "on" //在服务器看来就是打开空调
       });
     },
@@ -312,8 +342,8 @@ export default {
   },
   watch: {
     acStateBool: function(newValue, oldValue) {
-      if (newValue == true) this.targetACState = "on";
-      if (newValue == false) this.targetACState = "off";
+      if (newValue == true) {this.targetACState = "on";this.on();}
+      if (newValue == false) {this.targetACState = "off";this.off();}
     },
     targetTemp: function(newValue, oldValue) {
       // console.log("targetTemp: " + oldValue + "-->" + newValue);
@@ -326,8 +356,8 @@ export default {
       this.sleepMode = false;
       this.tryChangeRoomState();
     },
-    targetSpeed: function(newValue, oldValue) {
-      // console.log("targetSpeed: " + oldValue + "-->" + newValue);
+    fan_speed: function(newValue, oldValue) {
+      // console.log("fan_speed: " + oldValue + "-->" + newValue);
       if (this.acStateBool == true) this.tryChangeRoomState();
     },
     targetACState: function(newValue, oldValue) {
