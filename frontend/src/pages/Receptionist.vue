@@ -1,37 +1,5 @@
-<!--
- * @Description:
- * @Author: l
- * @Date: 2021-06-01 15:38:49
- * @LastEditors: l
- * @LastEditTime: 2021-06-27 00:59:37
- * @FilePath: \DistributedControlSystem\frontend\src\pages\Receptionist.vue
--->
 <template>
   <div>
-    <!-- <h2>Receptionists</h2>
-      <div class='bill-div'>
-        Bill RoomId:
-        <input type='text' v-model="inputBillRoomId">
-        <input type='button' value='getBill' @click="getBill({roomId:inputBillRoomId})">
-        <div class='bill' v-if='billIsOk'>
-          Bill:
-          <p>roomId:{{billRoomId}}</p>
-          <p>fee:{{bill.fee}}</p>
-        </div>
-      </div>
-      <div class='RDR-div'>
-        RDR RoomId:
-        <input type='text' v-model="inputRDRRoomId">
-        <input type='button' value='getRDR' @click="getRDR({roomId:inputRDRRoomId})">
-        <div class='RDR' v-if='RDRIsOk'>
-          RDR:
-          <p>roomId:{{RDRRoomId}}</p>
-          <p>startTime:{{RDR.startTime}}</p>
-          <p>endTime:{{RDR.endTime}}</p>
-          <p>speed:{{RDR.speed}}</p>
-          <p>fee:{{RDR.fee}}</p>
-        </div>
-      </div> -->
     <el-tabs :type="border - card" style="height: 500px">
       <el-tab-pane>
         <template slot="label">
@@ -59,25 +27,19 @@
                     获取账单
                   </el-button>
                 </div>
-
-
-                
-
-
-
               </el-col>
 
-              <el-col  :span="9" :offset="1" align="middle" type="flex"  >
-                <div class="grid-content bg-purple-light" >
-                  <el-button  style="background-color: rgba(234, 150, 150, 0.811);"     
-                  round @click="DeleteRoom({ room_id: room_id })">
+              <el-col :span="9" :offset="1" align="middle" type="flex">
+                <div class="grid-content bg-purple-light">
+                  <el-button
+                    style="background-color: rgba(234, 150, 150, 0.811);"
+                    round
+                    @click="DeleteRoom({ room_id: room_id })"
+                  >
                     退房
                   </el-button>
                 </div>
               </el-col>
-
-
-
             </el-row>
           </div>
 
@@ -89,7 +51,7 @@
                     <h3>房间ID</h3>
                   </div>
                 </template>
-                <el-row>{{ billRoomId }}</el-row>
+                <el-row class="text">{{ room_id }}</el-row>
               </el-form-item>
               <el-form-item>
                 <template slot="label">
@@ -97,7 +59,7 @@
                     <h3>费用</h3>
                   </div>
                 </template>
-                <el-row>{{ bill.fee }}</el-row>
+                <el-row class="text">{{ totalCost }}</el-row>
               </el-form-item>
             </el-form>
           </div>
@@ -130,7 +92,7 @@
               </el-col>
               <el-col :span="2" :offset="1" align="middle" type="flex">
                 <div class="grid-content bg-purple-light">
-                  <el-button round @click="getRDR({ roomId: inputRDRRoomId })">
+                  <el-button round @click="handleGetRDR">
                     获取详单
                   </el-button>
                 </div>
@@ -142,21 +104,31 @@
             <el-table :data="RDR" border style="width: 100%">
               <el-table-column
                 sortable
-                prop="startTime"
+                prop="start_time"
                 label="起始时间"
                 width="286"
               >
               </el-table-column>
               <el-table-column
                 sortable
-                prop="endTime"
+                prop="end_time"
                 label="结束时间"
                 width="286"
               >
               </el-table-column>
-              <el-table-column sortable prop="speed" label="风速" width="286">
+              <el-table-column
+                sortable
+                prop="fan_speed"
+                label="风速"
+                width="286"
+              >
               </el-table-column>
-              <el-table-column sortable prop="fee" label="费用" width="">
+              <el-table-column
+                sortable
+                prop="current_cost"
+                label="费用"
+                width=""
+              >
               </el-table-column>
             </el-table>
           </div>
@@ -170,7 +142,7 @@
           </div>
         </template>
         <div class="content">
-          <el-row align="middle" type="flex" class="content2"> 
+          <el-row align="middle" type="flex" class="content2">
             <el-row :gutter="20" align="middle">
               <!-- 房间ID -->
               <el-col :span="24">
@@ -208,17 +180,30 @@
               </el-col>
 
               <!-- 提交按钮 -->
-        
-            
 
-            <el-col :span="24" :offset="1" align="middle" type="flex" style="margin-top: 30px;margin-left: 30%;" >
-              <div class="grid-content bg-purple-light">
-                <el-button round @click="CreateRoom({ room_id,identity_card,initial_temperature})">
-                  创建房间
-                </el-button>
-              </div>
-            </el-col>
-          </el-row>
+              <el-col
+                :span="24"
+                :offset="1"
+                align="middle"
+                type="flex"
+                style="margin-top: 30px;margin-left: 30%;"
+              >
+                <div class="grid-content bg-purple-light">
+                  <el-button
+                    round
+                    @click="
+                      CreateRoom({
+                        room_id,
+                        identity_card,
+                        initial_temperature
+                      })
+                    "
+                  >
+                    创建房间
+                  </el-button>
+                </div>
+              </el-col>
+            </el-row>
           </el-row>
         </div>
       </el-tab-pane>
@@ -227,18 +212,18 @@
 </template>
 
 <script>
+import XLSX from "xlsx";
 import { computed } from "@vue/composition-api";
 import { mapActions, mapState } from "vuex";
 export default {
-  data: function () {
+  data: function() {
     return {
       tabPosition: "left",
       room_id: "1",
       inputRDRRoomId: 2,
-      identity_card: "1",//修改
-      initial_temperature: "1",//修改
-
-      imgSrc: require("../assets/images/room.jpg"),
+      identity_card: "1", //修改
+      initial_temperature: "1", //修改
+      imgSrc: require("../assets/images/room.jpg")
     };
   },
   computed: {
@@ -249,14 +234,57 @@ export default {
       "bill",
       "RDRIsOk",
       "billIsOk",
-    ]),
+      "totalCost"
+    ])
   },
   methods: {
-    ...mapActions("receptionist", ["getRDR", "getBill", "CreateRoom","DeleteRoom"]),//修改
-  },
+    ...mapActions("receptionist", [
+      "getRDR",
+      "getBill",
+      "CreateRoom",
+      "DeleteRoom"
+    ]), //修改
+    async handleGetRDR() {
+      // 调用Vuex中的getRDR方法
+      await this.getRDR({ roomId: this.inputRDRRoomId });
+
+      // 生成并下载Excel文件
+      this.generateAndDownloadExcel();
+    },
+
+    generateAndDownloadExcel() {
+      const ws = XLSX.utils.json_to_sheet(this.RDR);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "RDRData");
+      const wbout = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+
+      const blob = new Blob([wbout], { type: "application/octet-stream" });
+      const fileName = "详单.xlsx";
+
+      if (window.navigator.msSaveOrOpenBlob) {
+        // For IE and Edge
+        window.navigator.msSaveBlob(blob, fileName);
+      } else {
+        // For other browsers
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        document.body.appendChild(a);
+        a.href = url;
+        a.download = fileName;
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      }
+    }
+  }
 };
 </script>
 <style scoped>
+.text {
+  font-size: 20px;
+  color: rgb(0, 4, 27);
+  font-weight: bold;
+}
 .content {
   margin-top: 50px;
   margin-left: 5%;
@@ -312,8 +340,7 @@ export default {
   box-shadow: 0 20px 40px 3px rgba(0, 0, 0, 0.253);
 }
 /* //修改 */
-.content2{
-
+.content2 {
   /* 使用flex布局 */
   display: flex;
   /* 水平居中 */
@@ -330,8 +357,5 @@ export default {
   height: 500px;
   /* 宽度 */
   width: 600px;
-
-
 }
-
 </style>
