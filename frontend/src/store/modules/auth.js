@@ -24,9 +24,6 @@ export default {
     setError(state, error) {
       state.error = error;
     },
-    setRole(state, role) {
-      state.role = role;
-    }
   },
   actions: {
     UserLogin({ commit, state }, payload) {
@@ -41,32 +38,13 @@ export default {
           `${api}/login?room_id=${payload.room_id}&identity_card=${payload.identity_card}`
         )
         .then(response => {
-          if (response.data.error) {
-            commit("setLoading", false);
-            commit("setError", "username or password error.");
-          } else {
+          if (response.data.msg=="登录成功") {
             commit("setLoading", false);
             commit("setError", "");
-            commit("setRole", response.data.role);
-
-            switch (response.data.role) {
-              case "room":
-                router.replace("/room");
-                break;
-              case "administrator":
-                router.replace("/administrator");
-                break;
-              case "manager":
-                router.replace("/manager");
-                break;
-              case "receptionist":
-                router.replace("/receptionist");
-                break;
-              default:
-                console.log("illegal role");
-                router.replace("/home");
-                break;
-            }
+            router.replace("/room");
+          } else {
+            commit("setLoading", false);
+            commit("setError", "username or password error.");
           }
         })
         .catch(error => {

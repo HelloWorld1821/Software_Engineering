@@ -6,7 +6,8 @@
  * @LastEditTime: 2021-06-27 01:39:18
  * @FilePath: \DistributedControlSystem\frontend\src\store\modules\administrator.js
  */
-const api = "/admin";
+import router from "../../router";
+const api = "http://127.0.0.1:8000/admin";
 import axios from "axios";
 export default {
   state: {
@@ -15,6 +16,9 @@ export default {
   },
   getter: {},
   mutations: {
+    setPassword(state, password) {
+      state.password = password;
+    },
     setRoomsState(state, roomsState) {
       // console.log('111');
       state.roomsState = roomsState;
@@ -24,6 +28,42 @@ export default {
     }
   },
   actions: {
+    AdminLogin({ commit, state }, payload) {
+      console.log("AdminLogin...");
+      commit("setLoading", true);
+      // commit("setPassword", payload.password); // 更新 password
+
+      return axios
+        .post(`${api}/login?password=${payload.password}`)
+        .then(response => {
+          if (response.data.msg=="登录成功") {
+            commit("setError", "");
+           
+            const menuItems = [
+              '/administrator',
+              '/receptionist',
+              '/manager'
+            ];
+    
+            menuItems.forEach(item => {
+              const menuItem = document.querySelector(`[index="${item}"]`);
+              if (menuItem) {
+                menuItem.setAttribute('disabled', 'false');
+              }
+            });
+
+            router.replace("/administrator");
+          } else {
+            commit("setError", "password error.");
+          }
+        })
+        .catch(error => {
+          console.error(error);
+        })
+        .finally(()=>{
+          commit("setLoading",false);
+        })
+    },
     checkRoomsState({ commit }) {
       console.log("checkRoomsState...");
       return axios
