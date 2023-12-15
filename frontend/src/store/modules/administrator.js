@@ -7,8 +7,6 @@
  * @FilePath: \DistributedControlSystem\frontend\src\store\modules\administrator.js
  */
 import router from "../../router";
-const api = "http://127.0.0.1:8000/admin";
-import router from "../../router";
 const api = "http://127.0.0.1:8000/admin"; // 更新 API 地址
 import axios from "axios";
 export default {
