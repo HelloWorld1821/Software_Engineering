@@ -6,6 +6,11 @@ from routers import (
 
 app = FastAPI()
 
+origins = [
+    "http://localhost",
+    "http://localhost:3100"
+]
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
