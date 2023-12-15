@@ -6,7 +6,7 @@
  * @LastEditTime: 2021-06-27 09:37:56
  * @FilePath: \DistributedControlSystem\frontend\src\store\modules\room.js
  */
-const api = '/api/room';
+const api = 'http://127.0.0.1:8000/room';
 import axios from 'axios';
 export default{
     state:{
