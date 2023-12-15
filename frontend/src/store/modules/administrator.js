@@ -36,19 +36,15 @@ export default {
       return axios
         .post(`${api}/login?password=${payload.password}`)
         .then(response => {
-          if (response.data.msg=="登录成功") {
+          if (response.data.msg == "登录成功") {
             commit("setError", "");
-           
-            const menuItems = [
-              '/administrator',
-              '/receptionist',
-              '/manager'
-            ];
-    
+
+            const menuItems = ["/administrator", "/receptionist", "/manager"];
+
             menuItems.forEach(item => {
               const menuItem = document.querySelector(`[index="${item}"]`);
               if (menuItem) {
-                menuItem.setAttribute('disabled', 'false');
+                menuItem.setAttribute("disabled", "false");
               }
             });
 
@@ -60,53 +56,42 @@ export default {
         .catch(error => {
           console.error(error);
         })
-        .finally(()=>{
-          commit("setLoading",false);
-        })
-    },
-    checkRoomsState({ commit }) {
-      console.log("checkRoomsState...");
-      return axios
-        // .get(api + "/rooms")
-        .get('/admin/rooms')
-        .then(response => {
-          if (response.data.error === false) {
-            commit("setRoomsState", response.data.roomsState);
-            commit("setStateIsOk", true);
-          } else {
-            commit("setStateIsOk", false);
-          }
-        })
-        .catch(error => {
-          console.error(error);
+        .finally(() => {
+          commit("setLoading", false);
         });
     },
+    async checkRoomsState({ commit }) {
+      try {
+        console.log("checkRoomsState...");
+        const response = await axios.get(api + "/rooms");
+        if (Array.isArray(response.data) && response.data.length > 0) {
+          commit("setRoomsState", response.data);
+          commit("setStateIsOk", true);
+        } else {
+          commit("setStateIsOk", false);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    // ...（其他 action 保持不变）
 
     setDefaultParams({ commit }, payload) {
       console.log("setDefaultParams...");
       let p = payload;
+      const queryParams = new URLSearchParams({
+        room_id: p.roomId,
+        target_temperatuer: p.target_Temp,
+        fan_speed: p.fanSpeed,
+        status: p.Status
+      });
+
       return axios
-        .post(api + "/setDefaultParams", {
-          // mode:'cold',
-          // tempSection:[10,15,20,25],
-          // defaultTemp:20,
-          // feeRate:1.5,
-          // scheduledNum:3
-          defaultMode: p.defaultMode,
-          defaultTemp: p.defaultTemp,
-          defaultSpeed: p.defaultSpeed,
-          feeRate: p.feeRate,
-          scheduledNum: p.scheduledNum,
-          coldHigh: p.coldHigh,
-          coldLow: p.coldLow,
-          hotHigh: p.hotHigh,
-          hotLow: p.hotLow
-        })
+        .post(`${api}/modify?${queryParams}`)
         .then(response => {
-          if (response.data.error == false) {
+          if (response.data.error === false) {
             console.log("setDefaultParams succeed");
           } else {
-            // commit('setStateIsOk', false);
             console.log("setDefaultParams fail");
           }
         })
