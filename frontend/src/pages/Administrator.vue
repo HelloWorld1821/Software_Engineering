@@ -51,38 +51,40 @@
           <h2>房间监视情况：</h2>
           <div class="rooms-table">
             <el-table :data="roomsState" border style="width: 100%">
-              <el-table-column label="房间ID" width="143">
-                <template slot-scope="scope">
-                  <i class="el-icon-user"></i>
-                  {{ scope.row.roomId }}
-                </template>
+              <el-table-column prop="room_id" label="房间ID" width="143">
               </el-table-column>
 
-              <el-table-column label="送风状态" width="143">
-                <template slot-scope="scope">
-                  <!-- {{ scope.row.state }} -->
-                  <el-switch
-                    :disabled="true"
-                    v-model="scope.row.state"
-                    active-color="#13ce66"
-                    inactive-color="#ff4949"
-                    active-value="sending"
-                    inactive-value="not sending"
-                  >
-                  </el-switch>
-                </template>
+              <el-table-column prop="status" label="空调模式" width="143">
               </el-table-column>
-              <el-table-column prop="mode" label="空调模式" width="143">
+              <el-table-column prop="fan_speed" label="当前风速" width="143">
               </el-table-column>
-              <el-table-column prop="speed" label="当前风速" width="143">
+              <el-table-column
+                prop="current_temperature"
+                label="当前温度"
+                width="143"
+              >
               </el-table-column>
-              <el-table-column prop="currTemp" label="当前温度" width="143">
+              <el-table-column
+                prop="initial_temperature"
+                label="初始温度"
+                width="143"
+              >
               </el-table-column>
-              <el-table-column prop="targetTemp" label="目标温度" width="143">
+              <el-table-column
+                prop="target_temperature"
+                label="目标温度"
+                width="143"
+              >
               </el-table-column>
-              <el-table-column prop="servedTime" label="服务时间" width="143">
+              <el-table-column prop="server_time" label="服务时间" width="143">
               </el-table-column>
-              <el-table-column prop="fee" label="服务费用" width="">
+              <el-table-column prop="total_cost" label="服务费用" width="">
+              </el-table-column>
+              <el-table-column
+                prop="identity_card"
+                label="身份证号"
+                width="143"
+              >
               </el-table-column>
             </el-table>
           </div>
@@ -100,92 +102,64 @@
           <h2>设置参数：</h2>
           <div class="params-form">
             <el-form label-width="100px" size="small" class="login-form">
-              <el-form-item label="默认模式">
-                <el-radio-group v-model="params.defaultMode">
-                  <el-radio :label="'hot'">hot</el-radio>
-                  <el-radio :label="'cold'">cold</el-radio>
-                </el-radio-group>
-              </el-form-item>
-
-              <el-form-item label="制冷温控区间">
-                <el-row>
-                  <el-col :span="8" :offset="2">
-                    <el-input
-                      type="number"
-                      v-model="params.coldLow"
-                      placeholder="最低温度"
-                    ></el-input>
-                  </el-col>
-                  <el-col :span="1" :offset="1">-</el-col>
-                  <el-col :span="8" :offset="1">
-                    <el-input
-                      type="number"
-                      v-model="params.coldHigh"
-                      placeholder="最高温度"
-                    ></el-input>
-                  </el-col>
-                </el-row>
-              </el-form-item>
-
-              <el-form-item label="制热温控区间">
-                <el-row>
-                  <el-col :span="8" :offset="2">
-                    <el-input
-                      type="number"
-                      v-model="params.hotLow"
-                      placeholder="最低温度"
-                    ></el-input>
-                  </el-col>
-                  <el-col :span="1" :offset="1">-</el-col>
-                  <el-col :span="8" :offset="1">
-                    <el-input
-                      type="number"
-                      v-model="params.hotHigh"
-                      placeholder="最高温度"
-                    ></el-input>
-                  </el-col>
-                </el-row>
-              </el-form-item>
-
-              <el-form-item label="缺省温度">
+              <el-form-item label="房间ID">
                 <el-row>
                   <el-col :span="8" :offset="8">
                     <el-input
                       type="number"
-                      v-model="params.defaultTemp"
-                      placeholder="缺省温度"
+                      v-model="params.roomId"
+                      placeholder="请输入房间ID"
                     ></el-input>
                   </el-col>
                 </el-row>
               </el-form-item>
 
-              <el-form-item label="费率">
+              <el-form-item label="目标温度">
                 <el-row>
                   <el-col :span="8" :offset="8">
                     <el-input
                       type="number"
-                      v-model="params.feeRate"
-                      placeholder="费率"
+                      v-model="params.target_Temp"
+                      placeholder="目标温度"
                     ></el-input>
                   </el-col>
                 </el-row>
               </el-form-item>
 
-              <el-form-item label="服务对象数">
+              <el-form-item label="风速">
                 <el-row>
                   <el-col :span="8" :offset="8">
-                    <el-input
-                      type="number"
-                      v-model="params.scheduledNum"
-                      placeholder="服务对象数"
-                    ></el-input>
+                    <el-select
+                      v-model="params.fanSpeed"
+                      placeholder="请选择风速"
+                    >
+                      <el-option label="高风速" value="high"></el-option>
+                      <el-option label="中风速" value="medium"></el-option>
+                      <el-option label="低风速" value="low"></el-option>
+                    </el-select>
+                  </el-col>
+                </el-row>
+              </el-form-item>
+
+              <el-form-item label="空调状态">
+                <el-row>
+                  <el-col :span="8" :offset="8">
+                    <el-select
+                      v-model="params.Status"
+                      placeholder="请选择空调状态"
+                    >
+                      <el-option label="服务中" value="SERVING"></el-option>
+                      <el-option label="等待中" value="WAITING"></el-option>
+                      <el-option label="已关闭" value="SHUTDOWN"></el-option>
+                      <el-option label="休眠中" value="SLEEPING"></el-option>
+                    </el-select>
                   </el-col>
                 </el-row>
               </el-form-item>
 
               <el-form-item>
                 <el-button type="primary" @click="setDefaultParams(params)">
-                  设置默认参数
+                  设置参数
                 </el-button>
               </el-form-item>
             </el-form>
@@ -203,14 +177,10 @@ export default {
     return {
       tabPosition: "left",
       params: {
-        defaultMode: "cold",
-        coldHigh: 25,
-        coldLow: 18,
-        hotHigh: 30,
-        hotLow: 25,
-        feeRate: 1,
-        defaultTemp: 25,
-        scheduledNum: 3
+        roomId: 1,
+        target_Temp: 25,
+        fanSpeed: "high",
+        Status: "SERVING"
       }
     };
   },
