@@ -27,7 +27,8 @@ export default {
     checkRoomsState({ commit }) {
       console.log("checkRoomsState...");
       return axios
-        .get(api + "/room")
+        // .get(api + "/rooms")
+        .get('/admin/rooms')
         .then(response => {
           if (response.data.error === false) {
             commit("setRoomsState", response.data.roomsState);

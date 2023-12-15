@@ -32,10 +32,10 @@
           <p>fee:{{RDR.fee}}</p>
         </div>
       </div> -->
-    <el-tabs :type="border - card" style="height:500px">
+    <el-tabs :type="border - card" style="height: 500px">
       <el-tab-pane>
         <template slot="label">
-          <div class="label" style="color: rgb(226, 183, 43);">
+          <div class="label" style="color: rgb(226, 183, 43)">
             <h2>获取账单</h2>
           </div>
         </template>
@@ -49,20 +49,13 @@
               </el-col>
               <el-col :span="4" :offset="0" align="middle" type="flex">
                 <div class="grid-content input-roomid">
-                  <el-input
-                    placeholder="room id"
-                    v-model="inputBillRoomId"
-                    clearable
-                  >
+                  <el-input placeholder="room id" v-model="room_id" clearable>
                   </el-input>
                 </div>
               </el-col>
               <el-col :span="2" :offset="1" align="middle" type="flex">
                 <div class="grid-content bg-purple-light">
-                  <el-button
-                    round
-                    @click="getBill({ roomId: inputBillRoomId })"
-                  >
+                  <el-button round @click="getBill({ room_id: room_id })">
                     获取账单
                   </el-button>
                 </div>
@@ -74,7 +67,7 @@
             <el-form label-width="100px" size="small" class="login-form">
               <el-form-item>
                 <template slot="label">
-                  <div class="label" style="color: rgb(0, 0, 0);">
+                  <div class="label" style="color: rgb(0, 0, 0)">
                     <h3>房间ID</h3>
                   </div>
                 </template>
@@ -82,7 +75,7 @@
               </el-form-item>
               <el-form-item>
                 <template slot="label">
-                  <div class="label" style="color: rgb(0, 0, 0);">
+                  <div class="label" style="color: rgb(0, 0, 0)">
                     <h3>费用</h3>
                   </div>
                 </template>
@@ -95,7 +88,7 @@
 
       <el-tab-pane>
         <template slot="label">
-          <div class="label" style="color: rgb(226, 183, 43);">
+          <div class="label" style="color: rgb(226, 183, 43)">
             <h2>获取详单</h2>
           </div>
         </template>
@@ -151,6 +144,66 @@
           </div>
         </div>
       </el-tab-pane>
+
+      <el-tab-pane>
+        <template slot="label">
+          <div class="label" style="color: rgb(226, 183, 43)">
+            <h2>入住登记</h2>
+          </div>
+        </template>
+        <div class="content">
+          <el-row align="middle" type="flex" class="content2"> 
+            <el-row :gutter="20" align="middle">
+              <!-- 房间ID -->
+              <el-col :span="24">
+                <div class="grid-content">
+                  <h4>请输入登记房间:</h4>
+                  <el-input placeholder="room id" v-model="room_id" clearable>
+                  </el-input>
+                </div>
+              </el-col>
+
+              <!-- 身份证号 -->
+              <el-col :span="24">
+                <div class="grid-content">
+                  <h4>请输入身份证号:</h4>
+                  <el-input
+                    placeholder="identity card"
+                    v-model="identity_card"
+                    clearable
+                  >
+                  </el-input>
+                </div>
+              </el-col>
+
+              <!-- 初始温度 -->
+              <el-col :span="24">
+                <div class="grid-content">
+                  <h4>请输入初始温度:</h4>
+                  <el-input
+                    placeholder="initial temperature"
+                    v-model="initial_temperature"
+                    clearable
+                  >
+                  </el-input>
+                </div>
+              </el-col>
+
+              <!-- 提交按钮 -->
+        
+            
+
+            <el-col :span="24" :offset="1" align="middle" type="flex" style="margin-top: 30px;margin-left: 30%;" >
+              <div class="grid-content bg-purple-light">
+                <el-button round @click="CreateRoom({ room_id,identity_card,initial_temperature})">
+                  创建房间
+                </el-button>
+              </div>
+            </el-col>
+          </el-row>
+          </el-row>
+        </div>
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -159,12 +212,15 @@
 import { computed } from "@vue/composition-api";
 import { mapActions, mapState } from "vuex";
 export default {
-  data: function() {
+  data: function () {
     return {
       tabPosition: "left",
-      inputBillRoomId: 1,
+      room_id: "1",
       inputRDRRoomId: 2,
-      imgSrc: require("../assets/images/room.jpg")
+      identity_card: "1",//修改
+      initial_temperature: "1",//修改
+
+      imgSrc: require("../assets/images/room.jpg"),
     };
   },
   computed: {
@@ -174,12 +230,12 @@ export default {
       "RDR",
       "bill",
       "RDRIsOk",
-      "billIsOk"
-    ])
+      "billIsOk",
+    ]),
   },
   methods: {
-    ...mapActions("receptionist", ["getRDR", "getBill"])
-  }
+    ...mapActions("receptionist", ["getRDR", "getBill", "CreateRoom"]),//修改
+  },
 };
 </script>
 <style scoped>
@@ -237,4 +293,27 @@ export default {
   background: linear-gradient(rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.3));
   box-shadow: 0 20px 40px 3px rgba(0, 0, 0, 0.253);
 }
+/* //修改 */
+.content2{
+
+  /* 使用flex布局 */
+  display: flex;
+  /* 水平居中 */
+  justify-content: center;
+  /* 垂直居中 */
+  align-items: center;
+  /* 上边距 */
+  margin-top: 50px;
+  /* 左边距，如果您想要居中，可以设置为自动 */
+  margin-left: auto;
+  /* 右边距，同样设置为自动以实现水平居中 */
+  margin-right: auto;
+  /* 高度 */
+  height: 500px;
+  /* 宽度 */
+  width: 600px;
+
+
+}
+
 </style>
