@@ -10,6 +10,7 @@ import Vue from "vue";
 import Router from "vue-router";
 import Home from "@/pages/Home";
 import Login from "@/pages/Login";
+import AdminLogin from "@/pages/AdminLogin";
 import Register from "@/pages/Register";
 import Room from "@/pages/Room";
 import Administrator from "@/pages/Administrator";
@@ -33,6 +34,11 @@ export default new Router({
       path: "/login",
       name: "login",
       component: Login
+    },
+    {
+      path: "/adminlogin",
+      name: "adminlogin",
+      component: AdminLogin
     },
     {
       path: "/register",

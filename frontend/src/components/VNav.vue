@@ -9,22 +9,12 @@
     router
     text-color="white"
   >
-    <el-menu-item index="/login" route="/login">登录</el-menu-item>
-    <el-menu-item index="/room" route="/room" :disabled="false"
-      >用户</el-menu-item
-    >
-    <el-menu-item
-      index="/administrator"
-      route="/administrator"
-      :disabled="false"
-      >管理员</el-menu-item
-    >
-    <el-menu-item index="/receptionist" route="/receptionist" :disabled="false"
-      >前台</el-menu-item
-    >
-    <el-menu-item index="/manager" route="/manager" :disabled="false"
-      >经理</el-menu-item
-    >
+    <el-menu-item index="/login" route="/login">用户登录</el-menu-item>
+    <el-menu-item index="/adminlogin" route="/adminlogin">管理员登录</el-menu-item>
+    <el-menu-item index="/room" route="/room" :disabled="true">房间</el-menu-item>
+    <el-menu-item index="/administrator"route="/administrator":disabled="true">管理员</el-menu-item>
+    <el-menu-item index="/receptionist" route="/receptionist" :disabled="true">前台</el-menu-item>
+    <el-menu-item index="/manager" route="/manager" :disabled="true">经理</el-menu-item>
   </el-menu>
 </template>
 
@@ -35,6 +25,8 @@ export default defineComponent({
   setup() {}
 });
 </script>
+
+
 <style scoped>
 .menu {
   background-color: #486589;
