@@ -86,6 +86,24 @@ export default {
                 });
         },
 
+        DeleteRoom({ commit }, payload) {
+            console.log('DeleteRoom...');
+            // commit('setBillRoomId',payload.room_id);
+            return axios
+                .delete(`${api}/delete?room_id=${payload.room_id}`)
+                .then((response) => {
+                    if (response.data.error == false) {
+                        commit('setdelete', response.data.bill);
+                        commit('setdeleteIsOk', true);
+                        commit('setdeleteRoomId', payload.room_id);
+                    } else {
+                        commit('setdeleteIsOk', false);
+                    }
+                }).catch((error) => {
+                    console.error(error)
+                });
+        },
+
 
 
 

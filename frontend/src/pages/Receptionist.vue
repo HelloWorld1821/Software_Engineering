@@ -59,7 +59,25 @@
                     获取账单
                   </el-button>
                 </div>
+
+
+                
+
+
+
               </el-col>
+
+              <el-col  :span="9" :offset="1" align="middle" type="flex"  >
+                <div class="grid-content bg-purple-light" >
+                  <el-button  style="background-color: rgba(234, 150, 150, 0.811);"     
+                  round @click="DeleteRoom({ room_id: room_id })">
+                    退房
+                  </el-button>
+                </div>
+              </el-col>
+
+
+
             </el-row>
           </div>
 
@@ -234,7 +252,7 @@ export default {
     ]),
   },
   methods: {
-    ...mapActions("receptionist", ["getRDR", "getBill", "CreateRoom"]),//修改
+    ...mapActions("receptionist", ["getRDR", "getBill", "CreateRoom","DeleteRoom"]),//修改
   },
 };
 </script>
