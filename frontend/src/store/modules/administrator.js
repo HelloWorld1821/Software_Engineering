@@ -12,7 +12,8 @@ import axios from "axios";
 export default {
   state: {
     roomsState: [],
-    stateIsOk: false
+    stateIsOk: false,
+    isDisabled: true
   },
   getter: {},
   mutations: {
@@ -25,6 +26,9 @@ export default {
     },
     setStateIsOk(state, isOk) {
       state.stateIsOk = isOk;
+    },
+    setLoginIsOk(state, isOk) {
+      state.isDisabled = isOk;
     }
   },
   actions: {
@@ -38,7 +42,7 @@ export default {
         .then(response => {
           if (response.data.msg == "登录成功") {
             commit("setError", "");
-
+            commit("setLoginIsOk", false);
             const menuItems = ["/administrator", "/receptionist", "/manager"];
 
             menuItems.forEach(item => {

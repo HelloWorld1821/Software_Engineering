@@ -9,20 +9,28 @@
     router
     text-color="white"
   >
-    <el-menu-item index="/login" route="/login">用户登录</el-menu-item>
+    <el-menu-item index="/login" route="/login" :disabled="!isDisabled"
+      >用户登录</el-menu-item
+    >
     <el-menu-item index="/adminlogin" route="/adminlogin"
       >管理员登录</el-menu-item
     >
     <el-menu-item index="/room" route="/room" :disabled="true"
       >房间</el-menu-item
     >
-    <el-menu-item index="/administrator" route="/administrator" :disabled="true"
+    <el-menu-item
+      index="/administrator"
+      route="/administrator"
+      :disabled="isDisabled"
       >管理员</el-menu-item
     >
-    <el-menu-item index="/receptionist" route="/receptionist" :disabled="false"
+    <el-menu-item
+      index="/receptionist"
+      route="/receptionist"
+      :disabled="isDisabled"
       >前台</el-menu-item
     >
-    <el-menu-item index="/manager" route="/manager" :disabled="true"
+    <el-menu-item index="/manager" route="/manager" :disabled="isDisabled"
       >经理</el-menu-item
     >
   </el-menu>
@@ -31,8 +39,13 @@
 <script>
 import { defineComponent } from "@vue/composition-api";
 import router from "../router";
+import { mapState } from "vuex";
 export default defineComponent({
-  setup() {}
+  setup() {},
+  // ... 其他组件选项
+  computed: {
+    ...mapState("administrator", ["isDisabled"])
+  }
 });
 </script>
 
