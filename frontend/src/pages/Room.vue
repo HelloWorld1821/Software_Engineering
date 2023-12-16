@@ -297,7 +297,12 @@ export default {
         targetACState: "on" //在服务器看来就是打开空调
       });
     }
-  }
+  },
+  watch: {
+    acStateBool: function(newValue, oldValue) {
+      if (newValue == true) {this.targetACState = "on";this.on();}
+      if (newValue == false) {this.targetACState = "off";this.off();}
+    },}
 };
 </script>
 
