@@ -9,15 +9,13 @@
     router
     text-color="white"
   >
-    <el-menu-item index="/login" route="/login" :disabled="!isDisabled"
+    <el-menu-item index="/login" route="/login" :disabled="false"
       >用户登录</el-menu-item
     >
     <el-menu-item index="/adminlogin" route="/adminlogin"
       >管理员登录</el-menu-item
     >
-    <el-menu-item index="/room" route="/room" :disabled="true"
-      >房间</el-menu-item
-    >
+    <el-menu-item index="/room" route="/room" :disabled="ds">房间</el-menu-item>
     <el-menu-item
       index="/administrator"
       route="/administrator"
@@ -44,7 +42,8 @@ export default defineComponent({
   setup() {},
   // ... 其他组件选项
   computed: {
-    ...mapState("administrator", ["isDisabled"])
+    ...mapState("administrator", ["isDisabled"]),
+    ...mapState("auth", ["ds"])
   }
 });
 </script>

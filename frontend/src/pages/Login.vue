@@ -77,7 +77,7 @@ export default defineComponent({
     };
   },
   computed: {
-    ...mapState("auth", ["role"])
+    ...mapState("auth", ["role", "ds"])
   },
   methods: {
     ...mapActions("auth", ["UserLogin"]),

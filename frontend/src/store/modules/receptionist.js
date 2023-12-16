@@ -31,7 +31,6 @@ export default {
     },
     setRDR(state, RDR) {
       state.RDR = RDR;
-      console.log("RDR:", RDR);
     },
     setTotalCost(state, total_cost) {
       state.totalCost = total_cost;
