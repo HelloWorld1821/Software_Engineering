@@ -17,13 +17,20 @@
               </el-col>
               <el-col :span="4" :offset="0" align="middle" type="flex">
                 <div class="grid-content input-roomid">
-                  <el-input placeholder="room id" v-model="room_id" clearable>
+                  <el-input
+                    placeholder="room id"
+                    v-model="inputroomid"
+                    clearable
+                  >
                   </el-input>
                 </div>
               </el-col>
               <el-col :span="2" :offset="1" align="middle" type="flex">
                 <div class="grid-content bg-purple-light">
-                  <el-button round @click="getBill({ room_id: room_id })">
+                  <el-button
+                    round
+                    @click="handleGetbill({ room_id: inputroomid })"
+                  >
                     获取账单
                   </el-button>
                 </div>
@@ -59,7 +66,7 @@
                     <h3>费用</h3>
                   </div>
                 </template>
-                <el-row class="text">{{ totalCost }}</el-row>
+                <el-row class="text">{{ bill.total_cost }}</el-row>
               </el-form-item>
             </el-form>
           </div>
@@ -221,6 +228,7 @@ export default {
       tabPosition: "left",
       room_id: "1",
       inputRDRRoomId: 2,
+      inputroomid: 1,
       identity_card: "1", //修改
       initial_temperature: "1", //修改
       imgSrc: require("../assets/images/room.jpg")
@@ -233,8 +241,7 @@ export default {
       "RDR",
       "bill",
       "RDRIsOk",
-      "billIsOk",
-      "totalCost"
+      "billIsOk"
     ])
   },
   methods: {
@@ -260,6 +267,43 @@ export default {
 
       const blob = new Blob([wbout], { type: "application/octet-stream" });
       const fileName = "详单.xlsx";
+
+      if (window.navigator.msSaveOrOpenBlob) {
+        // For IE and Edge
+        window.navigator.msSaveBlob(blob, fileName);
+      } else {
+        // For other browsers
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        document.body.appendChild(a);
+        a.href = url;
+        a.download = fileName;
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      }
+    },
+    async handleGetbill() {
+      // 调用Vuex中的getBill方法
+      await this.getBill({ room_id: this.inputroomid });
+
+      // 生成并下载Excel文件
+      this.generateAndDownloadExcel2();
+    },
+
+    generateAndDownloadExcel2() {
+      // 将单个账单数据包装为数组
+      const billDataArray = [this.bill];
+
+      // 使用 XLSX.utils.json_to_sheet 处理数组
+      const ws = XLSX.utils.json_to_sheet(billDataArray);
+
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "billdata");
+      const wbout = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+
+      const blob = new Blob([wbout], { type: "application/octet-stream" });
+      const fileName = "账单.xlsx";
 
       if (window.navigator.msSaveOrOpenBlob) {
         // For IE and Edge

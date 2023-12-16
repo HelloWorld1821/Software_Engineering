@@ -45,7 +45,16 @@
                   </div>
                 </el-col>
               </el-row>
-
+              <el-row style="margin-top: 20px">
+                <el-col :span="8" :offset="0" class="temp">
+                  <div>开机状态:</div>
+                </el-col>
+                <el-col :span="8" :offset="4">
+                  <div>
+                    {{ status }}
+                  </div>
+                </el-col>
+              </el-row>
               <el-row style="margin-top: 20px">
                 <el-col :span="8" :offset="0" class="temp">
                   <div>设定温度:</div>
@@ -153,7 +162,8 @@ export default {
       targetACState: "off",
       acStateBool: false,
       sleepMode: false, //是否开启休眠模式
-      isSupplyBool: false
+      isSupplyBool: false,
+      status: "关机" // 默认为'关机'
     };
   },
 
@@ -207,11 +217,13 @@ export default {
       this.request_on({
         room_id: this.room_id
       });
+      this.status = "开机"; // 更新状态为'开机'
     },
     off() {
       this.request_off({
         room_id: this.room_id
       });
+      this.status = "关机"; // 更新状态为'关机'
     },
     decreaseTemp() {
       if (this.targetTemp > this.$store.state.room.roomParams.tempSectionLow) {
@@ -300,9 +312,16 @@ export default {
   },
   watch: {
     acStateBool: function(newValue, oldValue) {
-      if (newValue == true) {this.targetACState = "on";this.on();}
-      if (newValue == false) {this.targetACState = "off";this.off();}
-    },}
+      if (newValue == true) {
+        this.targetACState = "on";
+        this.on();
+      }
+      if (newValue == false) {
+        this.targetACState = "off";
+        this.off();
+      }
+    }
+  }
 };
 </script>
 

@@ -199,7 +199,7 @@ export default {
       this.timer = setInterval(() => {
         let that = this;
         that.checkRoomsState();
-      }, 1000);
+      }, 3000);
     }
   },
   destroyed: function() {

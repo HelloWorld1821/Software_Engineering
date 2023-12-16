@@ -16,7 +16,7 @@ export default {
     billIsOk: false,
     RDRIsOk: false,
     RDR: [],
-    totalCost: 0
+    bill: []
   },
   getter: {},
   mutations: {
@@ -32,8 +32,9 @@ export default {
     setRDR(state, RDR) {
       state.RDR = RDR;
     },
-    setTotalCost(state, total_cost) {
-      state.totalCost = total_cost;
+    setTotalCost(state, data) {
+      state.bill = data;
+      console.log("bill:", data);
     },
     setBillIsOk(state, isOk) {
       state.billIsOk = isOk;
@@ -69,9 +70,9 @@ export default {
       return axios
         .get(`${api}/bills/${payload.room_id}`)
         .then(response => {
-          commit("setTotalCost", response.data.total_cost);
+          commit("setTotalCost", response.data);
           commit("setBillIsOk", true);
-          console.log("Updated totalCost:", response.data.total_cost); // 记录状态
+          console.log("Updated totalCost:", response.data); // 记录状态
           commit("setBillRoomId", payload.room_id);
         })
         .catch(error => {
