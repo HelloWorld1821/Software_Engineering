@@ -7,7 +7,6 @@ from sql_app.database import get_db, SessionLocal
 import requests
 from typing import List
 import json
-from routers.schedule import service_queue, waiting_queue
 FILENAME = './test_case_empty.xlsx'
 
 url = None
@@ -44,7 +43,7 @@ class Action:
                 '中': "medium",
                 '低': "low"
             }
-            requests.post(url + ':' + str(port) + self.api+'?room_id=' + str(self.room_id)+'&speed='+speed_map[self.input])
+            requests.post(url + ':' + str(port) + self.api+'?room_id=' + str(self.room_id)+'&fan_speed='+speed_map[self.input])
         else:
             self.api = '/schedule/request_temp'
             requests.post(url + ':' + str(port) + self.api+'?room_id=' + str(self.room_id)+'&target_temperature='+str(self.input))
@@ -106,11 +105,17 @@ def thread_query(actions):
 
             df_rooms = pd.concat([df_rooms, tmp_df], axis=0)
             print(df_rooms)
-            df1 = pd.DataFrame([service_queue])
-            df2 = pd.DataFrame([waiting_queue])
-            df_cat = pd.concat([df1, df2], axis=1)
-            df_schedule = pd.concat([df_schedule, df_cat], axis=0)
-            print(df_schedule)
+
+            # from routers.schedule import service_queue, waiting_queue,room_queue
+            # print("房间队列")
+            # for room in room_queue:
+            #     print(room.room_id,room.status)
+            # print("服务队列")
+            # for room in service_queue:
+            #     print(room.room_id)
+            # print("等待队列")
+            # for room in waiting_queue:
+            #     print(room.room_id)
             
     except KeyboardInterrupt:
         print("线程查询被中断")
@@ -119,6 +124,58 @@ def thread_query(actions):
     global roomInfo, scheduleInfo
     roomInfo = df_rooms
     scheduleInfo = df_schedule
+
+def only_for_test(actions):
+
+    api_room_info = '/user/show/'
+    df_rooms = pd.DataFrame()
+    df_schedule = pd.DataFrame()
+
+    # 发起请求
+    for idx, action_list in enumerate(actions):
+        for action in action_list:
+            print('第%d分钟，%d，%s' % (idx, action.room_id, action.input))
+            action.post()
+            
+        print('第%d分钟' % idx)
+        tmp_df = pd.DataFrame()
+        for room_id in room_map.values():
+            params = {
+            'room_id': room_id
+            }    
+            res = requests.get(url + ':' + str(port) + api_room_info+str(room_id), timeout=5)
+            data_dict = res.json()
+            # convert to a dataframe
+            data = [data_dict]
+            this_df = pd.DataFrame(data)
+            tmp_df = pd.concat([tmp_df, this_df], axis=1)
+
+        df_rooms = pd.concat([df_rooms, tmp_df], axis=0)
+        print(df_rooms)
+
+        # res2=requests.get(url + ':' + str(port) + '/schedule/show')
+        # data_dict = res2.json()
+        # # convert to a dataframe
+        # data = [data_dict]
+        # this_df = pd.DataFrame(data)
+        # df_schedule = pd.concat([df_schedule, this_df], axis=0)
+
+        requests.get(url + ':' + str(port) + '/schedule/test_poweron')
+
+        res=requests.get(url + ':' + str(port) + '/schedule/show')
+        data_dict = res.json()
+        # convert to a dataframe
+        data = [data_dict]
+        this_df = pd.DataFrame(data)
+        df_schedule = pd.concat([df_schedule, this_df], axis=0)
+        print(df_schedule)
+        time.sleep(10)
+    # 将结果保存在Excel
+    writer = pd.ExcelWriter('result.xlsx')
+    df_rooms.to_excel(writer, sheet_name='房间信息', index=False)
+    df_schedule.to_excel(writer, sheet_name='调度信息', index=False)
+    writer._save()
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -163,32 +220,33 @@ if __name__ == '__main__':
                     
         actions.append(action_once)
 
-    requests.get(url + ':' + str(port) + '/schedule/poweron')
+    only_for_test(actions)
 
-    thread1 = threading.Thread(target=thread_request, args=(actions,), daemon=True)
-    thread2 = threading.Thread(target=thread_query, args=(actions,), daemon=True)
+    # thread1 = threading.Thread(target=thread_request, args=(actions,), daemon=True)
+    # thread2 = threading.Thread(target=thread_query, args=(actions,), daemon=True)
+
+
+    # requests.get(url + ':' + str(port) + '/schedule/poweron')
+    # thread1.start()
+    # thread2.start()    
     
-    thread1.start()
+    # try:
+    #     # 等待线程完成
+    #     thread1.join()
+    #     thread2.join()
+    # except KeyboardInterrupt:
+    #     print("主程序中断")
+    # df = pd.read_excel(FILENAME, sheet_name='测试用例')
+    # target1 = df.iloc[2:28, 6:26]
+    # target2 = df.iloc[2:28, 27:32]
+    # assert target1.size == roomInfo.size
+    # assert target2.size == scheduleInfo.size
+    # # df.iloc[2:28, 6:26] = roomInfo.values
+    # # df.iloc[2:28, 27:32] = scheduleInfo.values
     
-    thread2.start()
-    
-    try:
-        # 等待线程完成
-        thread1.join()
-        thread2.join()
-    except KeyboardInterrupt:
-        print("主程序中断")
-    df = pd.read_excel(FILENAME, sheet_name='测试用例')
-    target1 = df.iloc[2:28, 6:26]
-    target2 = df.iloc[2:28, 27:32]
-    assert target1.size == roomInfo.size
-    assert target2.size == scheduleInfo.size
-    # df.iloc[2:28, 6:26] = roomInfo.values
-    # df.iloc[2:28, 27:32] = scheduleInfo.values
-    
-    # create a file to store the result
-    writer = pd.ExcelWriter('result.xlsx')
-    df.to_excel(writer, sheet_name='测试用例', index=False)
-    roomInfo.to_excel(writer, sheet_name='房间信息', index=False)
-    scheduleInfo.to_excel(writer, sheet_name='调度信息', index=False)
-    writer.save()
+    # # create a file to store the result
+    # writer = pd.ExcelWriter('result.xlsx')
+    # df.to_excel(writer, sheet_name='测试用例', index=False)
+    # roomInfo.to_excel(writer, sheet_name='房间信息', index=False)
+    # scheduleInfo.to_excel(writer, sheet_name='调度信息', index=False)
+    # writer.save()
