@@ -41,7 +41,7 @@
                   <el-button
                     style="background-color: rgba(234, 150, 150, 0.811);"
                     round
-                    @click="DeleteRoom({ room_id: room_id })"
+                    @click="DeleteRoom({ room_id: inputroomid })"
                   >
                     退房
                   </el-button>
@@ -58,7 +58,7 @@
                     <h3>房间ID</h3>
                   </div>
                 </template>
-                <el-row class="text">{{ room_id }}</el-row>
+                <el-row class="text">{{  inputroomid }}</el-row>
               </el-form-item>
               <el-form-item>
                 <template slot="label">
