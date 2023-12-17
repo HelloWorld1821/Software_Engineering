@@ -1,11 +1,3 @@
-<!--
- * @Description:
- * @Author: l
- * @Date: 2021-06-01 15:36:52
- * @LastEditors: l
- * @LastEditTime: 2021-06-27 09:34:44
- * @FilePath: \DistributedControlSystem\frontend\src\pages\Administrator.vue
--->
 <template>
   <div>
     <!-- <h2>Admistrator</h2>

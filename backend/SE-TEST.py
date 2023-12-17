@@ -13,11 +13,11 @@ url = None
 port = None
 
 room_map = {
-    '房间1': 101,
-    '房间2': 102,
-    '房间3': 103,
-    '房间4': 104,
-    '房间5': 105,
+    '房间1': 1,
+    '房间2': 2,
+    '房间3': 3,
+    '房间4': 4,
+    '房间5': 5,
 }
 
 def read_excel_case(filename):
@@ -174,7 +174,7 @@ def only_for_test(actions):
     writer = pd.ExcelWriter('result.xlsx')
     df_rooms.to_excel(writer, sheet_name='房间信息', index=False)
     df_schedule.to_excel(writer, sheet_name='调度信息', index=False)
-    writer._save()
+    writer.save()
 
 
 if __name__ == '__main__':

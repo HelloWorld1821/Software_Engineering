@@ -1,11 +1,3 @@
-/*
- * @Description:
- * @Author: l
- * @Date: 2021-06-03 14:12:06
- * @LastEditors: l
- * @LastEditTime: 2021-06-26 16:44:45
- * @FilePath: \DistributedControlSystem\frontend\src\store\modules\receptionist.js
- */
 const api = "/api/admin"; //修改后端接口
 import axios from "axios";
 export default {

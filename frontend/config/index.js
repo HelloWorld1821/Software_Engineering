@@ -1,11 +1,3 @@
-/*
- * @Description:
- * @Author: l
- * @Date: 2021-05-31 13:38:16
- * @LastEditors: l
- * @LastEditTime: 2021-06-26 20:19:28
- * @FilePath: \DistributedControlSystem\frontend\config\index.js
- */
 "use strict";
 // Template version: 1.3.1
 // see http://vuejs-templates.github.io/webpack for documentation.

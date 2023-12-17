@@ -1,11 +1,3 @@
-/*
- * @Description:
- * @Author: l
- * @Date: 2021-05-31 13:38:16
- * @LastEditors: l
- * @LastEditTime: 2021-06-05 12:48:11
- * @FilePath: \DistributedControlSystem\frontend\src\router\index.js
- */
 import Vue from "vue";
 import Router from "vue-router";
 import Home from "@/pages/Home";

@@ -1,11 +1,3 @@
-/*
- * @Description:
- * @Author: l
- * @Date: 2021-06-03 14:17:10
- * @LastEditors: l
- * @LastEditTime: 2021-06-27 01:39:18
- * @FilePath: \DistributedControlSystem\frontend\src\store\modules\administrator.js
- */
 import router from "../../router";
 const api = "http://127.0.0.1:8000/admin"; // 更新 API 地址
 import axios from "axios";

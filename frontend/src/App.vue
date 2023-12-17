@@ -1,11 +1,3 @@
-<!--
- * @Description:
- * @Author: l
- * @Date: 2021-05-31 13:38:16
- * @LastEditors: l
- * @LastEditTime: 2021-06-26 21:45:23
- * @FilePath: \DistributedControlSystem\frontend\src\App.vue
--->
 <template>
   <div id="app">
     <v-nav></v-nav>
