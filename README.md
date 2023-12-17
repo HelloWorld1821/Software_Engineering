@@ -1,0 +1,16 @@
+VNav.vue:崔彣婧，徐彬芮+12.14
+AdminLogin.vue：崔彣婧，徐彬芮+12.13
+auth.js:崔彣婧+12.14
+administrator.vue:徐彬芮，崔彣婧+12.11
+Login.vue:崔彣婧+12.09
+administrator.js:徐彬芮+12.11
+config/index.js:徐彬芮，郁璋源，陈淑芳，崔彣婧+12.12
+reception.js:陈淑芳+12.13
+reception.vue:陈淑芳+12.12
+Room.vue:郁璋源+12.11
+room.js:郁璋源+12.12
+router/index:郁璋源，崔彣婧，陈淑芳，徐彬芮+12.08
+assets:徐彬芮+12.12
+main.js:郁璋源，崔彣婧，陈淑芳，徐彬芮+12.11
+APP.vue:郁璋源，崔彣婧，陈淑芳，徐彬芮+12.07
+test：郁璋源，崔彣婧，陈淑芳，徐彬芮+12.09
