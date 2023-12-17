@@ -1,6 +1,7 @@
 const api = "/api/schedule";
 import axios from "axios";
-export default {
+
+export default {//房间参数的一些默认值，在快速调试时可以使用
   state: {
     roomId: "114",
     room_id: "114",
@@ -12,8 +13,8 @@ export default {
       acState: ""
     },
     roomParams: {
-      tempSectionHigh: "25",
-      tempSectionLow: "18",
+      tempSectionHigh: "35",
+      tempSectionLow: "15",
       defaultTemp: 20,
       defaultSpeed: "low",
       mode: ""
@@ -36,55 +37,24 @@ export default {
   },
   getters: {},
   mutations: {
-    setRoomId(state, roomId) {
-      state.roomId = roomId;
-    },
     setStatus(state, status) {
       state.adminStatus = status;
     },
     setSpeed(state, speed) {
       state.roomState.speed = speed;
     },
-    setCurrTemp(state, currTemp) {
-      state.roomState.currTemp = currTemp;
-    },
     setTargetTemp(state, targetTemp) {
       state.roomState.targetTemp = targetTemp;
-    },
-    setFee(state, fee) {
-      state.roomState.fee = fee;
-    },
-    setAcState(state, acState) {
-      state.roomState.acState = acState;
     },
     setRoomState(state, roomState) {
       state.roomState = roomState;
     },
-
-    setTempSectionHigh(state, tempHigh) {
-      state.roomParams.tempSectionHigh = tempHigh;
-    },
-    setTempSectionLow(state, tempLow) {
-      state.roomParams.tempSectionLow = tempLow;
-    },
     setRoomState1(state, showState) {
       state.showState = showState;
     },
-    setDefaultTemp(state, defaultTemp) {
-      state.roomParams.defaultTemp = defaultTemp;
-    },
-    setDefaultSpeed(state, defaultSpeed) {
-      state.roomParams.defaultSpeed = defaultSpeed;
-    },
-    setMode(state, mode) {
-      state.roomParams.mode = mode;
-    },
-    setRoomParams(state, params) {
-      state.roomParams = params;
-    }
   },
   actions: {
-    request_on({ commit }, payload) {
+    request_on({commit}, payload) {//调用api接口，返回给后端空调开启信息
       return axios
         .post(`${api}/request_on?room_id=${payload.room_id}`)
         .then(response => {
@@ -97,7 +67,7 @@ export default {
           console.error(error);
         });
     },
-    request_off({ commit }, payload) {
+    request_off({commit}, payload) {//调用api接口，返回给后端空调关闭信息
       return axios
         .post(`${api}/request_off?room_id=${payload.room_id}`)
         .then(response => {
@@ -110,7 +80,7 @@ export default {
           console.error(error);
         });
     },
-    async showRoomState1({ commit }, payload) {
+    async showRoomState1({commit}, payload) {//调用从后端获取get信息，通过setStatus将get信息传到前端，以显示在用户控制面板中
       try {
         console.log("checkRoomsState, room_id:", payload.room_id);
         const response = await axios.get(`/api/user/show/${payload.room_id}`);
@@ -128,7 +98,7 @@ export default {
       }
     },
 
-    async showRoomState({ commit }, payload) {
+    async showRoomState({commit}, payload) {
       try {
         console.log("checkRoomsState...");
         const response = await axios.get(`/user/show/${payload.room_id}`);
@@ -142,9 +112,7 @@ export default {
         console.error(error);
       }
     },
-    request_temp({ commit }, payload) {
-      // console.log('updateRoomState...');
-      // commit("setRoomId", payload.room_id);
+    request_temp({commit}, payload) {//调用api接口，返回给后端温度信息
       commit("setTargetTemp", payload.target_temperature);
 
       return axios
@@ -162,9 +130,7 @@ export default {
           console.error(error);
         });
     },
-    request_speed({ commit }, payload) {
-      // console.log('updateRoomState...');
-      // commit("setRoomId", payload.room_id);
+    request_speed({commit}, payload) {//调用api接口，返回给后端风速信息
       commit("setSpeed", payload.fan_speed);
 
       return axios
@@ -182,23 +148,6 @@ export default {
           console.error(error);
         });
     }
-    // changeRoomState({commit},payload){
-    //     console.log('changeRoomState...');
-    //     return axios.post(api + '/changeRoomState', {
-    //         roomId:payload.roomId,
-    //         targetTemp:payload.targetTemp,
-    //         fan_speed:payload.fan_speed,
-    //         acState:payload.targetACState,
-    //     }).then((response) => {
-    //         if (response.data.error == false) {
-    //             // console.log("changeRoomState fail..");
-    //         } else {
-    //             ;
-    //         }
-    //     }).catch((error) => {
-    //         console.error(error)
-    //     });
-    // }
   },
   modules: {},
   namespaced: true
