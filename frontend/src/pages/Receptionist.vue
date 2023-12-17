@@ -257,6 +257,7 @@ export default {
 
       // 生成并下载Excel文件
       this.generateAndDownloadExcel();
+      this.showSuccessMessage("详单获取成功");
     },
 
     generateAndDownloadExcel() {
@@ -289,6 +290,7 @@ export default {
 
       // 生成并下载Excel文件
       this.generateAndDownloadExcel2();
+      this.showSuccessMessage("账单获取成功");
     },
 
     generateAndDownloadExcel2() {

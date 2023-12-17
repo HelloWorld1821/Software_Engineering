@@ -21,7 +21,6 @@ export default {
       state.password = password;
     },
     setRoomsState(state, roomsState) {
-      // console.log('111');
       state.roomsState = roomsState;
     },
     setStateIsOk(state, isOk) {

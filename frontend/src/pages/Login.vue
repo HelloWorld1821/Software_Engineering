@@ -68,7 +68,7 @@ export default defineComponent({
         { value: "room_3" },
         { value: "room_4" },
         { value: "receptionist_1" },
-        { value: "manager_1" },
+      
         { value: "administrator_1" }
       ],
       room_id: "",
@@ -93,6 +93,23 @@ export default defineComponent({
         : userList;
       // 调用 callback 返回
       cb(results);
+    }
+  },
+
+  async UserLogin(credentials) {
+    try {
+      // 调用后端登录 API
+      await this.UserLogin(credentials);
+
+      // 登录成功后显示提示窗口
+      this.$message.success("登录成功");
+
+      // 可以在这里跳转到其他页面，例如：
+      // this.$router.push("/dashboard");
+    } catch (error) {
+      console.error("登录失败:", error);
+      // 登录失败时显示错误提示窗口
+      this.$message.error("登录失败，请检查您的账号和密码");
     }
   }
 });

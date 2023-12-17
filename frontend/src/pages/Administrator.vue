@@ -158,7 +158,7 @@
               </el-form-item>
 
               <el-form-item>
-                <el-button type="primary" @click="setDefaultParams(params)">
+                <el-button type="primary" @click="callSetDefaultParams(params)">
                   设置参数
                 </el-button>
               </el-form-item>
@@ -188,7 +188,24 @@ export default {
     ...mapState("administrator", ["roomsState", "stateIsOk"])
   },
   methods: {
-    ...mapActions("administrator", ["checkRoomsState", "setDefaultParams"])
+    ...mapActions("administrator", ["checkRoomsState", "setDefaultParams"]),
+    showSuccessMessage() {
+      this.$message.success("操作成功");
+
+      // 在这里可以执行其他操作，如重新加载数据或跳转页面等
+
+      // 以下是示例操作，你可以根据你的需求来处理
+      setTimeout(() => {
+        // 模拟成功后的操作
+        console.log("成功后的操作");
+      }, 1000);
+    },
+
+    // 在调用 setDefaultParams 后立即调用 showSuccessMessage
+    callSetDefaultParams(params) {
+      this.setDefaultParams(params);
+      this.showSuccessMessage();
+    }
   },
   mounted: function() {
     let that = this;

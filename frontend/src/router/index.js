@@ -14,7 +14,7 @@ import AdminLogin from "@/pages/AdminLogin";
 import Register from "@/pages/Register";
 import Room from "@/pages/Room";
 import Administrator from "@/pages/Administrator";
-import Manager from "@/pages/Manager";
+
 import Receptionist from "@/pages/Receptionist";
 Vue.use(Router); // 让Vue安装VueRouter组件
 
@@ -55,11 +55,7 @@ export default new Router({
       name: "administrator",
       component: Administrator
     },
-    {
-      path: "/manager",
-      name: "manager",
-      component: Manager
-    },
+
     {
       path: "/receptionist",
       name: "receptionist",

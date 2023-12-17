@@ -51,7 +51,7 @@
                 </el-col>
                 <el-col :span="8" :offset="4">
                   <div>
-                    {{ status }}
+                    {{ adminStatus.status }}
                   </div>
                 </el-col>
               </el-row>
@@ -150,6 +150,7 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
+import { Message } from "element-ui"; // 导入 Element UI 的 Message 组件
 
 export default {
   destroyed: function() {
@@ -162,8 +163,7 @@ export default {
       targetACState: "off",
       acStateBool: false,
       sleepMode: false, //是否开启休眠模式
-      isSupplyBool: false,
-      status: "关机" // 默认为'关机'
+      isSupplyBool: false
     };
   },
 
@@ -173,7 +173,8 @@ export default {
       "roomState",
       "roomParams",
       "showState",
-      "room_id"
+      "room_id",
+      "adminStatus"
     ]),
     ...mapState("auth", ["room_id"])
 
@@ -198,7 +199,7 @@ export default {
       if (this.room_id) {
         this.showRoomState1({ room_id: this.room_id });
       }
-    }, 5000);
+    }, 1000);
   },
   methods: {
     ...mapActions("room", [
@@ -213,17 +214,30 @@ export default {
       this.showRoomState1({ room_id: this.room_id });
       console.log("showRoom..");
     },
+
     on() {
       this.request_on({
         room_id: this.room_id
       });
       this.status = "开机"; // 更新状态为'开机'
+      this.showSuccessMessage("空调已开启"); // 显示操作成功的消息
     },
     off() {
       this.request_off({
         room_id: this.room_id
       });
       this.status = "关机"; // 更新状态为'关机'
+      this.showSuccessMessage("空调已关闭"); // 显示操作成功的消息
+    },
+
+    // ...之前的其他方法...
+
+    showSuccessMessage(message) {
+      // 使用 Element UI 的 Message 组件显示操作成功的消息
+      Message.success({
+        message: message,
+        duration: 2000 // 持续显示时间，单位是毫秒
+      });
     },
     decreaseTemp() {
       if (this.targetTemp > this.$store.state.room.roomParams.tempSectionLow) {
@@ -311,14 +325,24 @@ export default {
     }
   },
   watch: {
-    acStateBool: function(newValue, oldValue) {
-      if (newValue == true) {
-        this.targetACState = "on";
-        this.on();
+    acStateBool: function(newBool, oldBool) {
+      if (newBool === true) {
+        this.on(); // 打开空调
+      } else {
+        this.off(); // 关闭空调
       }
-      if (newValue == false) {
-        this.targetACState = "off";
-        this.off();
+    },
+    adminStatus: function(newStatus, oldStatus) {
+      if (
+        newStatus.status === "SLEEPING" ||
+        newStatus.status === "WAITING" ||
+        newStatus.status === "SERVING"
+      ) {
+        // 当 adminStatus.status 是 "SLEEPING"、"WAITING" 或 "SERVING" 时，将开关状态设为打开
+        this.acStateBool = true;
+      } else {
+        // 其他情况下，将开关状态设为关闭
+        this.acStateBool = false;
       }
     }
   }

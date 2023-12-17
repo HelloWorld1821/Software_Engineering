@@ -18,14 +18,30 @@ export default {
       defaultSpeed: "low",
       mode: ""
     },
-    showState: []
+    showState: [],
+    adminStatus: [
+      {
+        record_id: 18,
+        room_id: 2,
+        initial_temperature: 28,
+        total_cost: 4,
+        identity_card: "1",
+        current_temperature: 25,
+        target_temperature: 25,
+        fan_speed: "medium",
+        status: "SLEEPING",
+        server_time: 0
+      }
+    ]
   },
   getters: {},
   mutations: {
     setRoomId(state, roomId) {
       state.roomId = roomId;
     },
-
+    setStatus(state, status) {
+      state.adminStatus = status;
+    },
     setSpeed(state, speed) {
       state.roomState.speed = speed;
     },
@@ -53,7 +69,6 @@ export default {
     },
     setRoomState1(state, showState) {
       state.showState = showState;
-      console.log("showState:", showState);
     },
     setDefaultTemp(state, defaultTemp) {
       state.roomParams.defaultTemp = defaultTemp;
@@ -100,6 +115,14 @@ export default {
         console.log("checkRoomsState, room_id:", payload.room_id);
         const response = await axios.get(`/api/user/show/${payload.room_id}`);
         commit("setRoomState1", response.data);
+      } catch (error) {
+        console.error(error);
+      }
+      try {
+        const response = await axios.get(
+          `/api/admin/rooms/?room_id=${payload.room_id}`
+        );
+        commit("setStatus", response.data[0]);
       } catch (error) {
         console.error(error);
       }

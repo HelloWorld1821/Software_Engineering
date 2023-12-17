@@ -28,9 +28,6 @@
       :disabled="isDisabled"
       >前台</el-menu-item
     >
-    <el-menu-item index="/manager" route="/manager" :disabled="isDisabled"
-      >经理</el-menu-item
-    >
   </el-menu>
 </template>
 
