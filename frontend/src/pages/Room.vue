@@ -61,7 +61,7 @@
                 </el-col>
                 <el-col :span="8" :offset="4">
                   <div>
-                    {{ targetTemp }}
+                    {{ adminStatus.target_temperature }}
                   </div>
                 </el-col>
               </el-row>
